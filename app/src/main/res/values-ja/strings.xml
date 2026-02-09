@@ -1,0 +1,7 @@
+<resources>
+    
+    <string name="welcome_message">ビデオダウンロードアプリへようこそ</string>
+    <string name="sample_button">サンプルボタン</string>
+    <string name="language_switch">スイッチ言語</string>
+    <string name="current_language">現在の言語:%s</string>
+</resources>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">video_download</string>
+    <string name="welcome_message">Welcome to Video Download App</string>
+    <string name="sample_button">Sample Button</string>
+    <string name="language_switch">Switch Language</string>
+    <string name="current_language">Current Language: %s</string>
+</resources>
