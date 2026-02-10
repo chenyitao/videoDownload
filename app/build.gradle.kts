@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity.ktx)
     implementation(libs.fragment.ktx)
+    implementation(libs.lottie)
     api(libs.media3.ui)
     api(libs.media3.exoplaye)
     api(libs.room.ktx)

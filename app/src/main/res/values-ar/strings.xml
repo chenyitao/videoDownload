@@ -1,4 +1,10 @@
 <resources>
-    
+
     <string name="loading_progress">جار التحميل… %d%%</string>
+    <string name="nav_home">المنزل</string>
+    <string name="nav_search">البحث</string>
+    <string name="nav_download">تحميل</string>
+    <string name="nav_player">اللاعب</string>
+    <string name="language">اللغة</string>
+    <string name="next">التالي</string>
 </resources>

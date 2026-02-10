@@ -25,4 +25,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
 
     override fun initListeners() {
     }
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

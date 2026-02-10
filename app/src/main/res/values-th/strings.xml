@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">กําลังโหลด… %d%%</string>
+    <string name="nav_home">หน้าแรก</string>
+    <string name="nav_search">ค้นหา</string>
+    <string name="nav_download">ดาวน์โหลด</string>
+    <string name="nav_player">ผู้เล่น</string>
+    <string name="language">ภาษา</string>
+    <string name="next">ต่อไป</string>
 </resources>

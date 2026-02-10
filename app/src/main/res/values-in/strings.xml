@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
     <string name="loading_progress">Memuat… %d%%</string>
+    <string name="nav_home">Beranda</string>
+    <string name="nav_search">Pencarian</string>
+    <string name="nav_download">Unduh</string>
+    <string name="nav_player">Pemain</string>
+    <string name="language">Bahasa</string>
+    <string name="next">Selanjutnya</string>
 </resources>

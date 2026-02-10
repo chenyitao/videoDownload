@@ -13,27 +13,7 @@ import java.util.*
  * 多语言工具类
  */
 object LanguageUtils {
-    
-    const val LANGUAGE_CHINESE = "zh"
-    const val LANGUAGE_ENGLISH = "en"
-    const val LANGUAGE_SYSTEM = "system"
-    
-    /**
-     * 获取当前语言
-     */
-    fun getCurrentLanguage(context: Context): String {
-        val locale = getCurrentLocale(context)
-        return locale.language
-    }
-    
-    /**
-     * 获取当前地区
-     */
-    fun getCurrentCountry(context: Context): String {
-        val locale = getCurrentLocale(context)
-        return locale.country
-    }
-    
+
     /**
      * 获取当前Locale
      */
@@ -87,39 +67,32 @@ object LanguageUtils {
      * 应用语言配置到Activity
      */
     fun applyLanguageConfiguration(activity: Activity) {
-        val locale = getCurrentLocale(activity)
+        val languageCode = AppCache.switchLanguage
+        var locale = if (languageCode.isNotEmpty()){
+            if (languageCode.contains("-r")) {
+                val parts = languageCode.split("-r")
+                if (parts.size == 2) {
+                    Locale(parts[0], parts[1])
+                } else {
+                    Locale(languageCode)
+                }
+            } else {
+                Locale(languageCode)
+            }
+        }else{
+            getCurrentLocale(activity)
+        }
         val configuration = activity.resources.configuration
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             configuration.setLocales(LocaleList(locale))
         } else {
             @Suppress("DEPRECATION")
             configuration.locale = locale
         }
-        
+
         @Suppress("DEPRECATION")
         activity.resources.updateConfiguration(configuration, activity.resources.displayMetrics)
-    }
-    
-    /**
-     * 获取系统语言
-     */
-    fun getSystemLanguage(): String {
-        return Locale.getDefault().language
-    }
-    
-    /**
-     * 获取支持的语言列表
-     */
-    fun getSupportedLanguages(): List<String> {
-        return listOf(LANGUAGE_CHINESE, LANGUAGE_ENGLISH)
-    }
-    
-    /**
-     * 检查语言是否支持
-     */
-    fun isLanguageSupported(language: String): Boolean {
-        return getSupportedLanguages().contains(language)
     }
     fun initLocale(context: Context) {
         val sLanguage = AppCache.switchLanguage

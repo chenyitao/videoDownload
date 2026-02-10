@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">Naglo-load… %d%%</string>
+    <string name="nav_home">Tahanan</string>
+    <string name="nav_search">Paghahanap</string>
+    <string name="nav_download">I-download</string>
+    <string name="nav_player">Manlalaro</string>
+    <string name="language">Wika</string>
+    <string name="next">Susunod</string>
 </resources>

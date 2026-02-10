@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">Safe Downloader-Save Video</string>
     <string name="loading_progress">Loading… %d%%</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_download">Download</string>
+    <string name="nav_player">Player</string>
+    <string name="language">Language</string>
+    <string name="next">Next</string>
 </resources>

@@ -24,4 +24,11 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     override fun initListeners() {
     }
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

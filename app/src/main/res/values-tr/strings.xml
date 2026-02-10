@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">Yükleniyor… %d%%</string>
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_search">Arama</string>
+    <string name="nav_download">İndir</string>
+    <string name="nav_player">Oyuncu</string>
+    <string name="language">Dil</string>
+    <string name="next">Sıradaki</string>
 </resources>

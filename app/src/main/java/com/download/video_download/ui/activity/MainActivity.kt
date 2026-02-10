@@ -1,6 +1,7 @@
 package com.download.video_download.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import com.download.video_download.R
@@ -11,12 +12,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.core.view.size
 import androidx.core.view.get
+import com.download.video_download.App
 import com.download.video_download.ui.fragment.DownloadFragment
 import com.download.video_download.ui.fragment.HomeFragment
 import com.download.video_download.ui.fragment.PlayerFragment
 import com.download.video_download.ui.fragment.WebFragment
 
-class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>() {
+class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     val viewModel: MainViewModel by viewModels()
     override fun createViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
@@ -60,5 +62,9 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>() {
                 else -> false
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">लोड हो रहा है… %d%%</string>
+    <string name="nav_home">घर</string>
+    <string name="nav_search">खोज</string>
+    <string name="nav_download">डाउनलोड</string>
+    <string name="nav_player">वादक</string>
+    <string name="language">भाषा</string>
+    <string name="next">अगला</string>
 </resources>

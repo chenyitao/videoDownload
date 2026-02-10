@@ -24,4 +24,11 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
 
     override fun initListeners() {
     }
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
 }

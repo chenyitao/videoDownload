@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">Cargando… %d%%</string>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_search">Búsqueda</string>
+    <string name="nav_download">Descargar</string>
+    <string name="nav_player">Jugador</string>
+    <string name="language">Idioma</string>
+    <string name="next">Siguiente</string>
 </resources>

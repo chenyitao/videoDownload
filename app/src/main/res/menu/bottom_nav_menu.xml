@@ -3,17 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home_selector"
-        android:title="首页"/>
+        android:title="@string/nav_home"/>
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/ic_search_selector"
-        android:title="搜索"/>
+        android:title="@string/nav_search"/>
     <item
         android:id="@+id/nav_download"
         android:icon="@drawable/ic_download_selector"
-        android:title="下载"/>
+        android:title="@string/nav_download"/>
     <item
         android:id="@+id/nav_player"
         android:icon="@drawable/ic_play_selector"
-        android:title="1111"/>
+        android:title="@string/nav_player"/>
 </menu>

@@ -20,10 +20,13 @@ import com.download.video_download.App
 import com.download.video_download.base.ext.showToast
 import com.download.video_download.base.utils.*
 import com.download.video_download.base.BaseViewModel
+import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.utils.NavigationBarUtils.setNavigationBarColor
+import com.download.video_download.ui.activity.MainActivity
+import com.download.video_download.ui.activity.SplashActivity
 import java.util.Locale
 
-abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity(), App.AppStatusChangeListener {
     
     protected open val enableImmersiveStatusBar: Boolean = true
     protected open val enableImmersiveNavigationBar: Boolean = true
@@ -33,6 +36,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     lateinit var mBind: VB
 
     lateinit var mViewModel: VM
+    var myApp: App? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LanguageUtils.applyLanguageConfiguration(this)
@@ -44,6 +48,8 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         initData()
         initListeners()
         registerOnBackPressedCallback()
+        myApp = application as App
+        myApp?.addAppStatusChangeListener(this)
     }
     protected abstract fun createViewBinding(): VB
 
@@ -55,6 +61,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     
     override fun onDestroy() {
         super.onDestroy()
+        myApp?.removeAppStatusChangeListener(this)
     }
     
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -152,17 +159,6 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     protected fun hasNavigationBar(): Boolean {
         return NavigationBarUtils.hasNavigationBar(this)
     }
-
-    protected fun switchLanguage(language: String, country: String = ""): Boolean {
-        val result = LanguageUtils.switchLanguage(this, language, country)
-        if (result) {
-            recreate() // 重启Activity以应用新语言
-        }
-        return result
-    }
-    protected fun getCurrentLanguage(): String {
-        return LanguageUtils.getCurrentLanguage(this)
-    }
     protected fun setStatusBarMode(isLight: Boolean) {
         if (isLight) {
             StatusBarUtils.setStatusBarLightMode(this)
@@ -180,14 +176,19 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     override fun attachBaseContext(newBase: Context?) {
         val sLanguage = AppCache.switchLanguage
         newBase?.let {
-            var context =if (sLanguage == "default") {
-                val systemLocale = LocaleListCompat.getAdjustedDefault()[0] ?: Locale.getDefault()
-                LanguageUtils.updateContextLocale(newBase, systemLocale)
-            }else{
-                val savedLocale = Locale(sLanguage)
-                LanguageUtils.updateContextLocale(newBase, savedLocale)
-            }
+            val savedLocale = Locale(sLanguage)
+            LanguageUtils.updateContextLocale(newBase, savedLocale)
         }
         super.attachBaseContext(newBase)
+    }
+
+    override fun onAppEnterForeground() {
+        if (ActivityManager.currentActivity() is SplashActivity){
+            return
+        }
+        startActivity<SplashActivity>()
+    }
+
+    override fun onAppEnterBackground() {
     }
 }

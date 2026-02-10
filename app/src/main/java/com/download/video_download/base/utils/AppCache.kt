@@ -52,4 +52,14 @@ object AppCache {
             saveValue("selectLanguage", value)
         }
         get() =getValue("selectLanguage", "")
+    var isSelectLng: Boolean
+        set(value) {
+            saveValue("isSelectLng", value)
+        }
+        get() =getValue("isSelectLng", false)
+    var guideShow : Boolean
+        set(value) {
+            saveValue("guideShow", value)
+        }
+        get() =getValue("guideShow", false)
 }

@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">Memuatkan… %d%%</string>
+    <string name="nav_home">Laman Utama</string>
+    <string name="nav_search">Carian</string>
+    <string name="nav_download">Muat turun</string>
+    <string name="nav_player">Pemain</string>
+    <string name="language">Bahasa</string>
+    <string name="next">Seterusnya</string>
 </resources>

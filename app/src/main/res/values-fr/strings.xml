@@ -1,4 +1,10 @@
 <resources>
     
-    <string name="loading_progress">Chargement… %d%%</string>
+    <string name="loading_progress"><![CDATA[Chargement… %d %%]]></string>
+    <string name="nav_home">Accueil</string>
+    <string name="nav_search">Recherche</string>
+    <string name="nav_download">Télécharger</string>
+    <string name="nav_player">Joueur</string>
+    <string name="language">Langue</string>
+    <string name="next">Suivant</string>
 </resources>

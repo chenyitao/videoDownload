@@ -1,0 +1,9 @@
+<resources>
+    <string name="loading_progress">載入中… %d%%</string>
+    <string name="nav_home">首頁</string>
+    <string name="nav_search">搜尋</string>
+    <string name="nav_download">下載</string>
+    <string name="nav_player">播放</string>
+    <string name="language">語言</string>
+    <string name="next">下一步</string>
+</resources>

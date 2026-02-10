@@ -1,4 +1,10 @@
 <resources>
     
     <string name="loading_progress">로딩 중… %d%%</string>
+    <string name="nav_home">홈</string>
+    <string name="nav_search">검색</string>
+    <string name="nav_download">다운로드</string>
+    <string name="nav_player">선수</string>
+    <string name="language">언어</string>
+    <string name="next">다음</string>
 </resources>
