@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">Загрузка… %d%%</string>
+    <string name="loading_progress">Загрузка... %d%%</string>
     <string name="nav_home">Дом</string>
     <string name="nav_search">Поиск</string>
     <string name="nav_download">Скачать</string>
     <string name="nav_player">Игрок</string>
     <string name="language">Язык</string>
     <string name="next">Далее</string>
+    <string name="guide1_title">Зайдите на исходный сайт видео, чтобы воспроизвести его</string>
+    <string name="guide2_title">Когда видео начинает воспроизводить, можно нажать кнопку скачивания</string>
+    <string name="guide3_title">Это приложение облегчает загрузку с сторонних источников (за исключением YouTube). Пользователи несут исключительную ответственность за то, чтобы они обладали юридическими правами на любой загружаемый контент и за все последствия, связанные с его использованием, включая, но не ограничиваясь, нарушением авторских прав.</string>
+    <string name="guide3_des">Отказ от ответственности</string>
+    <string name="skip">Пропустить</string>
+    <string name="guide3_bold">(за исключением YouTube)</string>
 </resources>

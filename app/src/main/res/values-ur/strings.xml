@@ -7,4 +7,10 @@
     <string name="nav_player">کھلاڑی</string>
     <string name="language">زبان</string>
     <string name="next">اگلا</string>
+    <string name="guide1_title">ویڈیو کے ماخذ ویب سائٹ پر جائیں اور اسے چلائیں</string>
+    <string name="guide2_title">جب ویڈیو چلنا شروع ہو جائے تو آپ ڈاؤن لوڈ بٹن پر کلک کر سکتے ہیں</string>
+    <string name="guide3_title">یہ ایپلیکیشن تیسرے فریق کے ذرائع سے ڈاؤن لوڈ کو آسان بناتی ہے (یوٹیوب کو چھوڑ کر)۔ صارفین صرف اس بات کے ذمہ دار ہیں کہ وہ کسی بھی ڈاؤن لوڈ شدہ مواد کے قانونی حقوق اور اس کے استعمال سے پیدا ہونے والے تمام نتائج، بشمول کاپی رائٹ کی خلاف ورزی، کے لیے قانونی حقوق حاصل کریں۔</string>
+    <string name="guide3_des">دستبرداری</string>
+    <string name="skip">چھوڑ دو</string>
+    <string name="guide3_bold">(یوٹیوب کو چھوڑ کر)</string>
 </resources>

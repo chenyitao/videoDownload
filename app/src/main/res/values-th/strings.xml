@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">กําลังโหลด… %d%%</string>
+    <string name="loading_progress">กําลังโหลด... %d%%</string>
     <string name="nav_home">หน้าแรก</string>
     <string name="nav_search">ค้นหา</string>
     <string name="nav_download">ดาวน์โหลด</string>
     <string name="nav_player">ผู้เล่น</string>
     <string name="language">ภาษา</string>
     <string name="next">ต่อไป</string>
+    <string name="guide1_title">ไปที่เว็บไซต์แหล่งที่มาของวิดีโอเพื่อเล่น</string>
+    <string name="guide2_title">เมื่อวิดีโอเริ่มเล่น คุณสามารถคลิกปุ่มดาวน์โหลด</string>
+    <string name="guide3_title">แอปพลิเคชั่นนี้อํานวยความสะดวกในการดาวน์โหลดจากแหล่งที่มาของบุคคลที่สาม (ไม่รวม YouTube) ผู้ใช้มีหน้าที่รับผิดชอบแต่เพียงผู้เดียวในการตรวจสอบให้แน่ใจว่าตนมีสิทธิ์ตามกฎหมายในเนื้อหาใด ๆ ที่ดาวน์โหลดและสําหรับผลที่ตามมาทั้งหมดที่เกิดขึ้นจากการใช้งาน ซึ่งรวมถึงแต่ไม่จํากัดเพียงการละเมิดลิขสิทธิ์</string>
+    <string name="guide3_des">คําปฏิเสธ</string>
+    <string name="skip">ข้าม</string>
+    <string name="guide3_bold">(ไม่รวม YouTube)</string>
 </resources>

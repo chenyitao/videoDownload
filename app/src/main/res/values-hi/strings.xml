@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">लोड हो रहा है… %d%%</string>
+    <string name="loading_progress">लोड हो रहा है... %d%%</string>
     <string name="nav_home">घर</string>
     <string name="nav_search">खोज</string>
     <string name="nav_download">डाउनलोड</string>
     <string name="nav_player">वादक</string>
     <string name="language">भाषा</string>
     <string name="next">अगला</string>
+    <string name="guide1_title">इसे चलाने के लिए वीडियो की स्रोत वेबसाइट पर जाएं</string>
+    <string name="guide2_title">एक बार जब वीडियो चलना शुरू हो जाए, तो आप डाउनलोड बटन पर क्लिक कर सकते हैं</string>
+    <string name="guide3_title">यह एप्लिकेशन तृतीय-पक्ष स्रोतों (YouTube को छोड़कर) से डाउनलोड की सुविधा प्रदान करता है। उपयोगकर्ता यह सुनिश्चित करने के लिए पूरी तरह से जिम्मेदार हैं कि उनके पास डाउनलोड की गई किसी भी सामग्री के कानूनी अधिकार हैं और इसके उपयोग से उत्पन्न होने वाले सभी परिणामों के लिए, जिसमें कॉपीराइट उल्लंघन भी शामिल है, लेकिन इन्हीं तक सीमित नहीं है।</string>
+    <string name="guide3_des">अस्वीकरण</string>
+    <string name="skip">छोड़ें</string>
+    <string name="guide3_bold">(YouTube को छोड़कर)</string>
 </resources>

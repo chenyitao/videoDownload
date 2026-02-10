@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">Memuat… %d%%</string>
+    <string name="loading_progress">Memuat... %d%%</string>
     <string name="nav_home">Beranda</string>
     <string name="nav_search">Pencarian</string>
     <string name="nav_download">Unduh</string>
     <string name="nav_player">Pemain</string>
     <string name="language">Bahasa</string>
     <string name="next">Selanjutnya</string>
+    <string name="guide1_title">Buka situs web sumber video untuk memutarnya</string>
+    <string name="guide2_title">Setelah video mulai diputar, Anda dapat mengklik tombol unduh</string>
+    <string name="guide3_title">Aplikasi ini memfasilitasi unduhan dari sumber pihak ketiga (tidak termasuk YouTube). Pengguna bertanggung jawab penuh untuk memastikan bahwa mereka memiliki hak hukum atas konten apa pun yang diunduh dan untuk semua konsekuensi yang timbul dari penggunaannya, termasuk namun tidak terbatas pada pelanggaran hak cipta.</string>
+    <string name="guide3_des">Penolakan tanggung jawab</string>
+    <string name="skip">Lewati</string>
+    <string name="guide3_bold">(tidak termasuk YouTube)</string>
 </resources>

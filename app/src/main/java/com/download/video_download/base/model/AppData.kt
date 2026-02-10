@@ -6,3 +6,8 @@ data class LanguageSelectData(
     val languageIv: Int,
     val languageCode: String,
 )
+data class GuideData(
+    val title: String,
+    val image: Int,
+    val description: String
+)

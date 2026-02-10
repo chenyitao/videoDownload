@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">Memuatkan… %d%%</string>
+    <string name="loading_progress">Memuatkan... %d%%</string>
     <string name="nav_home">Laman Utama</string>
     <string name="nav_search">Carian</string>
     <string name="nav_download">Muat turun</string>
     <string name="nav_player">Pemain</string>
     <string name="language">Bahasa</string>
     <string name="next">Seterusnya</string>
+    <string name="guide1_title">Pergi ke tapak web sumber video untuk memainkannya</string>
+    <string name="guide2_title">Sebaik sahaja video mula dimainkan, anda boleh mengklik butang muat turun</string>
+    <string name="guide3_title">Aplikasi ini memudahkan muat turun daripada sumber pihak ketiga (tidak termasuk YouTube). Pengguna bertanggungjawab sepenuhnya untuk memastikan mereka mempunyai hak undang-undang untuk sebarang kandungan yang dimuat turun dan untuk semua akibat yang timbul daripada penggunaannya, termasuk tetapi tidak terhad kepada pelanggaran hak cipta.</string>
+    <string name="guide3_des">Penafian</string>
+    <string name="skip">Langkau</string>
+    <string name="guide3_bold">(tidak termasuk YouTube)</string>
 </resources>

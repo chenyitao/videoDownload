@@ -1,9 +1,16 @@
 <resources>
-    <string name="loading_progress">載入中… %d%%</string>
+    
+    <string name="loading_progress">載入中... %d%%</string>
     <string name="nav_home">首頁</string>
     <string name="nav_search">搜尋</string>
     <string name="nav_download">下載</string>
-    <string name="nav_player">播放</string>
+    <string name="nav_player">球員生涯</string>
     <string name="language">語言</string>
-    <string name="next">下一步</string>
+    <string name="next">下一篇</string>
+    <string name="guide1_title">請前往影片的官方網站播放</string>
+    <string name="guide2_title">影片開始播放後，你可以點擊下載按鈕</string>
+    <string name="guide3_title">此應用程式促進從第三方來源（不含 YouTube）下載。用戶需完全負責確保自己擁有對下載內容的合法權利，並承擔使用內容所引發的所有後果，包括但不限於著作權侵權。</string>
+    <string name="guide3_des">免責聲明</string>
+    <string name="skip">跳過</string>
+    <string name="guide3_bold">（不包括 YouTube）</string>
 </resources>

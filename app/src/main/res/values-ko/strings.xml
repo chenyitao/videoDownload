@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">로딩 중… %d%%</string>
+    <string name="loading_progress">로딩 중... %d%%</string>
     <string name="nav_home">홈</string>
     <string name="nav_search">검색</string>
     <string name="nav_download">다운로드</string>
     <string name="nav_player">선수</string>
     <string name="language">언어</string>
     <string name="next">다음</string>
+    <string name="guide1_title">영상의 소스 웹사이트에서 재생하세요</string>
+    <string name="guide2_title">영상이 재생되기 시작하면 다운로드 버튼을 클릭할 수 있습니다</string>
+    <string name="guide3_title">이 애플리케이션은 유튜브 제외의 제3자 소스에서 다운로드를 지원합니다. 사용자는 다운로드된 콘텐츠에 대한 법적 권리를 보장하고, 저작권 침해를 포함하되 이에 국한되지 않는 모든 결과에 대해 전적으로 책임을 집니다.</string>
+    <string name="guide3_des">면책 조항</string>
+    <string name="skip">건너뛰기</string>
+    <string name="guide3_bold">(유튜브 제외)</string>
 </resources>

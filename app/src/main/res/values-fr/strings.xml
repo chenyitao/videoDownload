@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress"><![CDATA[Chargement… %d %%]]></string>
+    <string name="loading_progress">Chargement... %d%%></string>
     <string name="nav_home">Accueil</string>
     <string name="nav_search">Recherche</string>
     <string name="nav_download">Télécharger</string>
     <string name="nav_player">Joueur</string>
     <string name="language">Langue</string>
     <string name="next">Suivant</string>
+    <string name="guide1_title">Allez sur le site source de la vidéo pour la lire</string>
+    <string name="guide2_title">Une fois la vidéo lancée, vous pouvez cliquer sur le bouton de téléchargement</string>
+    <string name="guide3_title">Cette application facilite les téléchargements depuis des sources tierces (à l’exception de YouTube). Les utilisateurs sont seuls responsables de s’assurer qu’ils détiennent les droits légaux sur tout contenu téléchargé et de toutes les conséquences découlant de son utilisation, y compris, mais sans s’y limiter, la violation du droit d’auteur.</string>
+    <string name="guide3_des">Avertissement</string>
+    <string name="skip">Skip</string>
+    <string name="guide3_bold">(hors YouTube)</string>
 </resources>

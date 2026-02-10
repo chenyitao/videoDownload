@@ -7,4 +7,10 @@
     <string name="nav_player">Player</string>
     <string name="language">Language</string>
     <string name="next">Next</string>
+    <string name="guide1_title">Go to the video\'s source website to play it</string>
+    <string name="guide2_title">Once the video begins playing, you can click the download button</string>
+    <string name="guide3_title">This application facilitates downloads from third-party sources (excluding YouTube). Users are solely responsible for ensuring they possess the legal rights to any content downloaded and for all consequences arising from its use, including but not limited to copyright infringement.</string>
+    <string name="guide3_des">Disclaimer</string>
+    <string name="skip">Skip</string>
+    <string name="guide3_bold">(excluding YouTube)</string>
 </resources>

@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">Caricamento… %d%%</string>
+    <string name="loading_progress">Caricamento... %d%%</string>
     <string name="nav_home">Casa</string>
     <string name="nav_search">Ricerca</string>
     <string name="nav_download">Scarica</string>
     <string name="nav_player">Giocatore</string>
     <string name="language">Lingua</string>
     <string name="next">Prossimo</string>
+    <string name="guide1_title">Vai sul sito originale del video per riprodurlo</string>
+    <string name="guide2_title">Una volta che il video inizia a riprodursi, puoi cliccare sul pulsante download</string>
+    <string name="guide3_title">Questa applicazione facilita i download da fonti terze (escluso YouTube). Gli utenti sono l\'unico responsabile di garantire il possesso dei diritti legali su qualsiasi contenuto scaricato e di tutte le conseguenze derivanti dal suo utilizzo, inclusa, ma non limitata a, violazione del copyright.</string>
+    <string name="guide3_des">Disclaimer</string>
+    <string name="skip">Skip</string>
+    <string name="guide3_bold">(escluso YouTube)</string>
 </resources>

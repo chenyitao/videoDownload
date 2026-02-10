@@ -1,10 +1,16 @@
 <resources>
     
-    <string name="loading_progress">Yükleniyor… %d%%</string>
+    <string name="loading_progress">Yükleniyor... %d%%</string>
     <string name="nav_home">Ana Sayfa</string>
     <string name="nav_search">Arama</string>
     <string name="nav_download">İndir</string>
     <string name="nav_player">Oyuncu</string>
     <string name="language">Dil</string>
     <string name="next">Sıradaki</string>
+    <string name="guide1_title">Videoyu oynatmak için videonun kaynak web sitesine gidin</string>
+    <string name="guide2_title">Video oynamaya başladığında, indirme düğmesine tıklayabilirsiniz</string>
+    <string name="guide3_title">Bu uygulama, üçüncü taraf kaynaklardan (YouTube hariç) indirmeleri kolaylaştırır. Kullanıcılar, indirilen herhangi bir içeriğe yasal haklara sahip olduklarını ve kullanımından kaynaklanan tüm sonuçların, telif hakkı ihlali dahil ancak bunlarla sınırlı olmamakla sorumludur.</string>
+    <string name="guide3_des">Feragatname</string>
+    <string name="skip">Atla</string>
+    <string name="guide3_bold">(YouTube hariç)</string>
 </resources>

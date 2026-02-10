@@ -7,4 +7,10 @@
     <string name="nav_player">اللاعب</string>
     <string name="language">اللغة</string>
     <string name="next">التالي</string>
+    <string name="guide1_title">اذهب إلى موقع الفيديو الأصلي للعبته</string>
+    <string name="guide2_title">بمجرد بدء تشغيل الفيديو، يمكنك الضغط على زر التحميل</string>
+    <string name="guide3_title">يسهل هذا التطبيق التنزيلات من مصادر خارجية (باستثناء يوتيوب). المستخدمون مسؤولون وحدهم عن التأكد من امتلاكهم الحقوق القانونية لأي محتوى يتم تنزيله وعن جميع العواقب الناتجة عن استخدامه، بما في ذلك على سبيل المثال لا الحصر، انتهاك حقوق النشر.</string>
+    <string name="guide3_des">تنويه</string>
+    <string name="skip">تخطي</string>
+    <string name="guide3_bold">(باستثناء يوتيوب)</string>
 </resources>
