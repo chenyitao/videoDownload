@@ -1,0 +1,4 @@
+<resources>
+    
+    <string name="loading_progress">लोड हो रहा है… %d%%</string>
+</resources>

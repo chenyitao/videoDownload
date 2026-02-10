@@ -1,7 +1,4 @@
 <resources>
     
-    <string name="welcome_message">ビデオダウンロードアプリへようこそ</string>
-    <string name="sample_button">サンプルボタン</string>
-    <string name="language_switch">スイッチ言語</string>
-    <string name="current_language">現在の言語:%s</string>
+    <string name="loading_progress">読み込み中… %d%%</string>
 </resources>

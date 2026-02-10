@@ -8,28 +8,46 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.LocaleListCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
+import androidx.viewbinding.ViewBinding
+import com.download.video_download.App
 import com.download.video_download.base.ext.showToast
 import com.download.video_download.base.utils.*
+import com.download.video_download.base.BaseViewModel
+import com.download.video_download.base.utils.NavigationBarUtils.setNavigationBarColor
 import java.util.Locale
 
-abstract class BaseActivity : Activity() {
+abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity() {
     
     protected open val enableImmersiveStatusBar: Boolean = true
     protected open val enableImmersiveNavigationBar: Boolean = true
     protected open val enableAutoHideKeyboard: Boolean = true
     protected open fun onLanguageChanged() {}
     protected open fun onConfigurationChanged() {}
-    
+    lateinit var mBind: VB
+
+    lateinit var mViewModel: VM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LanguageUtils.applyLanguageConfiguration(this)
+        mBind = createViewBinding()
+        setContentView(mBind.root)
+        mViewModel = createViewModel()
         initImmersiveUI()
-        initViews()
+        initViews(savedInstanceState)
         initData()
         initListeners()
+        registerOnBackPressedCallback()
     }
-    
+    protected abstract fun createViewBinding(): VB
+
+    protected abstract fun createViewModel(): VM
     override fun onResume() {
         super.onResume()
         restoreImmersiveState()
@@ -46,18 +64,27 @@ abstract class BaseActivity : Activity() {
         onConfigurationChanged()
         onLanguageChanged()
     }
-    
-    /**
-     * 初始化沉浸式UI（状态栏 + 导航栏）
-     */
     private fun initImmersiveUI() {
         if (enableImmersiveStatusBar) {
             StatusBarUtils.setTransparentStatusBar(this)
             StatusBarUtils.setStatusBarLightMode(this) // 默认浅色文字
         }
         if (enableImmersiveNavigationBar) {
+            setNavigationBarColor(this, android.graphics.Color.TRANSPARENT)
             NavigationBarUtils.setImmersiveNavigationBar(this)
             NavigationBarUtils.setNavigationBarLightMode(this) // 默认浅色文字
+        }
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
+            true
+        ViewCompat.setOnApplyWindowInsetsListener(mBind.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(
+                left = 0,
+                top = 0,
+                right = 0,
+                bottom = systemBars.bottom
+            )
+            insets
         }
     }
     
@@ -75,41 +102,29 @@ abstract class BaseActivity : Activity() {
             NavigationBarUtils.setNavigationBarLightMode(this)
         }
     }
-    
-    /**
-     * 抽象方法：初始化视图
-     * 子类必须实现此方法来初始化UI组件
-     */
-    protected abstract fun initViews()
-    
-    /**
-     * 抽象方法：初始化数据
-     * 子类可以重写此方法来初始化业务数据
-     */
+    protected abstract fun initViews(savedInstanceState: Bundle?)
     protected open fun initData() {}
-    
-    /**
-     * 抽象方法：初始化监听器
-     * 子类必须实现此方法来设置事件监听
-     */
     protected abstract fun initListeners()
-    
-    /**
-     * 显示Toast消息
-     */
     protected fun showToast(message: String) {
         showToast(message)
     }
-    /**
-     * 处理返回键逻辑
-     */
     protected open fun handleBackPressed(): Boolean {
-        return false // 返回false表示不拦截，交给系统处理
+        return false
     }
-    
-    /**
-     * 点击空白处自动隐藏键盘
-     */
+    protected open fun registerOnBackPressedCallback() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (handleBackPressed()) {
+                    return
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
+        })
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (enableAutoHideKeyboard && ev?.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus

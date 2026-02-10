@@ -7,14 +7,13 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
 import androidx.core.os.LocaleListCompat
-import androidx.multidex.MultiDexApplication
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LanguageUtils
 import java.lang.ref.WeakReference
 import java.util.Locale
 
-class App : MultiDexApplication() {
+class App : Application() {
     interface AppStatusChangeListener {
         fun onAppEnterForeground()
         fun onAppEnterBackground()

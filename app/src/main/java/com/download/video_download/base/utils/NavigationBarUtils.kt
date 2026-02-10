@@ -55,14 +55,20 @@ object NavigationBarUtils {
      * 设置沉浸式导航栏
      */
     fun setImmersiveNavigationBar(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.window.navigationBarColor = android.graphics.Color.TRANSPARENT
-            activity.window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                )
-        }
+        activity.window.navigationBarColor = android.graphics.Color.TRANSPARENT
+        activity.window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            )
+    }
+    
+    /**
+     * 设置导航栏透明背景
+     * 仅设置背景透明，不改变其他系统UI标志
+     */
+    fun setNavigationBarTransparent(activity: Activity) {
+        activity.window.navigationBarColor = android.graphics.Color.TRANSPARENT
     }
     
     /**
@@ -78,24 +84,20 @@ object NavigationBarUtils {
      * 设置导航栏文字颜色为深色（适用于浅色背景）
      */
     fun setNavigationBarLightMode(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity.window.decorView.systemUiVisibility = (
-                activity.window.decorView.systemUiVisibility
-                    or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                )
-        }
+        activity.window.decorView.systemUiVisibility = (
+            activity.window.decorView.systemUiVisibility
+                or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            )
     }
     
     /**
      * 设置导航栏文字颜色为浅色（适用于深色背景）
      */
     fun setNavigationBarDarkMode(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity.window.decorView.systemUiVisibility = (
-                activity.window.decorView.systemUiVisibility
-                    and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
-                )
-        }
+        activity.window.decorView.systemUiVisibility = (
+            activity.window.decorView.systemUiVisibility
+                and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+            )
     }
     
     /**

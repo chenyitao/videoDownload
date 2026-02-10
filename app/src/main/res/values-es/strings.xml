@@ -1,0 +1,4 @@
+<resources>
+    
+    <string name="loading_progress">Cargando… %d%%</string>
+</resources>

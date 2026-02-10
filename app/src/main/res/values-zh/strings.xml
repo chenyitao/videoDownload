@@ -1,7 +1,3 @@
 <resources>
-    <string name="app_name">视频下载</string>
-    <string name="welcome_message">欢迎使用视频下载应用</string>
-    <string name="sample_button">示例按钮</string>
-    <string name="language_switch">切换语言</string>
-    <string name="current_language">当前语言: %s</string>
+    <string name="loading_progress">載入中… %d%%</string>
 </resources>
