@@ -14,7 +14,6 @@ object StringUtils {
         }
         val endIndex = startIndex + targetSubStr.length
 
-        // 2. 为子串区间设置加粗样式
         val boldSpan = StyleSpan(Typeface.BOLD)
         spannableString.setSpan(
             boldSpan,

@@ -13,4 +13,8 @@
     <string name="guide3_des">Disclaimer</string>
     <string name="skip">Skip</string>
     <string name="guide3_bold">(excluding YouTube)</string>
+    <string name="home_search">Search or type a URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Video</string>
 </resources>

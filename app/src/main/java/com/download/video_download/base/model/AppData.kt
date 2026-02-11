@@ -11,3 +11,10 @@ data class GuideData(
     val image: Int,
     val description: String
 )
+
+data class WebsiteData(
+    val title: String,
+    val image: Int,
+    val color: String = "",
+    val url: String
+)

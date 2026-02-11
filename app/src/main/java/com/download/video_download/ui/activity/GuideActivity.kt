@@ -17,7 +17,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
+import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.model.GuideData
+import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DpUtils.dp2px
 import com.download.video_download.base.utils.StringUtils.boldTargetSubStr
 import com.download.video_download.databinding.ActivityGuideBinding
@@ -44,6 +46,20 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     }
 
     override fun initListeners() {
+        mBind.skip.setOnClickListener {
+            startActivity<MainActivity>()
+            AppCache.guideShow = true
+            finish()
+        }
+        mBind.next.setOnClickListener {
+            if (mBind.viewPager.currentItem == viewModel.getGuideList().size - 1){
+                startActivity<MainActivity>()
+                AppCache.guideShow = true
+                finish()
+                return@setOnClickListener
+            }
+            mBind.viewPager.currentItem += 1
+        }
     }
     class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: AppCompatTextView = itemView.findViewById(R.id.tv_title)

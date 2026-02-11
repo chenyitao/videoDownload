@@ -28,39 +28,29 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
 
     override fun initViews(savedInstanceState: Bundle?) {
         mBind.navBottom.selectedItemId = R.id.nav_home
+        loadFragment(R.id.nav_home)
         mBind.navBottom.itemIconTintList = null
         setStatusBarMode(true)
     }
 
     override fun initListeners() {
         mBind.navBottom.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(mBind.container.id, HomeFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_search -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(mBind.container.id, WebFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_download -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(mBind.container.id, DownloadFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_player -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(mBind.container.id, PlayerFragment())
-                        .commit()
-                    true
-                }
-                else -> false
-            }
+            loadFragment(item.itemId)
+            true
+        }
+    }
+    private fun loadFragment(itemId: Int) {
+        val fragment = when (itemId) {
+            R.id.nav_home -> HomeFragment()
+            R.id.nav_search -> WebFragment()
+            R.id.nav_download -> DownloadFragment()
+            R.id.nav_player -> PlayerFragment()
+            else -> null
+        }
+        fragment?.let {
+            supportFragmentManager.beginTransaction()
+                .replace(mBind.container.id, it)
+                .commit()
         }
     }
 
