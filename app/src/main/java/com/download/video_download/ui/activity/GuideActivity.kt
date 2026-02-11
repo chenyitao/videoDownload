@@ -41,6 +41,11 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         mBind.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                if (position == 2){
+                    mBind.skip.visibility = View.INVISIBLE
+                }else{
+                    mBind.skip.visibility = View.VISIBLE
+                }
             }
         })
     }
