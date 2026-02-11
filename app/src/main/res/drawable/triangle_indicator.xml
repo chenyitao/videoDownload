@@ -8,6 +8,6 @@
     <!-- 三角形路径 -->
     <path
         android:pathData="M0,10 L9.5,0 L19,10 Z"
-        android:fillColor="#ffffffff" />
+        android:fillColor="#FF9526" />
         
 </vector>

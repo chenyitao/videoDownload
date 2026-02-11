@@ -24,4 +24,6 @@
     <string name="search_guide_2">2.Begin playing the video.</string>
     <string name="search_guide_3">3.Click the download button</string>
     <string name="search_guide_video_title">Her heart\'s melody sets her body free in a dance of pure, unscripted joy.</string>
+    <string name="history">History</string>
+    <string name="clear_all">Clear All</string>
 </resources>

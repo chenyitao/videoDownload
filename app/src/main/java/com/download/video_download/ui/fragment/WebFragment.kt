@@ -1,10 +1,14 @@
 package com.download.video_download.ui.fragment
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.model.History
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.databinding.FragmentSearchBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
@@ -22,10 +26,29 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     override fun createViewModel(): SearchViewModel  = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        loadFragment(SearchState.GUIDE)
+        loadFragment(SearchState.HISTORY)
     }
 
     override fun initListeners() {
+        binding.tvSearch.setOnClickListener {
+            val inputContent = binding.etSearch.text.toString().trim()
+            if (inputContent.isNotEmpty()) {
+                searchViewModel.addHistory(History(inputContent, System.currentTimeMillis()))
+            }
+        }
+        binding.etSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            val isSearchAction = actionId == EditorInfo.IME_ACTION_SEARCH
+            val isEnterKey = event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP
+            if (isSearchAction || isEnterKey) {
+                val inputContent = v.text.toString().trim()
+
+                if (inputContent.isNotEmpty()) {
+                    searchViewModel.addHistory(History(inputContent, System.currentTimeMillis()))
+                }
+                return@OnEditorActionListener true
+            }
+            false
+        })
     }
     override fun onResume() {
         super.onResume()

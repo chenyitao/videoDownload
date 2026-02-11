@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import kotlinx.serialization.json.Json
 
 /**
  * Context 扩展函数
@@ -40,6 +41,14 @@ inline fun <reified T : Activity> Context.startActivityWithExtras(extras: Bundle
     val bundle = Bundle().apply(extras)
     intent.putExtras(bundle)
     startActivity(intent)
+}
+inline fun <reified T : Activity> Context.jsonParser(): Json {
+    return Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        prettyPrint = false
+        isLenient = true
+    }
 }
 
 /**

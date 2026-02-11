@@ -57,6 +57,7 @@
                 android:textColorHint="#4dffffff"
                 android:layout_toStartOf="@+id/iv_search_clear"
                 android:background="@null"
+                android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:ellipsize="end"/>
             <androidx.appcompat.widget.AppCompatImageView

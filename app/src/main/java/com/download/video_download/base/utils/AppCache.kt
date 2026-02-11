@@ -62,4 +62,9 @@ object AppCache {
             saveValue("guideShow", value)
         }
         get() =getValue("guideShow", false)
+    var history : String
+        set(value) {
+            saveValue("history", value)
+        }
+        get() =getValue("history", "")
 }

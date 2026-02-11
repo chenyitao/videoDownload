@@ -20,16 +20,19 @@ media3-ui = { module = "androidx.media3:media3-ui", version = "1.9.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.10.2" }
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version = "2.7.0" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version = "2.7.0" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version = "2.7.0" }
 androidx-lifecycle-livedata-ktx= { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version = "1.12.3" }
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.9" }
 lottie = { group = "com.airbnb.android", name = "lottie", version = "5.2.0" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.2" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "1.9.23"}
+
 
