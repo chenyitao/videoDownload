@@ -17,4 +17,11 @@
     <string name="imdb">IMDb</string>
     <string name="mixkit">Mixkit</string>
     <string name="video">Video</string>
+    <string name="search_hint">Paste or type a URL/search</string>
+    <string name="search_guide_tips">Tips:Click the download button to start saving the file.</string>
+    <string name="search_guide_tips_up">Begin playing the video.</string>
+    <string name="search_guide_1">1.Locate the video by its title.</string>
+    <string name="search_guide_2">2.Begin playing the video.</string>
+    <string name="search_guide_3">3.Click the download button</string>
+    <string name="search_guide_video_title">Her heart\'s melody sets her body free in a dance of pure, unscripted joy.</string>
 </resources>
