@@ -10,7 +10,8 @@ import com.download.video_download.databinding.ItemHistoryBinding
  * 语言选择列表适配器
  */
 class HistoryAdapter(
-    private val onItemClick: (History) -> Unit
+    private val onItemClick: (History) -> Unit,
+    private val onItemDelClick: (History) -> Unit,
 ) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     
     private var historyList: MutableList<History> = mutableListOf()
@@ -42,6 +43,12 @@ class HistoryAdapter(
         fun bind(data: History) {
             binding.historyUrl .text = data.url
             binding.ivDelete.setOnClickListener{
+                val currentPosition = adapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    onItemDelClick(data)
+                }
+            }
+            binding.llH.setOnClickListener {
                 val currentPosition = adapterPosition
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     onItemClick(data)

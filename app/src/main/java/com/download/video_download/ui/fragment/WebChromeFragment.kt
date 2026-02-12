@@ -18,16 +18,27 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
+import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.model.DetectState
+import com.download.video_download.base.model.DetectStatus
 import com.download.video_download.base.model.History
+import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.utils.DESUtil
 import com.download.video_download.base.web.JsBg
+import com.download.video_download.base.web.VideoParse
 import com.download.video_download.base.web.VideoParse.isDouyinVideoUrl
 import com.download.video_download.databinding.FragmentSearchChromeBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Collections
 import kotlin.text.isNullOrEmpty
 
@@ -39,6 +50,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
     var task1 = ""
     var task2 = ""
     private var curUrl = ""
+    var videoList: MutableList<Video> = ArrayList()
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -84,7 +96,25 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             addJavascriptInterface(
                 JsBg(
                 videoData = { videos, isLoading ->
+                    videoList.addAll( videos)
+                    val distinctVideoList = videoList.distinctBy { it.url }.toMutableList()
+                    videoList = distinctVideoList
                     Log.d("VideoEngine", "videoData: $videos")
+                    val currentHost =
+                        curUrl.toUri().host
+                    val findItem =
+                        VideoParse.perWebsite.find {
+                            currentHost?.contains(
+                                it
+                            ) == true
+                        }
+                    lifecycleScope.launch(Dispatchers.Main) { // 替换为你的实际生命周期作用域
+                        findItem?.let {
+                            searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+                        }
+                        searchViewModel.isLoading(isLoading)
+                        searchViewModel.saveVideos(videoList)
+                    }
                 },
                 jobs = parseJobList,
                 isInit = {
@@ -105,7 +135,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
         }
         searchViewModel.setChromeUrl.observe( this, {
             val url = it
-            if (url.isNotEmpty() && (URLUtil.isNetworkUrl(url) || url.contains("www."))){
+            if (url.isNotEmpty() && (URLUtil.isNetworkUrl(url) || url.contains("www.") || url.contains(".com"))){
                 val host = url.toUri().host
                 if (binding.webview.url == null || binding.webview.url?.contains(host.toString()) == false){
                     binding.webview.loadUrl(url)
@@ -147,6 +177,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 super.onPageStarted(view, url, favicon)
                 curUrl = url?:""
                 parseJobList.forEach { it.cancel() }
+                videoList.clear()
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -154,22 +185,27 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 curUrl = url?:""
                 if (!URLUtil.isAboutUrl(url) && url?.contains("youtube") == false) {
                     if (isDouyinVideoUrl(url)) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            view?.evaluateJavascript(task1) { result ->
-                            }
-                        } else {
-                            view?.loadUrl("javascript:$task1")
+                        view?.evaluateJavascript(task1) { result ->
                         }
                     } else {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            view?.evaluateJavascript(task2) { result ->
-                            }
-                        } else {
-                            view?.loadUrl("javascript:$task2")
+                        view?.evaluateJavascript(task2) { result ->
                         }
                     }
+                    val currentHost =
+                        curUrl.toUri().host
+                    val findItem =
+                        VideoParse.perWebsite.find {
+                            currentHost?.contains(
+                                it
+                            ) == true
+                        }
+                    findItem?.let {
+                        searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+                    }?:run {
+                        searchViewModel.detect(DetectStatus(DetectState.YOUTUBE))
+                    }
                 } else {
-//                    viewModel.handleIntent(HomeIntent.VideoDisable)
+                    searchViewModel.detect(DetectStatus(DetectState.YOUTUBE))
                 }
                 val currentHost =
                     url?.toUri()?.host
@@ -180,7 +216,9 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                     )
                     searchViewModel.addHistory(curHistory)
                 }
-                searchViewModel.setSearchInput(currentHost?:"")
+                if (!binding.empty.isVisible){
+                    searchViewModel.setSearchInput(currentHost?:"")
+                }
             }
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
@@ -214,6 +252,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 if (request?.isForMainFrame == true) {
                     binding.empty.visibility = View.VISIBLE
                     binding.llEmptyBtn.visibility = View.VISIBLE
+                    searchViewModel.setSearchInput(App.getAppContext().getString(R.string.load_error_web))
                 }else{
                     binding.empty.visibility = View.GONE
                     binding.llEmptyBtn.visibility = View.GONE

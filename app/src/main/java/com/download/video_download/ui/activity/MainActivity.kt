@@ -102,4 +102,8 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun onDestroy() {
         super.onDestroy()
     }
+
+    override fun handleBackPressed(): Boolean {
+        return false
+    }
 }

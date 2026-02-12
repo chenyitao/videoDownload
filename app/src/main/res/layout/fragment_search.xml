@@ -3,7 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="false"
+    android:clickable="false"
+    android:focusableInTouchMode="false">
     <RelativeLayout
         android:id="@+id/rl_search"
         android:layout_width="match_parent"
@@ -19,6 +22,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@mipmap/ic_search_back"
+            android:clickable="true"
             android:layout_centerVertical="true"/>
         <RelativeLayout
             android:id="@+id/rl_search_content"
@@ -28,7 +32,10 @@
             android:layout_marginStart="8dp"
             android:background="@drawable/shape_radius_6_grey"
             android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingBottom="4dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_google"
                 android:layout_width="24dp"
@@ -169,6 +176,17 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_floating_anim"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/ripple_circle_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:clickable="true"
+            android:focusable="true" />
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_floating"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -176,7 +194,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="20dp"
-            android:layout_marginEnd="20dp"/>
+            android:layout_marginEnd="20dp"
+            android:clickable="true"
+            android:focusable="true" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/iv_floating_num"
             android:layout_width="wrap_content"

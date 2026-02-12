@@ -40,3 +40,7 @@ data class NavigationItem(
     val from: NavState,
     val route: NavState
 )
+
+data class DetectStatus(
+    val state: DetectState,
+)

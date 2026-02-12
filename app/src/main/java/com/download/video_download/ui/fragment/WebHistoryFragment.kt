@@ -30,9 +30,13 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
     override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        adapter = HistoryAdapter {
+        adapter = HistoryAdapter(onItemDelClick = {
             viewModel.deleteHistory(it)
-        }
+        }, onItemClick ={
+            searchViewModel.navigate(SearchState.WEB)
+            searchViewModel.setChromeUrl(it.url)
+            searchViewModel.setSearchInput(it.url)
+        })
         binding.rvHistory.adapter = adapter
         viewModel.getHistoryData()
         lifecycleScope.launch {

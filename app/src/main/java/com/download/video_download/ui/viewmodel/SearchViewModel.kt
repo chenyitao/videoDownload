@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.download.video_download.base.BaseViewModel
+import com.download.video_download.base.model.DetectStatus
 import com.download.video_download.base.model.History
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.utils.AppCache
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +32,12 @@ class SearchViewModel: BaseViewModel() {
     val goBackWeb: LiveData<Boolean> get() = _goBackWeb
     private val _goBackDone = MutableLiveData<Boolean>()
     val goBackDone: LiveData<Boolean> get() = _goBackDone
+    private val _videos = MutableLiveData<MutableList<Video>>()
+    val videos: LiveData<MutableList<Video>> get() = _videos
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+    private val _detect= MutableLiveData<DetectStatus>()
+    val detect: LiveData<DetectStatus> get() = _detect
     fun getHistoryData(){
         viewModelScope.launch {
             val historyStr = AppCache.history
@@ -113,5 +121,14 @@ class SearchViewModel: BaseViewModel() {
     }
     fun notifyWebGoBackDone() {
         _goBackDone.value = true
+    }
+    fun saveVideos(videos: MutableList<Video>) {
+        _videos.value = videos
+    }
+    fun isLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading
+    }
+    fun detect(state: DetectStatus) {
+        _detect.value = state
     }
 }

@@ -2,26 +2,35 @@ package com.download.video_download.ui.fragment
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.URLUtil
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.ext.showToast
+import com.download.video_download.base.model.DetectState
 import com.download.video_download.base.model.History
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
@@ -52,6 +61,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     override fun createViewModel(): SearchViewModel  = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        startRippleAnimation()
+        initRotateAnimation()
         searchViewModel.nav.observe(this){
             curPage = it?:SearchState.GUIDE
             switchPage()
@@ -67,12 +78,51 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             binding.etSearch.setText(it)
         }
         searchViewModel.goBackDone.observe(this){
+            binding.etSearch.text?.clear()
+            hideKeyboard(binding.etSearch)
             if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}"){
                 loadFragment(SearchState.HISTORY)
                 curPage = SearchState.HISTORY
             }else{
                 loadFragment(SearchState.GUIDE)
                 curPage = SearchState.GUIDE
+            }
+        }
+        searchViewModel.detect.observe(this){
+            when (it.state){
+                DetectState.SUPPORTWEB -> {
+                    binding.ivFloating.setImageResource(R.mipmap.ic_floating_normal)
+                }
+                DetectState.YOUTUBE -> {
+                    binding.ivFloatingNum.visibility = View.GONE
+                    binding.ivFloating.setImageResource(R.mipmap.ic_floating_grey)
+                }
+                else -> {}
+            }
+        }
+        searchViewModel.isLoading.observe(this){
+            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE){
+                return@observe
+            }
+            if (it){
+                binding.ivFloating.setImageResource(R.mipmap.ic_floating_loading)
+                resumeRotate()
+            }else{
+                binding.ivFloating.setImageResource(R.mipmap.ic_floating_normal)
+                pauseRotate()
+            }
+        }
+        searchViewModel.videos.observe(this){
+            if (it.isNotEmpty()){
+                if (AppCache.isFirstDetect && !binding.downFloatingGuide.isVisible){
+                    binding.downFloatingGuide.visibility = View.VISIBLE
+                    createUpFingerAnimation(false)
+                    startAnimations()
+                }
+                binding.ivFloatingNum.visibility = View.VISIBLE
+                binding.ivFloatingNum.text = it.size.toString()
+            }else{
+                binding.ivFloatingNum.visibility = View.GONE
             }
         }
         binding.tvSearch.background = if (binding.etSearch.text.toString().isEmpty()) ContextCompat.getDrawable(requireContext(),R.drawable.shape_radius_6_grey)
@@ -83,7 +133,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         binding.tvSearch.setOnClickListener {
             val inputContent = binding.etSearch.text.toString().trim()
             if (inputContent.isNotEmpty()) {
-                val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")){
+                val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")|| inputContent.contains(".com")){
                     inputContent
                 }else{
                     "https://www.google.com/search?q=${URLEncoder.encode(inputContent, "UTF-8")}"
@@ -94,7 +144,9 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 }
                 searchViewModel.setChromeUrl(data)
                 hideKeyboard(binding.etSearch)
+                return@setOnClickListener
             }
+            requireContext().showToast(getString(R.string.search_hint))
         }
         binding.etSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             val isSearchAction = actionId == EditorInfo.IME_ACTION_SEARCH
@@ -103,7 +155,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 val inputContent = v.text.toString().trim()
 
                 if (inputContent.isNotEmpty()) {
-                    val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")){
+                    val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")|| inputContent.contains(".com")){
                         inputContent
                     }else{
                         "https://www.google.com/search?q=${URLEncoder.encode(inputContent, "UTF-8")}"
@@ -114,7 +166,9 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                     }
                     searchViewModel.setChromeUrl(data)
                     hideKeyboard(binding.etSearch)
+                    return@OnEditorActionListener true
                 }
+                requireContext().showToast(getString(R.string.search_hint))
                 return@OnEditorActionListener true
             }
             false
@@ -160,13 +214,49 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             searchViewModel.refreshWeb()
         }
         binding.ivSearchBack.setOnClickListener {
+            val isKeyboardOpen = isKeyboardReallyShowing(requireContext(), requireActivity().window.decorView.findViewById<View>(android.R.id.content))
+            if (isKeyboardOpen){
+                hideKeyboard(binding.etSearch)
+                return@setOnClickListener
+            }
             if (curPage == SearchState.WEB){
                 searchViewModel.canWebGoBack()
             }else{
+                binding.etSearch.text?.clear()
                 mainViewModel.navigate(NavigationItem( "", NavState.SEARCH, NavState.HOME))
             }
         }
+        binding.ivFloating.setOnClickListener {
+            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE || searchViewModel.videos.value?.isEmpty() == true){
+                requireContext().showToast(getString(R.string.no_file))
+                return@setOnClickListener
+            }
+            if ((searchViewModel.detect.value?.state == DetectState.SUPPORTWEB && (searchViewModel.videos.value == null || searchViewModel.videos.value?.isEmpty() == true))
+                || (searchViewModel.isLoading.value == null || searchViewModel.isLoading.value == true)){
+                requireContext().showToast(getString(R.string.a_video))
+                return@setOnClickListener
+            }
+
+        }
     }
+    override fun handleBackPressed(): Boolean {
+        if (!isVisible){
+            return false
+        }
+        val isKeyboardOpen = isKeyboardReallyShowing(requireContext(), requireActivity().window.decorView.findViewById<View>(android.R.id.content))
+        if (isKeyboardOpen){
+            hideKeyboard(binding.etSearch)
+        }else{
+            if (curPage == SearchState.WEB){
+                searchViewModel.canWebGoBack()
+            }else{
+                binding.etSearch.text?.clear()
+                mainViewModel.navigate(NavigationItem( "", NavState.SEARCH, NavState.HOME))
+            }
+        }
+        return true
+    }
+
     override fun onResume() {
         super.onResume()
         parseParams()
@@ -237,6 +327,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             loadFragment(SearchState.GUIDE)
             curPage = SearchState.GUIDE
         }
+        if (curPage == SearchState.HISTORY){
+            binding.floating.visibility = View.GONE
+        }else{
+            binding.floating.visibility = View.VISIBLE
+        }
     }
     private fun loadFragment(state: SearchState) {
         val targetFragment = fragmentCache.getOrPut(state) {
@@ -292,4 +387,53 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
+    private fun isKeyboardReallyShowing(context: Context, rootView: View): Boolean {
+        val displayMetrics = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenHeight = displayMetrics.heightPixels
+
+        val rect = Rect()
+        rootView.getWindowVisibleDisplayFrame(rect)
+        val visibleHeight = rect.bottom - rect.top
+
+        val heightDiff = screenHeight - visibleHeight
+        val keyboardThreshold = screenHeight / 4
+
+        return heightDiff > keyboardThreshold
+    }
+
+    private fun initRotateAnimation() {
+        val rotateAnimator = ObjectAnimator.ofFloat(binding.ivFloating, "rotation", 0f, 360f)
+        rotateAnimator.apply {
+            duration = 200
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = LinearInterpolator()
+            repeatMode = ValueAnimator.RESTART
+        }
+        binding.ivFloating.tag = rotateAnimator
+    }
+
+    fun pauseRotate() {
+        val animator = binding.ivFloating.tag as? ValueAnimator
+        animator?.pause()
+    }
+
+    fun resumeRotate() {
+        val animator = binding.ivFloating.tag as? ValueAnimator
+        animator?.resume()
+    }
+    private fun startRippleAnimation() {
+        val rippleAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.ripple_circle_anim)
+        binding.ivFloatingAnim.apply {
+            startAnimation(rippleAnim) // 启动无限循环动画
+            rippleAnim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    startAnimation(rippleAnim)
+                }
+                override fun onAnimationRepeat(animation: Animation?) {}
+            })
+        }
+    }
+
 }
