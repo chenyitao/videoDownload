@@ -4,10 +4,13 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -39,6 +42,7 @@ import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.PUtils
 import com.download.video_download.databinding.FragmentSearchBinding
 import com.download.video_download.ui.dialog.DownloadDialog
+import com.download.video_download.ui.dialog.DownloadStatusDialog
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.SearchViewModel
 import java.net.URLEncoder
@@ -53,6 +57,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     private var curPage = SearchState.GUIDE
     private val fragmentCache = HashMap<SearchState, Fragment>()
     private var currentFragment: Fragment? = null
+    private var permissionDenied = false
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -498,12 +503,23 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             downloadDialog.setOnCancelListener {
                 if (PUtils.hasStoragePermission(requireContext())) {
                 } else {
+                    if (permissionDenied){
+                        mainViewModel.isFromPermissionBack = true
+                        goToPermissionSetting()
+                        return@setOnCancelListener
+                    }
                     PUtils.requestStoragePermission(requireActivity())
                 }
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
             downloadDialog.updateData(it)
         }
+    }
+    private fun goToPermissionSetting() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
+        intent.data = uri
+        startActivity(intent)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -518,7 +534,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
 
             },
             onDenied = {
-
+                permissionDenied = true
             }
         )
     }

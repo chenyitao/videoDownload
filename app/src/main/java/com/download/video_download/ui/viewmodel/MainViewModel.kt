@@ -8,6 +8,8 @@ import com.download.video_download.base.model.NavigationItem
 class MainViewModel : BaseViewModel() {
     private val _nav = MutableLiveData<NavigationItem?>()
     val nav: LiveData<NavigationItem?> get() = _nav
+
+    var isFromPermissionBack = false
     fun navigate(item: NavigationItem) {
         _nav.value = item
     }

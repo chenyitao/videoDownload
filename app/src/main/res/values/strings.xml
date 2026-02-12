@@ -41,4 +41,9 @@
     <string name="deselect_all">Deselect All</string>
     <string name="select_all">Select All</string>
     <string name="fast_download">Download(%d)</string>
+    <string name="download_task1">Download has </string>
+    <string name="download_task1_green">started</string>
+    <string name="download_task2">Download </string>
+    <string name="download_task2_green">completed</string>
+    <string name="view">View</string>
 </resources>

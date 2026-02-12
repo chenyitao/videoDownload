@@ -106,4 +106,11 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun handleBackPressed(): Boolean {
         return false
     }
+
+    override fun onAppEnterForeground() {
+        if (!viewModel.isFromPermissionBack){
+            super.onAppEnterForeground()
+        }
+        viewModel.isFromPermissionBack = false
+    }
 }
