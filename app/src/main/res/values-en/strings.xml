@@ -13,4 +13,21 @@
     <string name="guide3_des">Disclaimer</string>
     <string name="skip">Skip</string>
     <string name="guide3_bold">(excluding YouTube)</string>
+    <string name="home_search">Search or type a URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Video</string>
+    <string name="search_hint">Paste or type a URL/search</string>
+    <string name="search_guide_tips">Tips:Click the download button to start saving the file.</string>
+    <string name="search_guide_tips_up">Begin playing the video.</string>
+    <string name="search_guide_1">1.Locate the video by its title.</string>
+    <string name="search_guide_2">2.Begin playing the video.</string>
+    <string name="search_guide_3">3.Click the download button</string>
+    <string name="search_guide_video_title">Her heart\'s melody sets her body free in a dance of pure, unscripted joy.</string>
+    <string name="history">History</string>
+    <string name="clear_all">Clear All</string>
+    <string name="load_error">Couldn’t load the page. Please try again.</string>
+    <string name="Retry">Retry</string>
+    <string name="guide1_title_new">Play the video on its original website.</string>
+    <string name="guide2_title_new">Once it starts playing, click the download button.</string>
 </resources>

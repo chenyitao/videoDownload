@@ -13,4 +13,21 @@
     <string name="guide3_des">Disclaimer</string>
     <string name="skip">Skip</string>
     <string name="guide3_bold">(escluso YouTube)</string>
+    <string name="home_search">Cerca o digita un URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Video</string>
+    <string name="search_hint">Incolla o digita un URL/ricerca</string>
+    <string name="search_guide_tips">Consigli: Clicca sul pulsante download per iniziare a salvare il file.</string>
+    <string name="search_guide_tips_up">Inizia a riprodurre il video.</string>
+    <string name="search_guide_1">1. Localizza il video dal titolo.</string>
+    <string name="search_guide_2">2. Inizia a riprodurre il video.</string>
+    <string name="search_guide_3">3. Clicca sul pulsante di download</string>
+    <string name="search_guide_video_title">La melodia del suo cuore libera il suo corpo in una danza di pura gioia spontanea.</string>
+    <string name="history">Storia</string>
+    <string name="clear_all">Cancella tutto</string>
+    <string name="load_error">Non riuscivo a caricare la pagina. Per favore, riprova.</string>
+    <string name="Retry">Ritenta</string>
+    <string name="guide1_title_new">Visualizza il video sul sito originale.</string>
+    <string name="guide2_title_new">Quando inizia a riprodursi, clicca sul pulsante download.</string>
 </resources>

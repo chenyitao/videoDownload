@@ -13,4 +13,21 @@
     <string name="guide3_des">Haftungsausschluss</string>
     <string name="skip">Überspringen</string>
     <string name="guide3_bold">(ohne YouTube)</string>
+    <string name="home_search">Suche oder gib eine URL ein</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Video</string>
+    <string name="search_hint">Fügen Sie eine URL oder Suche ein oder geben Sie eine URL ein oder geben Sie sie ein</string>
+    <string name="search_guide_tips">Tipps: Klicken Sie auf den Download-Button, um die Datei zu speichern.</string>
+    <string name="search_guide_tips_up">Fang an, das Video abzuspielen.</string>
+    <string name="search_guide_1">1. Finde das Video anhand seines Titels.</string>
+    <string name="search_guide_2">2. Beginnen Sie mit dem Abspielen des Videos.</string>
+    <string name="search_guide_3">3. Klicken Sie auf den Download-Button</string>
+    <string name="search_guide_video_title">Die Melodie ihres Herzens befreit ihren Körper in einem Tanz reiner, ungeskripteter Freude.</string>
+    <string name="history">Geschichte</string>
+    <string name="clear_all">Alles löschen</string>
+    <string name="load_error">Konnte die Seite nicht laden. Bitte versuchen Sie es erneut.</string>
+    <string name="Retry">Wiederholungsversuch</string>
+    <string name="guide1_title_new">Spielen Sie das Video auf der ursprünglichen Website ab.</string>
+    <string name="guide2_title_new">Sobald es losgeht, klicke auf den Download-Button.</string>
 </resources>

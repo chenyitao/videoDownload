@@ -13,4 +13,21 @@
     <string name="guide3_des">Penolakan tanggung jawab</string>
     <string name="skip">Lewati</string>
     <string name="guide3_bold">(tidak termasuk YouTube)</string>
+    <string name="home_search">Menelusuri atau mengetik URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Videonya</string>
+    <string name="search_hint">Tempel atau ketik URL/pencarian</string>
+    <string name="search_guide_tips">Tips:Klik tombol unduh untuk mulai menyimpan file.</string>
+    <string name="search_guide_tips_up">Mulailah memutar video.</string>
+    <string name="search_guide_1">1. Temukan video berdasarkan judulnya.</string>
+    <string name="search_guide_2">2. Mulailah memutar video.</string>
+    <string name="search_guide_3">3.Klik tombol unduh</string>
+    <string name="search_guide_video_title">Melodi hatinya membebaskan tubuhnya dalam tarian kegembiraan murni yang tidak tertulis.</string>
+    <string name="history">Sejarah</string>
+    <string name="clear_all">Hapus Semua</string>
+    <string name="load_error">Tidak dapat memuat halaman. Silakan coba lagi.</string>
+    <string name="Retry">Coba lagi</string>
+    <string name="guide1_title_new">Putar video di situs web aslinya.</string>
+    <string name="guide2_title_new">Setelah mulai diputar, klik tombol unduh.</string>
 </resources>

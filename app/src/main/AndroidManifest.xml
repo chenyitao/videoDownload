@@ -13,10 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Video_download">
         <activity
             android:name=".ui.activity.SplashActivity"
             android:exported="true"
+            android:launchMode="singleTop"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -35,12 +37,14 @@
         <activity
             android:name=".ui.activity.GuideActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
             android:name=".ui.activity.LanguageActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>

@@ -1,9 +1,12 @@
 package com.download.video_download.ui.fragment
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -16,6 +19,8 @@ import kotlin.getValue
 
 class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     val searchViewModel: SearchViewModel by viewModels()
+    private var upFingerAnimator: ObjectAnimator? = null
+    private var downFingerAnimator: ObjectAnimator? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -26,7 +31,9 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     override fun createViewModel(): SearchViewModel  = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        loadFragment(SearchState.HISTORY)
+        loadFragment(SearchState.GUIDE)
+        handleUpFingerUpDownAnimation()
+        handleDownFingerUpDownAnimation()
     }
 
     override fun initListeners() {
@@ -67,6 +74,54 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             childFragmentManager.beginTransaction()
                 .replace(binding.flContainer.id, it)
                 .commit()
+        }
+    }
+    private fun createUpFingerUpDownAnimation(){
+        upFingerAnimator = ObjectAnimator.ofFloat(binding.llFingerUp, "translationY", 0f, -20f).apply {
+            duration = 1500
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+    }
+    private fun startUpAnimations() {
+        upFingerAnimator?.start()
+    }
+
+    private fun cancelUpAnimations() {
+        upFingerAnimator?.cancel()
+        upFingerAnimator = null
+    }
+    private fun handleUpFingerUpDownAnimation() {
+        if (binding.upFloatingGuide.visibility == ViewGroup.VISIBLE){
+            createUpFingerUpDownAnimation()
+            startUpAnimations()
+        }else{
+            cancelUpAnimations()
+        }
+    }
+    private fun createDownFingerUpDownAnimation(){
+        downFingerAnimator = ObjectAnimator.ofFloat(binding.llGuideDown, "translationY", 0f, -20f).apply {
+            duration = 1500
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.REVERSE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+    }
+    private fun startDownAnimations() {
+        downFingerAnimator?.start()
+    }
+
+    private fun cancelDownAnimations() {
+        downFingerAnimator?.cancel()
+        downFingerAnimator = null
+    }
+    private fun handleDownFingerUpDownAnimation() {
+        if (binding.llGuideDown.visibility == ViewGroup.VISIBLE){
+            createDownFingerUpDownAnimation()
+            startDownAnimations()
+        }else{
+            cancelDownAnimations()
         }
     }
 }

@@ -1,14 +1,19 @@
+import android.content.res.Resources
+import com.download.video_download.App
+import com.download.video_download.R
 import com.download.video_download.base.BaseViewModel
 import com.download.video_download.base.model.LanguageSelectData
-import com.download.video_download.R
+import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LanguageUtils
+import com.download.video_download.base.utils.LanguageUtils.getSystemOriginalLocale
 import java.util.Locale
 
 class LanguageViewModel : BaseViewModel() {
 
-    private fun getSystemLanguageCode(): String {
-        val locale = Locale.getDefault()
-        val language = locale.language
-        val country = locale.country
+    fun getSystemLanguageCode(): String {
+        val systemLocale: Locale = Resources.getSystem().configuration.locale
+        val language = systemLocale.language.takeIf { it.isNotBlank() } ?: "en"
+        val country = systemLocale.country.takeIf { it.isNotBlank() } ?: ""
         if (language == "zh") {
             if (country == "TW" || country == "HK") {
                 return "zh-rTW"
@@ -16,11 +21,11 @@ class LanguageViewModel : BaseViewModel() {
             return "en"
         }
         val supportedLanguages = setOf("en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "hi", "it", "in", "fil", "th", "tr", "ur", "ms")
-        return if (language in supportedLanguages) language else "en"
+        val curlg = if (language in supportedLanguages) language else "en"
+        return curlg
     }
-
     fun getLanguageList(): MutableList<LanguageSelectData> {
-         return mutableListOf(
+         val lg =  mutableListOf(
             LanguageSelectData(
                 language = "Use system language",
                 languageCode = getSystemLanguageCode(),  // 根据支持的语言判断
@@ -137,6 +142,17 @@ class LanguageViewModel : BaseViewModel() {
                 languageIv = R.mipmap.ic_ur
             ),
          )
+        if (AppCache.switchLanguage.isNotEmpty()){
+            lg.forEachIndexed { index, it ->
+                if (it.languageCode == AppCache.switchLanguage && it.language == AppCache.switchLanguageName){
+                    it.isSelected = true
+                    LanguageUtils.setAppLanguage(App.getAppContext(),AppCache.switchLanguage)
+                }else{
+                    it.isSelected = false
+                }
+            }
+        }
+        return lg
     }
 
 }

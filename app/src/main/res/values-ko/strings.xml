@@ -13,4 +13,21 @@
     <string name="guide3_des">면책 조항</string>
     <string name="skip">건너뛰기</string>
     <string name="guide3_bold">(유튜브 제외)</string>
+    <string name="home_search">URL 검색이나 입력</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">믹스킷</string>
+    <string name="video">비디오</string>
+    <string name="search_hint">URL을 붙여넣거나 입력하세요 / 검색하세요</string>
+    <string name="search_guide_tips">팁: 파일 저장을 시작하려면 다운로드 버튼을 클릭하세요.</string>
+    <string name="search_guide_tips_up">영상 재생을 시작하세요.</string>
+    <string name="search_guide_1">1. 영상 제목을 찾아보세요.</string>
+    <string name="search_guide_2">2. 영상 재생 시작.</string>
+    <string name="search_guide_3">3. 다운로드 버튼을 클릭하세요</string>
+    <string name="search_guide_video_title">그녀의 마음의 멜로디는 순수하고 대본에 의한 기쁨의 춤으로 몸을 자유롭게 만든다.</string>
+    <string name="history">역사</string>
+    <string name="clear_all">모두 삭제</string>
+    <string name="load_error">페이지가 불러올 수 없었어요. 다시 시도해 주세요.</string>
+    <string name="Retry">재도전</string>
+    <string name="guide1_title_new">원본 웹사이트에서 영상을 재생하세요.</string>
+    <string name="guide2_title_new">재생이 시작되면 다운로드 버튼을 클릭하세요.</string>
 </resources>

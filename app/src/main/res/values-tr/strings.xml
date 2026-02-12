@@ -13,4 +13,21 @@
     <string name="guide3_des">Feragatname</string>
     <string name="skip">Atla</string>
     <string name="guide3_bold">(YouTube hariç)</string>
+    <string name="home_search">Arama veya URL yazın</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Video</string>
+    <string name="search_hint">URL/arama yap veya yapıştır</string>
+    <string name="search_guide_tips">İpuçları: Dosyayı kaydetmeye başlamak için indirme butonuna tıklayın.</string>
+    <string name="search_guide_tips_up">Videoyu oynatmaya başlayın.</string>
+    <string name="search_guide_1">1. Videoyu başlığına göre bul.</string>
+    <string name="search_guide_2">2. Videoyu oynatmaya başlayın.</string>
+    <string name="search_guide_3">3. İndir düğmesine tıklayın</string>
+    <string name="search_guide_video_title">Kalbinin melodisi, bedenini saf, öngörülmemiş bir neşe dansında özgür bırakıyor.</string>
+    <string name="history">Tarihçe</string>
+    <string name="clear_all">Hepsi Temizlen</string>
+    <string name="load_error">Sayfayı yükleyemedim. Lütfen tekrar dene.</string>
+    <string name="Retry">Yeniden deneme</string>
+    <string name="guide1_title_new">Videoyu orijinal web sitesinde oynatın.</string>
+    <string name="guide2_title_new">Oynamaya başladığında, indirme butonuna tıklayın.</string>
 </resources>

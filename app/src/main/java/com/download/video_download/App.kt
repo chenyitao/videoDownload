@@ -75,22 +75,24 @@ class App : Application() {
     }
     override fun getResources(): android.content.res.Resources {
         val resources = super.getResources()
-        if (AppCache.isInit()){
-            val sLanguage = AppCache.switchLanguage
-            val locale =  if (sLanguage.contains("-r")) {
-                val parts = sLanguage.split("-r")
-                if (parts.size == 2) {
-                    Locale(parts[0], parts[1])
-                } else {
-                    Locale(sLanguage)
+            if (AppCache.isInit()){
+                val sLanguage = AppCache.switchLanguage
+                if (sLanguage.isNotEmpty()){
+                    val locale =  if (sLanguage.contains("-r")) {
+                        val parts = sLanguage.split("-r")
+                        if (parts.size == 2) {
+                            Locale(parts[0], parts[1])
+                        } else {
+                            Locale(sLanguage)
+                        }
+                    } else {
+                        Locale(sLanguage)
+                    }
+                    val configuration = Configuration(resources.configuration)
+                    configuration.setLocales(LocaleList(locale))
+                    resources.updateConfiguration(configuration, resources.displayMetrics)
+                    ActivityManager.currentActivity()?.let { LanguageUtils.applyLanguageConfiguration(it) }
                 }
-            } else {
-                Locale(sLanguage)
-            }
-            val configuration = Configuration(resources.configuration)
-            configuration.setLocales(LocaleList(locale))
-            resources.updateConfiguration(configuration, resources.displayMetrics)
-            ActivityManager.currentActivity()?.let { LanguageUtils.applyLanguageConfiguration(it) }
         }
         return resources
     }

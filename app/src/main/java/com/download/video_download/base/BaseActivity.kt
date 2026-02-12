@@ -21,6 +21,7 @@ import com.download.video_download.base.ext.showToast
 import com.download.video_download.base.utils.*
 import com.download.video_download.base.BaseViewModel
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.ext.startActivityWithExtras
 import com.download.video_download.base.utils.NavigationBarUtils.setNavigationBarColor
 import com.download.video_download.ui.activity.MainActivity
 import com.download.video_download.ui.activity.SplashActivity
@@ -175,9 +176,11 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     }
     override fun attachBaseContext(newBase: Context?) {
         val sLanguage = AppCache.switchLanguage
-        newBase?.let {
-            val savedLocale = Locale(sLanguage)
-            LanguageUtils.updateContextLocale(newBase, savedLocale)
+        if (sLanguage.isNotEmpty()){
+            newBase?.let {
+                val savedLocale = Locale(sLanguage)
+                LanguageUtils.updateContextLocale(newBase, savedLocale)
+            }
         }
         super.attachBaseContext(newBase)
     }
@@ -186,7 +189,13 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         if (ActivityManager.currentActivity() is SplashActivity){
             return
         }
-        startActivity<SplashActivity>()
+        startActivity<SplashActivity>{
+            putExtra("from", "Background")
+            addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+            )
+        }
     }
 
     override fun onAppEnterBackground() {

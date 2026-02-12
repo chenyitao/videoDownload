@@ -13,4 +13,21 @@
     <string name="guide3_des">تنويه</string>
     <string name="skip">تخطي</string>
     <string name="guide3_bold">(باستثناء يوتيوب)</string>
+    <string name="home_search">ابحث أو اكتب عنوان URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">ميكسكت</string>
+    <string name="video">الفيديو</string>
+    <string name="search_hint">الصق أو اكتب رابط/بحث</string>
+    <string name="search_guide_tips">نصائح: اضغط على زر التحميل لبدء حفظ الملف.</string>
+    <string name="search_guide_tips_up">ابدأ تشغيل الفيديو.</string>
+    <string name="search_guide_1">1. حدد الفيديو من خلال عنوانه.</string>
+    <string name="search_guide_2">2. ابدأ تشغيل الفيديو.</string>
+    <string name="search_guide_3">3. اضغط على زر التحميل</string>
+    <string name="search_guide_video_title">لحن قلبها يحرر جسدها في رقصة من الفرح النقي غير المخطط.</string>
+    <string name="history">التاريخ</string>
+    <string name="clear_all">تنظيف الجميع</string>
+    <string name="load_error">لم أتمكن من تحميل الصفحة. يرجى المحاولة مرة أخرى.</string>
+    <string name="Retry">إعادة المحاولة</string>
+    <string name="guide1_title_new">شاهد الفيديو على موقعه الأصلي.</string>
+    <string name="guide2_title_new">بمجرد بدء التشغيل، اضغط على زر التحميل.</string>
 </resources>

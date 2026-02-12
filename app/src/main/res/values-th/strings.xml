@@ -13,4 +13,21 @@
     <string name="guide3_des">คําปฏิเสธ</string>
     <string name="skip">ข้าม</string>
     <string name="guide3_bold">(ไม่รวม YouTube)</string>
+    <string name="home_search">ค้นหาหรือพิมพ์ URL</string>
+    <string name="imdb">ไอเอ็มดีบี</string>
+    <string name="mixkit">มิกซ์คิท</string>
+    <string name="video">วิดีโอ</string>
+    <string name="search_hint">วางหรือพิมพ์ URL/การค้นหา</string>
+    <string name="search_guide_tips">ทิปส์:คลิกปุ่มดาวน์โหลดเพื่อเริ่มบันทึกไฟล์</string>
+    <string name="search_guide_tips_up">เริ่มเล่นวิดีโอ</string>
+    <string name="search_guide_1">1.ค้นหาวิดีโอตามชื่อ</string>
+    <string name="search_guide_2">2.เริ่มเล่นวิดีโอ</string>
+    <string name="search_guide_3">3.คลิกปุ่มดาวน์โหลด</string>
+    <string name="search_guide_video_title">ท่วงทํานองของหัวใจของเธอทําให้ร่างกายของเธอเป็นอิสระในการเต้นรําแห่งความสุขที่บริสุทธิ์และไม่มีสคริปต์</string>
+    <string name="history">ประวัติ</string>
+    <string name="clear_all">ล้างทั้งหมด</string>
+    <string name="load_error">โหลดหน้าเว็บไม่ได้ โปรดลองอีกครั้ง</string>
+    <string name="Retry">ลองอีกครั้ง</string>
+    <string name="guide1_title_new">เล่นวิดีโอบนเว็บไซต์ดั้งเดิม</string>
+    <string name="guide2_title_new">เมื่อเริ่มเล่นแล้ว ให้คลิกปุ่มดาวน์โหลด</string>
 </resources>

@@ -8,7 +8,7 @@ data class LanguageSelectData(
     val language: String,
     var isSelected: Boolean,  // 改为可变属性以支持选中状态更新
     val languageIv: Int,
-    val languageCode: String,
+    var languageCode: String,
 )
 data class GuideData(
     val title: String,

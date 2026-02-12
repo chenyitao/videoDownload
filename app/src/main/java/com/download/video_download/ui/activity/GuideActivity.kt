@@ -1,10 +1,12 @@
 package com.download.video_download.ui.activity
 
+import android.R.attr.startX
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -25,9 +27,13 @@ import com.download.video_download.base.utils.StringUtils.boldTargetSubStr
 import com.download.video_download.databinding.ActivityGuideBinding
 import com.download.video_download.ui.viewmodel.GuideViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlin.math.abs
 
 class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     val viewModel: GuideViewModel by viewModels()
+    var guideList: MutableList<GuideData> = mutableListOf()
+    private var currentPage = 0
+    private var isForbidRightScroll = true
     override fun createViewBinding(): ActivityGuideBinding {
         return ActivityGuideBinding.inflate(layoutInflater)
     }
@@ -35,9 +41,12 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun createViewModel(): GuideViewModel  = viewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        mBind.viewPager.adapter = ViewPager2Adapter(viewModel.getGuideList())
+        val from = intent.getStringExtra("from")
+        guideList = viewModel.getGuideList(from?:"")
+        mBind.viewPager.adapter = ViewPager2Adapter(guideList)
         TabLayoutMediator(mBind.tabLayout, mBind.viewPager) { tab, position ->
         }.attach()
+        currentPage = mBind.viewPager.currentItem
         mBind.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -46,6 +55,26 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 }else{
                     mBind.skip.visibility = View.VISIBLE
                 }
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                if (from != "language" && from != "splash"){
+                    if (position < currentPage){
+                        mBind.viewPager.setCurrentItem(position+1,false)
+                        currentPage = position+1
+                    }else{
+                        currentPage = position
+                    }
+                }
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
             }
         })
     }
@@ -57,7 +86,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             finish()
         }
         mBind.next.setOnClickListener {
-            if (mBind.viewPager.currentItem == viewModel.getGuideList().size - 1){
+            if (mBind.viewPager.currentItem == guideList.size - 1){
                 startActivity<MainActivity>()
                 AppCache.guideShow = true
                 finish()
@@ -110,5 +139,13 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         }
 
         override fun getItemCount(): Int = pageTitles.size
+    }
+
+    override fun handleBackPressed(): Boolean {
+        return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

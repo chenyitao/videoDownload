@@ -13,4 +13,21 @@
     <string name="guide3_des">Отказ от ответственности</string>
     <string name="skip">Пропустить</string>
     <string name="guide3_bold">(за исключением YouTube)</string>
+    <string name="home_search">Поиск или введите URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Видео</string>
+    <string name="search_hint">Вставьте или введите URL/поиск</string>
+    <string name="search_guide_tips">Советы: нажмите кнопку скачивания, чтобы начать сохранять файл.</string>
+    <string name="search_guide_tips_up">Начинайте воспроизводить видео.</string>
+    <string name="search_guide_1">1. Найдите видео по названию.</string>
+    <string name="search_guide_2">2. Начните проигрывать видео.</string>
+    <string name="search_guide_3">3. Нажмите кнопку скачивания</string>
+    <string name="search_guide_video_title">Мелодия её сердца освобождает тело в танце чистой, незапланированной радости.</string>
+    <string name="history">История</string>
+    <string name="clear_all">Очистить всё</string>
+    <string name="load_error">Не удалось загрузить страницу. Пожалуйста, попробуйте ещё раз.</string>
+    <string name="Retry">Повторная попытка</string>
+    <string name="guide1_title_new">Посмотрите видео на оригинальном сайте.</string>
+    <string name="guide2_title_new">Когда игра начнёт воспроизводиться, нажмите кнопку скачивания.</string>
 </resources>

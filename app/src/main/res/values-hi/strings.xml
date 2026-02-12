@@ -13,4 +13,21 @@
     <string name="guide3_des">अस्वीकरण</string>
     <string name="skip">छोड़ें</string>
     <string name="guide3_bold">(YouTube को छोड़कर)</string>
+    <string name="home_search">URL खोजें या लिखें</string>
+    <string name="imdb">आईएमडीबी</string>
+    <string name="mixkit">मिक्सकिट</string>
+    <string name="video">वीडियो</string>
+    <string name="search_hint">URL/खोज चिपकाएँ या लिखें</string>
+    <string name="search_guide_tips">टिप्स: फ़ाइल को सहेजना शुरू करने के लिए डाउनलोड बटन पर क्लिक करें।</string>
+    <string name="search_guide_tips_up">वीडियो चलाना शुरू करें।</string>
+    <string name="search_guide_1">1. वीडियो को उसके शीर्षक से खोजें।</string>
+    <string name="search_guide_2">2. वीडियो चलाना शुरू करें।</string>
+    <string name="search_guide_3">3. डाउनलोड बटन पर क्लिक करें</string>
+    <string name="search_guide_video_title">उसके दिल की धुन उसके शरीर को शुद्ध, अलिखित आनंद के नृत्य में मुक्त कर देती है।</string>
+    <string name="history">इतिहास</string>
+    <string name="clear_all">सभी साफ़ करें</string>
+    <string name="load_error">पृष्ठ लोड नहीं किया जा सका. कृपया पुन: प्रयास करें.</string>
+    <string name="Retry">पुनः प्रयास करें</string>
+    <string name="guide1_title_new">वीडियो को उसकी मूल वेबसाइट पर चलाएं।</string>
+    <string name="guide2_title_new">एक बार जब यह चलना शुरू हो जाए, तो डाउनलोड बटन पर क्लिक करें।</string>
 </resources>

@@ -26,4 +26,8 @@
     <string name="search_guide_video_title">Her heart\'s melody sets her body free in a dance of pure, unscripted joy.</string>
     <string name="history">History</string>
     <string name="clear_all">Clear All</string>
+    <string name="load_error">Couldn’t load the page. Please try again.</string>
+    <string name="Retry">Retry</string>
+    <string name="guide1_title_new">Play the video on its original website.</string>
+    <string name="guide2_title_new">Once it starts playing, click the download button.</string>
 </resources>

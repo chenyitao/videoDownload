@@ -1,6 +1,6 @@
 <resources>
     
-    <string name="loading_progress">Chargement... %d%%></string>
+    <string name="loading_progress"><![CDATA[Chargement... %d %%]]></string>
     <string name="nav_home">Accueil</string>
     <string name="nav_search">Recherche</string>
     <string name="nav_download">Télécharger</string>
@@ -13,4 +13,21 @@
     <string name="guide3_des">Avertissement</string>
     <string name="skip">Skip</string>
     <string name="guide3_bold">(hors YouTube)</string>
+    <string name="home_search">Recherche ou tape une URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Mixkit</string>
+    <string name="video">Vidéo</string>
+    <string name="search_hint">Collez ou tapez une URL/recherche</string>
+    <string name="search_guide_tips">Conseils : Cliquez sur le bouton de téléchargement pour commencer à sauvegarder le fichier.</string>
+    <string name="search_guide_tips_up">Commencez à lire la vidéo.</string>
+    <string name="search_guide_1">1. Localiser la vidéo par son titre.</string>
+    <string name="search_guide_2">2. Commencez à lire la vidéo.</string>
+    <string name="search_guide_3">3. Cliquez sur le bouton de téléchargement</string>
+    <string name="search_guide_video_title">La mélodie de son cœur libère son corps dans une danse de joie pure et improvisée.</string>
+    <string name="history">Histoire</string>
+    <string name="clear_all">Effacer tout</string>
+    <string name="load_error">Impossible de charger la page. Veuillez réessayer.</string>
+    <string name="Retry">Nouvelle tentative</string>
+    <string name="guide1_title_new">Écoutez la vidéo sur son site d’origine.</string>
+    <string name="guide2_title_new">Une fois que la lecture commence, cliquez sur le bouton de téléchargement.</string>
 </resources>

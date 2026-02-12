@@ -7,14 +7,16 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "video_table")
 data class Video(
     @PrimaryKey(autoGenerate = false)
-    val id: Int = 0,
-    val url: String = "",
-    val thumb: String = "",
-    val speed: String = "",
-    val totalSize: Int = 0,
-    val process: Float = 0f,
-    val mimeTypes: String = "",
-    val path: String = "",
-    val fileName: String = "",
-    val downloadStatus: Int = 0,
+    var id: Int = 0,
+    var url: String = "",
+    var thumb: String = "",
+    var speed: String = "",
+    var totalSize: Int = 0,
+    var process: Float = 0f,
+    var mimeTypes: String = "",
+    var path: String = "",
+    var fileName: String = "",
+    var downloadStatus: Int = 0,
+    var audioUrl: String = "",
+    var duration: Long =  0L
 )

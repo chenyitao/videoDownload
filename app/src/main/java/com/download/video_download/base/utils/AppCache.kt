@@ -52,6 +52,11 @@ object AppCache {
             saveValue("selectLanguage", value)
         }
         get() =getValue("selectLanguage", "")
+    var switchLanguageName: String
+        set(value) {
+            saveValue("switchLanguageName", value)
+        }
+        get() =getValue("switchLanguageName", "")
     var isSelectLng: Boolean
         set(value) {
             saveValue("isSelectLng", value)

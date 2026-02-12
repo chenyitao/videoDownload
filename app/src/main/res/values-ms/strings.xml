@@ -13,4 +13,21 @@
     <string name="guide3_des">Penafian</string>
     <string name="skip">Langkau</string>
     <string name="guide3_bold">(tidak termasuk YouTube)</string>
+    <string name="home_search">Cari atau taipkan URL</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">Kit campuran</string>
+    <string name="video">Video</string>
+    <string name="search_hint">Tampal atau taipkan URL/carian</string>
+    <string name="search_guide_tips">Petua:Klik butang muat turun untuk mula menyimpan fail.</string>
+    <string name="search_guide_tips_up">Mula memainkan video.</string>
+    <string name="search_guide_1">1. Cari video mengikut tajuknya.</string>
+    <string name="search_guide_2">2. Mula memainkan video.</string>
+    <string name="search_guide_3">3. Klik butang muat turun</string>
+    <string name="search_guide_video_title">Melodi hatinya membebaskan tubuhnya dalam tarian kegembiraan yang tulen dan tidak berskrip.</string>
+    <string name="history">Sejarah</string>
+    <string name="clear_all">Kosongkan semua</string>
+    <string name="load_error">Tidak dapat memuatkan halaman. Sila cuba lagi.</string>
+    <string name="Retry">Percubaan semula</string>
+    <string name="guide1_title_new">Mainkan video di laman web asalnya.</string>
+    <string name="guide2_title_new">Sebaik sahaja ia mula dimainkan, klik butang muat turun.</string>
 </resources>

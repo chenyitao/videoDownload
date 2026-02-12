@@ -13,4 +13,21 @@
     <string name="guide3_des">免責聲明</string>
     <string name="skip">跳過</string>
     <string name="guide3_bold">（不包括 YouTube）</string>
+    <string name="home_search">搜尋或輸入網址</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">混音套件</string>
+    <string name="video">影片</string>
+    <string name="search_hint">貼上或輸入網址/搜尋</string>
+    <string name="search_guide_tips">提示：點擊下載按鈕開始儲存檔案。</string>
+    <string name="search_guide_tips_up">開始播放影片。</string>
+    <string name="search_guide_1">1. 依照影片標題定位。</string>
+    <string name="search_guide_2">2. 開始播放影片。</string>
+    <string name="search_guide_3">3. 點擊下載按鈕</string>
+    <string name="search_guide_video_title">她心的旋律讓她的身體自由，跳起純粹、無劇本的喜悅之舞。</string>
+    <string name="history">歷史</string>
+    <string name="clear_all">清除一切</string>
+    <string name="load_error">無法載入頁面。請再試一次。</string>
+    <string name="Retry">重試</string>
+    <string name="guide1_title_new">請在原版網站上播放該影片。</string>
+    <string name="guide2_title_new">遊戲開始播放後，點擊下載按鈕。</string>
 </resources>

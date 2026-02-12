@@ -8,10 +8,12 @@ import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.ext.startActivityWithExtras
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LanguageUtils
 import com.download.video_download.databinding.ActivityLanguageBinding
 import com.download.video_download.ui.adapter.LanguageAdapter
+import java.util.Locale
 
 class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding>() {
     lateinit var adapter :LanguageAdapter
@@ -25,7 +27,11 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     override fun initViews(savedInstanceState: Bundle?) {
         mBind.rvLanguage.layoutManager = LinearLayoutManager(this)
         adapter = LanguageAdapter {
+            if (it.language == "Use system language"){
+                it.languageCode = viewModel.getSystemLanguageCode()
+            }
             AppCache.switchLanguage = it.languageCode
+            AppCache.switchLanguageName = it.language
             LanguageUtils.setAppLanguage(this,it.languageCode)
             updateText()
            if (!it.isSelected){
@@ -51,7 +57,9 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
         mBind.nextBtn.setOnClickListener {
             AppCache.isSelectLng = true
             if (!AppCache.guideShow) {
-                startActivity<GuideActivity>()
+                startActivityWithExtras<GuideActivity>(extras = {
+                    putString("from", "language")
+                })
             }else{
                 startActivity<MainActivity>()
             }

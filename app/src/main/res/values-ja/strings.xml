@@ -13,4 +13,21 @@
     <string name="guide3_des">免責事項</string>
     <string name="skip">スキップ</string>
     <string name="guide3_bold">(YouTubeを除く)</string>
+    <string name="home_search">URLを検索または入力します</string>
+    <string name="imdb">IMDb</string>
+    <string name="mixkit">ミックスキット</string>
+    <string name="video">ビデオ</string>
+    <string name="search_hint">URLを貼り付けるか入力してください。</string>
+    <string name="search_guide_tips">ヒント:ダウンロードボタンをクリックしてファイルの保存を始めてください。</string>
+    <string name="search_guide_tips_up">ビデオ再生を始めてください。</string>
+    <string name="search_guide_1">1. 動画のタイトルで特定。</string>
+    <string name="search_guide_2">2. ビデオ再生を始めてください。</string>
+    <string name="search_guide_3">3.ダウンロードボタンをクリックします</string>
+    <string name="search_guide_video_title">彼女の心の旋律が、純粋で台本に沿わない喜びの舞踏で体を解放する。</string>
+    <string name="history">歴史</string>
+    <string name="clear_all">すべてクリア</string>
+    <string name="load_error">ページが読み込めませんでした。もう一度お試しください。</string>
+    <string name="Retry">再挑戦</string>
+    <string name="guide1_title_new">動画はオリジナルのウェブサイトで再生できます。</string>
+    <string name="guide2_title_new">再生が始まったら、ダウンロードボタンをクリックしてください。</string>
 </resources>

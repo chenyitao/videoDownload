@@ -96,7 +96,7 @@ object LanguageUtils {
     }
     fun initLocale(context: Context) {
         val sLanguage = AppCache.switchLanguage
-        var context =if (sLanguage == "default") {
+        var context =if (sLanguage == "") {
             val systemLocale = LocaleListCompat.getAdjustedDefault()[0] ?: Locale.getDefault()
             updateLocaleConfiguration(context, systemLocale)
         }else{
@@ -117,7 +117,6 @@ object LanguageUtils {
         return context.createConfigurationContext(configuration)
     }
     fun setAppLocale(context: Context, locale: Locale) {
-        Locale.setDefault(locale)
         updateLocaleConfiguration(context.applicationContext, locale) // 全局上下文
         updateLocaleConfiguration(context, locale) // 当前上下文
     }
@@ -162,5 +161,36 @@ object LanguageUtils {
             context,
             locale
         )
+    }
+    fun getSystemOriginalLocale(context: Context): Locale {
+        // Step 1：Android 7.0+ 直接获取系统 LocaleList（系统级）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return LocaleList.getDefault().get(0) // 系统首选 Locale
+        }
+
+        // Step 2：Android 7.0 以下，通过反射获取系统 Locale（绕过应用配置）
+        return try {
+            // 反射调用系统 Locale.getDefault() 的底层实现（避免应用覆盖）
+            val systemLocaleClazz = Class.forName("android.os.SystemProperties")
+            val getMethod = systemLocaleClazz.getMethod("get", String::class.java)
+            val localeStr = getMethod.invoke(null, "persist.sys.locale") as String?
+                ?: getMethod.invoke(null, "ro.product.locale") as String?
+
+            if (!localeStr.isNullOrBlank()) {
+                // 解析系统语言字符串（如 "zh-CN" → Locale("zh", "CN")）
+                val parts = localeStr.split("_")
+                if (parts.size >= 2) {
+                    Locale(parts[0], parts[1])
+                } else {
+                    Locale(parts[0])
+                }
+            } else {
+                // 反射失败时，兜底用系统默认（此时可能受应用影响，但已是最优解）
+                Locale.getDefault()
+            }
+        } catch (e: Exception) {
+            // 反射异常（如定制 ROM 限制），兜底用系统默认
+            Locale.getDefault()
+        }
     }
 }

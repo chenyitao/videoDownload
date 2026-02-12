@@ -1,6 +1,8 @@
 package com.download.video_download.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.download.video_download.App
 import com.download.video_download.R
@@ -32,23 +34,32 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         
         mViewModel.isLoadingComplete.observe(this, Observer { isComplete ->
             if (isComplete) {
-                 if (!AppCache.isSelectLng){
-                     startActivity<LanguageActivity>()
-                 }else if (!AppCache.guideShow) {
-                     startActivity<GuideActivity>()
-                }else{
-                     startActivity<MainActivity>()
-                 }
+                if (intent?.extras?.getString("from") != "Background"){
+                    if (!AppCache.isSelectLng){
+                        startActivity<LanguageActivity>()
+                    }else if (!AppCache.guideShow) {
+                        startActivity<GuideActivity>{
+                            putExtra("from", "splash")
+                        }
+                    }else{
+                        startActivity<MainActivity>()
+                    }
+                }
                  finish()
             }
         })
     }
-    
+
     override fun onResume() {
         super.onResume()
         mViewModel.startLoading()
     }
-    
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent( intent)
+    }
+
     /**
      * 更新进度文本
      */

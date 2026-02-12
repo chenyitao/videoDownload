@@ -13,4 +13,21 @@
     <string name="guide3_des">دستبرداری</string>
     <string name="skip">چھوڑ دو</string>
     <string name="guide3_bold">(یوٹیوب کو چھوڑ کر)</string>
+    <string name="home_search">یو آر ایل تلاش کریں یا ٹائپ کریں</string>
+    <string name="imdb">آئی ایم ڈی بی</string>
+    <string name="mixkit">مکس کٹ</string>
+    <string name="video">ویڈیو</string>
+    <string name="search_hint">یو آر ایل/سرچ پیسٹ کریں یا ٹائپ کریں</string>
+    <string name="search_guide_tips">مشورے: فائل کو محفوظ کرنے کے لیے ڈاؤن لوڈ بٹن پر کلک کریں۔</string>
+    <string name="search_guide_tips_up">ویڈیو چلانا شروع کریں۔</string>
+    <string name="search_guide_1">1. ویڈیو کو اس کے عنوان سے تلاش کریں۔</string>
+    <string name="search_guide_2">2. ویڈیو چلانا شروع کریں۔</string>
+    <string name="search_guide_3">3. ڈاؤن لوڈ بٹن پر کلک کریں</string>
+    <string name="search_guide_video_title">اس کے دل کی دھن اس کے جسم کو خالص، غیر تحریری خوشی کے رقص میں آزاد کر دیتی ہے۔</string>
+    <string name="history">تاریخ</string>
+    <string name="clear_all">سب کچھ صاف کریں</string>
+    <string name="load_error">صفحہ لوڈ نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں۔</string>
+    <string name="Retry">دوبارہ کوشش</string>
+    <string name="guide1_title_new">ویڈیو کو اس کی اصل ویب سائٹ پر چلائیں۔</string>
+    <string name="guide2_title_new">جب یہ چلنا شروع ہو جائے تو ڈاؤن لوڈ بٹن پر کلک کریں۔</string>
 </resources>
