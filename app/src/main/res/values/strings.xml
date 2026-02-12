@@ -37,4 +37,8 @@
     <string name="load_error_web">Load Error</string>
     <string name="no_file">No downloadable files available</string>
     <string name="a_video">Analyzing video…</string>
+    <string name="Video_list">Video list</string>
+    <string name="deselect_all">Deselect All</string>
+    <string name="select_all">Select All</string>
+    <string name="fast_download">Download(%d)</string>
 </resources>

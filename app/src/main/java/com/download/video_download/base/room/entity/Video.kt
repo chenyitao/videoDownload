@@ -18,5 +18,6 @@ data class Video(
     var fileName: String = "",
     var downloadStatus: Int = 0,
     var audioUrl: String = "",
-    var duration: Long =  0L
+    var duration: Long =  0L,
+    var isSelect: Boolean = false
 )

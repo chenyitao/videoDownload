@@ -40,6 +40,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Collections
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.text.isNullOrEmpty
 
 class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBinding>() {
@@ -50,7 +51,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
     var task1 = ""
     var task2 = ""
     private var curUrl = ""
-    var videoList: MutableList<Video> = ArrayList()
+    var videoList: MutableList<Video> = CopyOnWriteArrayList()
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -96,9 +97,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             addJavascriptInterface(
                 JsBg(
                 videoData = { videos, isLoading ->
-                    videoList.addAll( videos)
-                    val distinctVideoList = videoList.distinctBy { it.url }.toMutableList()
-                    videoList = distinctVideoList
+                    updateVideoList(videos)
                     Log.d("VideoEngine", "videoData: $videos")
                     val currentHost =
                         curUrl.toUri().host
@@ -108,7 +107,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                                 it
                             ) == true
                         }
-                    lifecycleScope.launch(Dispatchers.Main) { // 替换为你的实际生命周期作用域
+                    lifecycleScope.launch(Dispatchers.Main) {
                         findItem?.let {
                             searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
                         }
@@ -152,6 +151,17 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 searchViewModel.notifyWebGoBackDone()
             }
         }
+    }
+    @Synchronized
+    private fun updateVideoList(newVideos: List<Video>) {
+        videoList.addAll(newVideos)
+
+        val distinctMap = mutableMapOf<String, Video>()
+        videoList.forEach { video ->
+            distinctMap[video.url] = video
+        }
+        videoList.clear()
+        videoList.addAll(distinctMap.values)
     }
     val webChromeClient1 by lazy {
         object : WebChromeClient() {
@@ -278,5 +288,9 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
 
     override fun onPause() {
         super.onPause()
+        parseJobList.forEach {
+            it.cancel()
+        }
+        parseJobList.clear()
     }
 }

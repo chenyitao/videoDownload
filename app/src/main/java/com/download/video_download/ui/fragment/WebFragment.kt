@@ -37,6 +37,7 @@ import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.databinding.FragmentSearchBinding
+import com.download.video_download.ui.dialog.DownloadDialog
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.SearchViewModel
 import java.net.URLEncoder
@@ -58,88 +59,101 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
-    override fun createViewModel(): SearchViewModel  = searchViewModel
+    override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
         startRippleAnimation()
         initRotateAnimation()
-        searchViewModel.nav.observe(this){
-            curPage = it?:SearchState.GUIDE
+        searchViewModel.nav.observe(this) {
+            curPage = it ?: SearchState.GUIDE
             switchPage()
         }
-        searchViewModel.showGuide.observe(this){
-           if (it){
-               binding.downFloatingGuide.visibility = View.VISIBLE
-               createUpFingerAnimation(false)
-               startAnimations()
-           }
+        searchViewModel.showGuide.observe(this) {
+            if (it) {
+                binding.downFloatingGuide.visibility = View.VISIBLE
+                createUpFingerAnimation(false)
+                startAnimations()
+            }
         }
-        searchViewModel.setSearchInput.observe( this){
+        searchViewModel.setSearchInput.observe(this) {
             binding.etSearch.setText(it)
         }
-        searchViewModel.goBackDone.observe(this){
+        searchViewModel.goBackDone.observe(this) {
             binding.etSearch.text?.clear()
             hideKeyboard(binding.etSearch)
-            if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}"){
+            if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
                 loadFragment(SearchState.HISTORY)
                 curPage = SearchState.HISTORY
-            }else{
+            } else {
                 loadFragment(SearchState.GUIDE)
                 curPage = SearchState.GUIDE
             }
         }
-        searchViewModel.detect.observe(this){
-            when (it.state){
+        searchViewModel.detect.observe(this) {
+            when (it.state) {
                 DetectState.SUPPORTWEB -> {
                     binding.ivFloating.setImageResource(R.mipmap.ic_floating_normal)
                 }
+
                 DetectState.YOUTUBE -> {
                     binding.ivFloatingNum.visibility = View.GONE
                     binding.ivFloating.setImageResource(R.mipmap.ic_floating_grey)
                 }
+
                 else -> {}
             }
         }
-        searchViewModel.isLoading.observe(this){
-            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE){
+        searchViewModel.isLoading.observe(this) {
+            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE) {
                 return@observe
             }
-            if (it){
+            if (it) {
                 binding.ivFloating.setImageResource(R.mipmap.ic_floating_loading)
                 resumeRotate()
-            }else{
+            } else {
                 binding.ivFloating.setImageResource(R.mipmap.ic_floating_normal)
                 pauseRotate()
             }
         }
-        searchViewModel.videos.observe(this){
-            if (it.isNotEmpty()){
-                if (AppCache.isFirstDetect && !binding.downFloatingGuide.isVisible){
+        searchViewModel.videos.observe(this) {
+            if (it.isNotEmpty()) {
+                if (AppCache.isFirstDetect && !binding.downFloatingGuide.isVisible) {
                     binding.downFloatingGuide.visibility = View.VISIBLE
                     createUpFingerAnimation(false)
                     startAnimations()
                 }
                 binding.ivFloatingNum.visibility = View.VISIBLE
                 binding.ivFloatingNum.text = it.size.toString()
-            }else{
+            } else {
                 binding.ivFloatingNum.visibility = View.GONE
             }
         }
-        binding.tvSearch.background = if (binding.etSearch.text.toString().isEmpty()) ContextCompat.getDrawable(requireContext(),R.drawable.shape_radius_6_grey)
-        else ContextCompat.getDrawable(requireContext(),R.drawable.shape_red_botton_5)
+        binding.tvSearch.background = if (binding.etSearch.text.toString()
+                .isEmpty()
+        ) ContextCompat.getDrawable(requireContext(), R.drawable.shape_radius_6_grey)
+        else ContextCompat.getDrawable(requireContext(), R.drawable.shape_red_botton_5)
     }
 
     override fun initListeners() {
         binding.tvSearch.setOnClickListener {
             val inputContent = binding.etSearch.text.toString().trim()
             if (inputContent.isNotEmpty()) {
-                val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")|| inputContent.contains(".com")){
-                    inputContent
-                }else{
-                    "https://www.google.com/search?q=${URLEncoder.encode(inputContent, "UTF-8")}"
-                }
+                val data =
+                    if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.") || inputContent.contains(
+                            ".com"
+                        )
+                    ) {
+                        inputContent
+                    } else {
+                        "https://www.google.com/search?q=${
+                            URLEncoder.encode(
+                                inputContent,
+                                "UTF-8"
+                            )
+                        }"
+                    }
                 searchViewModel.addHistory(History(data, System.currentTimeMillis()))
-                if (curPage != SearchState.WEB){
+                if (curPage != SearchState.WEB) {
                     loadFragment(SearchState.WEB)
                 }
                 searchViewModel.setChromeUrl(data)
@@ -150,18 +164,28 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         binding.etSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             val isSearchAction = actionId == EditorInfo.IME_ACTION_SEARCH
-            val isEnterKey = event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP
+            val isEnterKey =
+                event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP
             if (isSearchAction || isEnterKey) {
                 val inputContent = v.text.toString().trim()
 
                 if (inputContent.isNotEmpty()) {
-                    val data = if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.")|| inputContent.contains(".com")){
-                        inputContent
-                    }else{
-                        "https://www.google.com/search?q=${URLEncoder.encode(inputContent, "UTF-8")}"
-                    }
+                    val data =
+                        if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.") || inputContent.contains(
+                                ".com"
+                            )
+                        ) {
+                            inputContent
+                        } else {
+                            "https://www.google.com/search?q=${
+                                URLEncoder.encode(
+                                    inputContent,
+                                    "UTF-8"
+                                )
+                            }"
+                        }
                     searchViewModel.addHistory(History(data, System.currentTimeMillis()))
-                    if (curPage != SearchState.WEB){
+                    if (curPage != SearchState.WEB) {
                         loadFragment(SearchState.WEB)
                     }
                     searchViewModel.setChromeUrl(data)
@@ -174,28 +198,31 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             false
         })
         binding.etSearch.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            if (hasFocus){
-                if (binding.etSearch.text.toString().isNotEmpty()){
+            if (hasFocus) {
+                if (binding.etSearch.text.toString().isNotEmpty()) {
                     binding.ivSearchClear.visibility = View.VISIBLE
-                }else{
+                } else {
                     binding.ivSearchClear.visibility = View.GONE
                 }
-            }else{
+            } else {
                 Handler(Looper.getMainLooper()).postDelayed({
                     binding.ivSearchClear.visibility = View.GONE
                 }, 100)
             }
-         }
+        }
         binding.etSearch.addTextChangedListener {
-            if (binding.etSearch.isFocused){
-                if (it.toString().isNotEmpty()){
+            if (binding.etSearch.isFocused) {
+                if (it.toString().isNotEmpty()) {
                     binding.ivSearchClear.visibility = View.VISIBLE
-                }else{
+                } else {
                     binding.ivSearchClear.visibility = View.GONE
                 }
             }
-            binding.tvSearch.background = if (it.toString().isEmpty()) ContextCompat.getDrawable(requireContext(),R.drawable.shape_radius_6_grey)
-            else ContextCompat.getDrawable(requireContext(),R.drawable.shape_red_botton_5)
+            binding.tvSearch.background = if (it.toString().isEmpty()) ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.shape_radius_6_grey
+            )
+            else ContextCompat.getDrawable(requireContext(), R.drawable.shape_red_botton_5)
         }
         binding.ivSearchClear.setOnClickListener {
             binding.etSearch.text?.clear()
@@ -214,44 +241,52 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             searchViewModel.refreshWeb()
         }
         binding.ivSearchBack.setOnClickListener {
-            val isKeyboardOpen = isKeyboardReallyShowing(requireContext(), requireActivity().window.decorView.findViewById<View>(android.R.id.content))
-            if (isKeyboardOpen){
+            val isKeyboardOpen = isKeyboardReallyShowing(
+                requireContext(),
+                requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+            )
+            if (isKeyboardOpen) {
                 hideKeyboard(binding.etSearch)
                 return@setOnClickListener
             }
-            if (curPage == SearchState.WEB){
+            if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
-            }else{
+            } else {
                 binding.etSearch.text?.clear()
-                mainViewModel.navigate(NavigationItem( "", NavState.SEARCH, NavState.HOME))
+                mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
             }
         }
         binding.ivFloating.setOnClickListener {
-            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE || searchViewModel.videos.value?.isEmpty() == true){
+            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE || searchViewModel.videos.value?.isEmpty() == true) {
                 requireContext().showToast(getString(R.string.no_file))
                 return@setOnClickListener
             }
             if ((searchViewModel.detect.value?.state == DetectState.SUPPORTWEB && (searchViewModel.videos.value == null || searchViewModel.videos.value?.isEmpty() == true))
-                || (searchViewModel.isLoading.value == null || searchViewModel.isLoading.value == true)){
+                || (searchViewModel.isLoading.value == null || searchViewModel.isLoading.value == true)
+            ) {
                 requireContext().showToast(getString(R.string.a_video))
                 return@setOnClickListener
             }
-
+            showDownloadDialog()
         }
     }
+
     override fun handleBackPressed(): Boolean {
-        if (!isVisible){
+        if (!isVisible) {
             return false
         }
-        val isKeyboardOpen = isKeyboardReallyShowing(requireContext(), requireActivity().window.decorView.findViewById<View>(android.R.id.content))
-        if (isKeyboardOpen){
+        val isKeyboardOpen = isKeyboardReallyShowing(
+            requireContext(),
+            requireActivity().window.decorView.findViewById<View>(android.R.id.content)
+        )
+        if (isKeyboardOpen) {
             hideKeyboard(binding.etSearch)
-        }else{
-            if (curPage == SearchState.WEB){
+        } else {
+            if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
-            }else{
+            } else {
                 binding.etSearch.text?.clear()
-                mainViewModel.navigate(NavigationItem( "", NavState.SEARCH, NavState.HOME))
+                mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
             }
         }
         return true
@@ -266,73 +301,78 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         super.onPause()
         hideKeyboard(binding.etSearch)
     }
+
     override fun onDestroy() {
         super.onDestroy()
     }
+
     private fun parseParams() {
         mainViewModel.nav.value?.let {
-            when(mainViewModel.nav.value?.from){
+            when (mainViewModel.nav.value?.from) {
                 NavState.HOME -> {
-                    if (mainViewModel.nav.value?.params?.isNotEmpty() == true){
+                    if (mainViewModel.nav.value?.params?.isNotEmpty() == true) {
                         searchViewModel.setChromeUrl(mainViewModel.nav.value?.params.toString())
                         loadFragment(SearchState.WEB)
                         curPage = SearchState.WEB
-                    }else if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}"){
+                    } else if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
                         loadFragment(SearchState.HISTORY)
                         curPage = SearchState.HISTORY
                         autoShowKeyboard(binding.etSearch)
-                    }else {
+                    } else {
                         loadFragment(SearchState.GUIDE)
                         curPage = SearchState.GUIDE
                         autoShowKeyboard(binding.etSearch)
                     }
                     mainViewModel.clearNavigation()
                 }
+
                 else -> {
                     switchPage()
                 }
             }
-        }?:run {
+        } ?: run {
             switchPage()
         }
-        if (curPage == SearchState.GUIDE && AppCache.isFirstInstall){
+        if (curPage == SearchState.GUIDE && AppCache.isFirstInstall) {
             binding.upFloatingGuide.visibility = View.VISIBLE
             createUpFingerAnimation()
             startAnimations()
-        }else{
+        } else {
             binding.upFloatingGuide.visibility = View.GONE
         }
-        if (curPage == SearchState.HISTORY){
+        if (curPage == SearchState.HISTORY) {
             binding.floating.visibility = View.GONE
-        }else{
+        } else {
             binding.floating.visibility = View.VISIBLE
         }
-        if (curPage == SearchState.WEB){
+        if (curPage == SearchState.WEB) {
             binding.tvSearch.visibility = View.GONE
             binding.ivSearch.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.tvSearch.visibility = View.VISIBLE
             binding.ivSearch.visibility = View.GONE
         }
     }
+
     private fun switchPage(params: String = "") {
-        if (curPage == SearchState.WEB){
+        if (curPage == SearchState.WEB) {
             searchViewModel.setChromeUrl("")
             loadFragment(SearchState.WEB)
             curPage = SearchState.WEB
-        }else if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}"){
+        } else if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
             loadFragment(SearchState.HISTORY)
             curPage = SearchState.HISTORY
-        }else{
+        } else {
             loadFragment(SearchState.GUIDE)
             curPage = SearchState.GUIDE
         }
-        if (curPage == SearchState.HISTORY){
+        if (curPage == SearchState.HISTORY) {
             binding.floating.visibility = View.GONE
-        }else{
+        } else {
             binding.floating.visibility = View.VISIBLE
         }
     }
+
     private fun loadFragment(state: SearchState) {
         val targetFragment = fragmentCache.getOrPut(state) {
             when (state) {
@@ -356,15 +396,22 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         currentFragment = targetFragment
     }
-    private fun createUpFingerAnimation(up: Boolean = true){
+
+    private fun createUpFingerAnimation(up: Boolean = true) {
         cancelAnimations()
-        fingerAnimator = ObjectAnimator.ofFloat(if (up) binding.llFingerUp else binding.llGuideDown, "translationY", 0f, -20f).apply {
+        fingerAnimator = ObjectAnimator.ofFloat(
+            if (up) binding.llFingerUp else binding.llGuideDown,
+            "translationY",
+            0f,
+            -20f
+        ).apply {
             duration = 1500
             repeatCount = ValueAnimator.INFINITE
             repeatMode = ValueAnimator.REVERSE
             interpolator = AccelerateDecelerateInterpolator()
         }
     }
+
     private fun startAnimations() {
         fingerAnimator?.start()
     }
@@ -373,20 +420,26 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         fingerAnimator?.cancel()
         fingerAnimator = null
     }
+
     private fun autoShowKeyboard(editText: AppCompatEditText) {
         Handler(Looper.getMainLooper()).postDelayed({
             showKeyboard(editText)
         }, 50)
     }
+
     private fun showKeyboard(editText: AppCompatEditText) {
         editText.requestFocus()
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
+
     private fun hideKeyboard(editText: AppCompatEditText) {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
+
     private fun isKeyboardReallyShowing(context: Context, rootView: View): Boolean {
         val displayMetrics = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -422,6 +475,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         val animator = binding.ivFloating.tag as? ValueAnimator
         animator?.resume()
     }
+
     private fun startRippleAnimation() {
         val rippleAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.ripple_circle_anim)
         binding.ivFloatingAnim.apply {
@@ -431,8 +485,18 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 override fun onAnimationEnd(animation: Animation?) {
                     startAnimation(rippleAnim)
                 }
+
                 override fun onAnimationRepeat(animation: Animation?) {}
             })
+        }
+    }
+    fun showDownloadDialog() {
+        searchViewModel.videos.value?.let {
+            val downloadDialog = DownloadDialog()
+            downloadDialog.setOnCancelListener {
+            }
+            downloadDialog.show(this.childFragmentManager, "DownloadDialog")
+            downloadDialog.updateData(it)
         }
     }
 

@@ -72,6 +72,8 @@ dependencies {
     api(libs.room.ktx)
     api(libs.room.runtime)
     ksp(libs.room.compiler)
+    api(libs.glide)
+    ksp(libs.glide.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
