@@ -46,7 +46,7 @@
                 android:layout_marginStart="8dp"/>
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_search"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="2dp"
@@ -55,25 +55,26 @@
                 android:layout_toEndOf="@+id/v_line"
                 android:hint="@string/search_hint"
                 android:textColorHint="#4dffffff"
-                android:layout_toStartOf="@+id/iv_search_clear"
+                android:layout_toStartOf="@+id/rl_content_btn"
                 android:background="@null"
                 android:imeOptions="actionSearch"
                 android:maxLines="1"
+                android:layout_marginEnd="2dp"
+                android:singleLine="true"
                 android:ellipsize="end"/>
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_search_clear"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_toStartOf="@+id/rl_content_btn"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_search_del"
-                android:visibility="gone"/>
             <RelativeLayout
                 android:id="@+id/rl_content_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_search_clear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_search_del"
+                    android:visibility="gone"/>
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_search"
                     android:layout_width="wrap_content"
@@ -84,6 +85,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:text="@string/nav_search"
+                    android:layout_toEndOf="@+id/iv_search_clear"
                     android:background="@drawable/shape_red_botton_5"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -97,6 +99,7 @@
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/ic_search_refresh"
+                    android:layout_toEndOf="@+id/iv_search_clear"
                     android:gravity="center"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
@@ -132,7 +135,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="#cc000000">
             <LinearLayout
                 android:id="@+id/ll_guide_down"
@@ -142,7 +145,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="148dp">
+                android:layout_marginBottom="84dp">
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_guide_tips"
                     android:layout_width="match_parent"
@@ -172,7 +175,7 @@
             android:src="@mipmap/ic_floating_normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="84dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginEnd="20dp"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/iv_floating_num"

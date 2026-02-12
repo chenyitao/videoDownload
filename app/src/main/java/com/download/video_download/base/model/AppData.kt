@@ -34,3 +34,9 @@ data class History(
     @SerialName("time")
     val time: Long = 0
 )
+
+data class NavigationItem(
+    val params: String,
+    val from: NavState,
+    val route: NavState
+)

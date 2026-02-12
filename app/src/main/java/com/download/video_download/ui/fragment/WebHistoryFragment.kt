@@ -8,8 +8,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.model.SearchState
 import com.download.video_download.databinding.FragmentSearchHistoryBinding
 import com.download.video_download.ui.adapter.HistoryAdapter
+import com.download.video_download.ui.dialog.HistoryClearAllDialog
 import com.download.video_download.ui.viewmodel.SearchViewModel
 import kotlinx.coroutines.launch
 
@@ -37,11 +39,26 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.historyList.collect { newList ->
                     adapter.updateData(newList)
+                    if (newList.isEmpty()){
+                        viewModel.navigate(SearchState.GUIDE)
+                    }
                 }
             }
         }
     }
 
     override fun initListeners() {
+        binding.tvClearAll.setOnClickListener {
+            showClearAllDialog()
+        }
+    }
+    
+    private fun showClearAllDialog() {
+        val dialog = HistoryClearAllDialog()
+        dialog.setOnConfirmListener {
+          viewModel.clearHistory()
+            viewModel.navigate(SearchState.GUIDE)
+        }
+        dialog.show(parentFragmentManager, "HistoryClearAllDialog")
     }
 }

@@ -28,6 +28,10 @@
     <string name="clear_all">Clear All</string>
     <string name="load_error">Couldn’t load the page. Please try again.</string>
     <string name="Retry">Retry</string>
+    <string name="clear_all_history_title">Clear All</string>
+    <string name="clear_all_history_message">Confirm to delete all history?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Delete</string>
     <string name="guide1_title_new">Play the video on its original website.</string>
     <string name="guide2_title_new">Once it starts playing, click the download button.</string>
 </resources>

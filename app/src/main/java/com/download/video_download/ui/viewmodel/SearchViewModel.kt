@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.download.video_download.base.BaseViewModel
 import com.download.video_download.base.model.History
+import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.utils.AppCache
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,9 +16,20 @@ import kotlinx.serialization.encodeToString
 class SearchViewModel: BaseViewModel() {
     private val _historyList = MutableStateFlow<List<History>>(emptyList())
     val historyList: StateFlow<List<History>> = _historyList.asStateFlow()
-    init {
-    }
-
+    private val _nav = MutableLiveData<SearchState?>()
+    val nav: LiveData<SearchState?> get() = _nav
+    private val _showGuide = MutableLiveData<Boolean>()
+    val showGuide: LiveData<Boolean> get() = _showGuide
+    private val _setChromeUrl = MutableLiveData<String>()
+    val setChromeUrl: LiveData<String> get() = _setChromeUrl
+    private val _setSearchInput = MutableLiveData<String>()
+    val setSearchInput: LiveData<String> get() = _setSearchInput
+    private val _refreshWeb = MutableLiveData<Boolean>()
+    val refreshWeb: LiveData<Boolean> get() = _refreshWeb
+    private val _goBackWeb = MutableLiveData<Boolean>()
+    val goBackWeb: LiveData<Boolean> get() = _goBackWeb
+    private val _goBackDone = MutableLiveData<Boolean>()
+    val goBackDone: LiveData<Boolean> get() = _goBackDone
     fun getHistoryData(){
         viewModelScope.launch {
             val historyStr = AppCache.history
@@ -39,7 +51,7 @@ class SearchViewModel: BaseViewModel() {
                     }
                 }
                 if (oldHistoryList.size>= 10){
-                    oldHistoryList.removeLast()
+                    oldHistoryList.removeAt(oldHistoryList.lastIndex)
                 }
                 oldHistoryList.add( history)
                 val newHistoryList = oldHistoryList.toList()
@@ -63,5 +75,43 @@ class SearchViewModel: BaseViewModel() {
             _historyList.value = newList
             AppCache.history = json.encodeToString( _historyList.value)
         }
+    }
+    fun  clearHistory() {
+        viewModelScope.launch {
+            _historyList.value = emptyList()
+            AppCache.history = ""
+        }
+    }
+    fun navigate(item: SearchState) {
+        _nav.value = item
+    }
+    fun clearNavigation() {
+        _nav.value = null
+    }
+    fun showGuide() {
+        _showGuide.value = AppCache.isFirstDetect
+    }
+    fun setChromeUrl(url: String) {
+        _setChromeUrl.value = url
+    }
+    fun clearChromeUrl() {
+        _setChromeUrl.value = ""
+    }
+    override fun onCleared() {
+        super.onCleared()
+    }
+
+    fun setSearchInput(input: String) {
+        _setSearchInput.value = input
+    }
+
+    fun refreshWeb(){
+        _refreshWeb.value = true
+    }
+    fun canWebGoBack() {
+       _goBackWeb.value = true
+    }
+    fun notifyWebGoBackDone() {
+        _goBackDone.value = true
     }
 }

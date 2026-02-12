@@ -72,4 +72,14 @@ object AppCache {
             saveValue("history", value)
         }
         get() =getValue("history", "")
+    var isFirstInstall : Boolean
+        set(value) {
+            saveValue("isFirstInstall", value)
+        }
+        get() =getValue("isFirstInstall", true)
+    var isFirstDetect : Boolean
+        set(value) {
+            saveValue("isFirstDetect", value)
+        }
+        get() =getValue("isFirstDetect", true)
 }

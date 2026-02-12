@@ -5,26 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp">
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/history_url"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_h"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_history_radius"
-        android:textColor="@color/color_DFFFFFF"
-        android:textSize="13sp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_delete"
+        android:layout_marginEnd="16dp">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/history_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_history_radius"
+            android:textColor="@color/color_DFFFFFF"
+            android:textSize="13sp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_delete"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@mipmap/ic_history_del"
-        app:layout_constraintBottom_toBottomOf="@+id/history_url"
-        app:layout_constraintTop_toTopOf="@+id/history_url"
+        app:layout_constraintBottom_toBottomOf="@+id/ll_h"
+        app:layout_constraintTop_toTopOf="@+id/ll_h"
         app:layout_constraintEnd_toEndOf="parent"
     />
 </androidx.constraintlayout.widget.ConstraintLayout>

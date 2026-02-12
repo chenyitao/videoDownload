@@ -6,14 +6,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.model.NavState
+import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.databinding.FragmentHomeBinding
 import com.download.video_download.ui.activity.GuideActivity
 import com.download.video_download.ui.adapter.HomeSiteAdapter
 import com.download.video_download.ui.viewmodel.HomeViewModel
+import com.download.video_download.ui.viewmodel.MainViewModel
 
 class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     val homeViewModel: HomeViewModel by viewModels()
     lateinit var adapter: HomeSiteAdapter
+    val mainViewModel: MainViewModel by viewModels(
+        ownerProducer = { requireActivity() }
+    )
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -25,7 +31,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     override fun initViews(savedInstanceState: Bundle?) {
         adapter = HomeSiteAdapter{
-
+            mainViewModel.navigate(NavigationItem(it.url, NavState.HOME, NavState.SEARCH))
         }
         binding.rvWebsite.adapter =  adapter
         viewModel.videoList.observe(viewLifecycleOwner) { videoUrls ->
@@ -38,7 +44,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             requireActivity().startActivity<GuideActivity>()
         }
         binding.rlSearch.setOnClickListener {
-
+            mainViewModel.navigate(NavigationItem("", NavState.HOME, NavState.SEARCH))
         }
     }
     override fun onResume() {

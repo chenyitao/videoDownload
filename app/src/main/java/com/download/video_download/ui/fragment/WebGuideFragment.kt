@@ -12,7 +12,7 @@ import com.download.video_download.databinding.FragmentSearchGuideBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
 
 class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding>() {
-    val searchViewModel: SearchViewModel by viewModels()
+    val searchViewModel: SearchViewModel by viewModels(ownerProducer = { requireParentFragment() })
     lateinit var player: Player
     override fun createViewBinding(
         inflater: LayoutInflater,
@@ -24,10 +24,13 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        player = Player(requireContext())
+        player = Player(requireContext(), playClick = {
+            searchViewModel.showGuide()
+        })
         player.setVideoUri("android.resource://${context?.packageName}/" + R.raw.sample)
         binding.flVideoContainer.addView(player)
-        binding.tvGuide1.text = App.getAppContext().getString(R.string.search_guide_1)+"\n"+App.getAppContext().getString(R.string.search_guide_2)+"\n"+App.getAppContext().getString(R.string.search_guide_3)
+        val guide = "${App.getAppContext().getString(R.string.search_guide_1)}\n${App.getAppContext().getString(R.string.search_guide_2)}\n${App.getAppContext().getString(R.string.search_guide_3)}"
+        binding.tvGuide1.text = guide
     }
 
     override fun initListeners() {

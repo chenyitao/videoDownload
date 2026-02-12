@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.URLUtil
@@ -24,7 +25,6 @@ import com.download.video_download.base.model.History
 import com.download.video_download.base.utils.DESUtil
 import com.download.video_download.base.web.JsBg
 import com.download.video_download.base.web.VideoParse.isDouyinVideoUrl
-import com.download.video_download.base.web.VideoParse.perWebsite
 import com.download.video_download.databinding.FragmentSearchChromeBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
 import kotlinx.coroutines.Job
@@ -96,25 +96,43 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 }
             ), "VideoEngine")
         }
-        binding.webview.loadUrl("www.baidu.com")
     }
 
     override fun initListeners() {
         binding.retry.setOnClickListener {
-            binding.empty.visibility = android.view.View.GONE
+            binding.webview.reload()
+            binding.llEmptyBtn.visibility = View.GONE
+        }
+        searchViewModel.setChromeUrl.observe( this, {
+            val url = it
+            if (url.isNotEmpty() && (URLUtil.isNetworkUrl(url) || url.contains("www."))){
+                val host = url.toUri().host
+                if (binding.webview.url == null || binding.webview.url?.contains(host.toString()) == false){
+                    binding.webview.loadUrl(url)
+                }
+            }
+        })
+        searchViewModel.refreshWeb.observe(this){
+            binding.webview.reload()
+        }
+        searchViewModel.goBackWeb.observe(this){
+            if (binding.webview.canGoBack()) {
+                binding.webview.goBack()
+            }else{
+                searchViewModel.notifyWebGoBackDone()
+            }
         }
     }
     val webChromeClient1 by lazy {
         object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                val currentProgress = newProgress / 100f
-                if (currentProgress == 1f) {
-                    binding.webProgress.visibility = android.view.View.GONE
-                } else {
-                    binding.webProgress.visibility = android.view.View.VISIBLE
-                }
                 binding.webProgress.progress = newProgress
+                if (newProgress == 100) {
+                    binding.webProgress.visibility = View.GONE // 加载完成隐藏
+                } else {
+                    binding.webProgress.visibility = View.VISIBLE // 加载中显示
+                }
             }
         }
     }
@@ -162,6 +180,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                     )
                     searchViewModel.addHistory(curHistory)
                 }
+                searchViewModel.setSearchInput(currentHost?:"")
             }
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
@@ -193,7 +212,11 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             ) {
                 super.onReceivedError(view, request, error)
                 if (request?.isForMainFrame == true) {
-                    binding.empty.visibility = android.view.View.VISIBLE
+                    binding.empty.visibility = View.VISIBLE
+                    binding.llEmptyBtn.visibility = View.VISIBLE
+                }else{
+                    binding.empty.visibility = View.GONE
+                    binding.llEmptyBtn.visibility = View.GONE
                 }
             }
             override fun onReceivedHttpError(
@@ -203,9 +226,18 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             ) {
                 super.onReceivedHttpError(view, request, errorResponse)
                 if (request?.isForMainFrame == true) {
-                    binding.empty.visibility = android.view.View.VISIBLE
+                    binding.empty.visibility = View.VISIBLE
+                    binding.llEmptyBtn.visibility = View.VISIBLE
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }

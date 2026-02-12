@@ -16,7 +16,8 @@ import com.download.video_download.databinding.LayoutPlayerBinding
 class Player @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = 0,
+    private val playClick: () -> Unit
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     private val binding: LayoutPlayerBinding =
@@ -145,6 +146,7 @@ class Player @JvmOverloads constructor(
                     player.pause()
                 } else {
                     player.play()
+                    playClick()
                 }
             }
         }
