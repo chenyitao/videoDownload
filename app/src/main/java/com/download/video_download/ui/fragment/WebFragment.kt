@@ -36,6 +36,7 @@ import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.PUtils
 import com.download.video_download.databinding.FragmentSearchBinding
 import com.download.video_download.ui.dialog.DownloadDialog
 import com.download.video_download.ui.viewmodel.MainViewModel
@@ -492,12 +493,33 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     }
     fun showDownloadDialog() {
         searchViewModel.videos.value?.let {
+            it.forEach { it.isSelect = true }
             val downloadDialog = DownloadDialog()
             downloadDialog.setOnCancelListener {
+                if (PUtils.hasStoragePermission(requireContext())) {
+                } else {
+                    PUtils.requestStoragePermission(requireActivity())
+                }
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
             downloadDialog.updateData(it)
         }
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        PUtils.handlePermissionResult(
+            requestCode,
+            grantResults,
+            onGranted = {
 
+            },
+            onDenied = {
+
+            }
+        )
+    }
 }

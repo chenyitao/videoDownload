@@ -91,7 +91,6 @@ class DownloadDialog : DialogFragment() {
     private fun initListeners() {
         binding.btnCancel.setOnClickListener {
             onCancelListener?.invoke(videos)
-            dismiss()
         }
         binding.tvAllSelect.setOnClickListener {
             if (binding.tvAllSelect.text.toString() == getString(R.string.select_all)){
