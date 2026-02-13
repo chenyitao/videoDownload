@@ -7,6 +7,9 @@ import androidx.fragment.app.viewModels
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.model.DetectState
+import com.download.video_download.base.model.DetectStatus
+import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.wiget.Player
 import com.download.video_download.databinding.FragmentSearchGuideBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
@@ -26,6 +29,7 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun initViews(savedInstanceState: Bundle?) {
         player = Player(requireContext(), playClick = {
             searchViewModel.showGuide()
+            addVideo()
         })
         player.setVideoUri("android.resource://${context?.packageName}/" + R.raw.sample)
         binding.flVideoContainer.addView(player)
@@ -48,5 +52,37 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun onDestroy() {
         super.onDestroy()
         player.release()
+    }
+    private fun addVideo(){
+        val vs = searchViewModel.videos.value
+        vs?.let {
+            val fs = it.filter { video ->
+                video.url.contains("android.resource://${context?.packageName}/")
+            }
+            if (fs.isNotEmpty()){
+                return
+            }
+            val video = Video(
+                url = "android.resource://${context?.packageName}/" + R.raw.sample,
+                fileName = "sample",
+                mimeTypes = "video/mp4",
+                duration = 16000,
+                totalSize  = 882758
+            )
+            searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+            searchViewModel.isLoading(false)
+            searchViewModel.saveVideos(mutableListOf(video))
+        }?:run {
+            val video = Video(
+                url = "android.resource://${context?.packageName}/" + R.raw.sample,
+                fileName = "sample",
+                mimeTypes = "video/mp4",
+                duration = 16000,
+                totalSize  = 882758
+            )
+            searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+            searchViewModel.isLoading(false)
+            searchViewModel.saveVideos(mutableListOf(video))
+        }
     }
 }

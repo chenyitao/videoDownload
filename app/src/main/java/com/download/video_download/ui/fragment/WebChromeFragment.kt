@@ -139,6 +139,10 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 if (binding.webview.url == null || binding.webview.url?.contains(host.toString()) == false){
                     binding.webview.loadUrl(url)
                 }
+            }else{
+                if (url == App.getAppContext().getString(R.string.load_error)){
+                    binding.webview.reload()
+                }
             }
         })
         searchViewModel.refreshWeb.observe(this){

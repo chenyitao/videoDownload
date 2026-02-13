@@ -44,5 +44,5 @@ data class NavigationItem(
 )
 
 data class DetectStatus(
-    val state: DetectState,
+    val state: DetectState = DetectState.SUPPORTWEB,
 )

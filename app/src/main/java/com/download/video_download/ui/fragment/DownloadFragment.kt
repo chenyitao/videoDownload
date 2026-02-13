@@ -18,6 +18,7 @@ import com.download.video_download.ui.adapter.DownloadTaskAdapter
 import com.download.video_download.ui.dialog.DownloadCancelDialog
 import com.download.video_download.ui.dialog.DownloadDialog
 import com.download.video_download.ui.dialog.DownloadStatusDialog
+import com.download.video_download.ui.dialog.isFragmentShowing
 import com.download.video_download.ui.viewmodel.DownloadViewModel
 import com.download.video_download.ui.viewmodel.MainViewModel
 
@@ -27,7 +28,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
         ownerProducer = { requireActivity() }
     )
     var adapter: DownloadTaskAdapter? = null
-    var taskManager: AriaDownloadManager? = null
+    var downloadDialog:DownloadStatusDialog? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -38,40 +39,52 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
     override fun createViewModel(): DownloadViewModel = downloadViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        taskManager = AriaDownloadManager(requireActivity())
         adapter = DownloadTaskAdapter({
             when (it.downloadStatus) {
                 IEntity.STATE_RUNNING -> {
-                    taskManager?.stop(it.id)
+                    AriaDownloadManager.INSTANCE.stop(it.id)
                 }
                 IEntity.STATE_STOP, IEntity.STATE_CANCEL -> {
-                    taskManager?.resume(it.id)
+                    AriaDownloadManager.INSTANCE.resume(it.id)
                 }
                 IEntity.STATE_FAIL -> {
-                    taskManager?.resume(it.id)
+                    AriaDownloadManager.INSTANCE.resume(it.id)
                 }
             }
         },{
             val downloadDialog = DownloadCancelDialog()
             downloadDialog.setOnConfirmListener {
-                taskManager?.cancel(it.id)
+                AriaDownloadManager.INSTANCE.cancel(it.id)
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
         },{
-            val downloadDialog = DownloadStatusDialog()
-            downloadDialog.setIsComplete(true)
-            downloadDialog.setOnConfirmListener {
+            if (downloadDialog == null){
+                downloadDialog = DownloadStatusDialog()
             }
-            downloadDialog.show(this.childFragmentManager, "DownloadDialog")
+            if (downloadDialog?.isFragmentShowing() == true){
+                downloadDialog?.dismissNow()
+            }
+            downloadDialog?.setIsComplete(true)
+            downloadDialog?.setOnConfirmListener {
+            }
+            downloadDialog?.show(this.childFragmentManager, "DownloadDialog")
         })
         binding.rvDownload.adapter = adapter
         mainViewModel.nav.observe( this){
-            taskManager?.startResumeDownloadTask( it?.video?:mutableListOf())
+            AriaDownloadManager.INSTANCE.startResumeDownloadTask( it?.video?:mutableListOf())
+        }
+        if (AriaDownloadManager.INSTANCE.videoItems.value?.isEmpty() == true){
+            if (adapter?.getData()?.isEmpty() == true){
+                binding.rlEmpty.visibility = View.VISIBLE
+                AriaDownloadManager.INSTANCE.startResumeDownloadTask()
+        }else{
+            binding.rlEmpty.visibility = View.GONE
+        }
         }
     }
 
     override fun initListeners() {
-        taskManager?.videoItems?.observe( this){
+        AriaDownloadManager.INSTANCE.videoItems?.observe( this){
             if (it.isEmpty()){
                 binding.rlEmpty.visibility = View.VISIBLE
             }else{
@@ -83,12 +96,6 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
 
     override fun onResume() {
         super.onResume()
-//        if (adapter?.getData()?.isEmpty() == true){
-//            binding.rlEmpty.visibility = View.VISIBLE
-//            taskManager?.startResumeDownloadTask()
-//        }else{
-//            binding.rlEmpty.visibility = View.GONE
-//        }
     }
 
     override fun onPause() {

@@ -12,9 +12,6 @@ import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.databinding.DialogDownloadTaskBinding
 
-/**
- * 清除所有历史记录确认弹窗
- */
 class DownloadStatusDialog : DialogFragment() {
     
     private var _binding: DialogDownloadTaskBinding? = null
@@ -76,4 +73,10 @@ class DownloadStatusDialog : DialogFragment() {
     fun setIsComplete(isComplete: Boolean) {
         this.isCompete = isComplete
     }
+}
+fun DialogFragment.isFragmentShowing(): Boolean {
+    return isAdded
+            && isVisible
+            && dialog?.isShowing == true
+            && !isRemoving
 }

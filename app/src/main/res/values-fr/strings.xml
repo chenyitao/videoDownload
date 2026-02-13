@@ -1,6 +1,6 @@
 <resources>
     
-    <string name="loading_progress"><![CDATA[Chargement... %d %%]]></string>
+    <string name="loading_progress">Chargement... %d%%</string>
     <string name="nav_home">Accueil</string>
     <string name="nav_search">Recherche</string>
     <string name="nav_download">Télécharger</string>
@@ -28,6 +28,33 @@
     <string name="clear_all">Effacer tout</string>
     <string name="load_error">Impossible de charger la page. Veuillez réessayer.</string>
     <string name="Retry">Nouvelle tentative</string>
+    <string name="clear_all_history_title">Effacer tout</string>
+    <string name="clear_all_history_message">Confirmer la suppression de tout l’historique \?</string>
+    <string name="cancel">Annuler</string>
+    <string name="confirm">Supprimer</string>
     <string name="guide1_title_new">Écoutez la vidéo sur son site d’origine.</string>
     <string name="guide2_title_new">Une fois que la lecture commence, cliquez sur le bouton de téléchargement.</string>
+    <string name="load_error_web">Erreur de chargement</string>
+    <string name="no_file">Aucun fichier téléchargeable disponible</string>
+    <string name="a_video">Analyse vidéo...</string>
+    <string name="Video_list">Liste vidéo</string>
+    <string name="deselect_all">Désélectionner tout</string>
+    <string name="select_all">Sélectionner tout</string>
+    <string name="fast_download"><![CDATA[Download( %d)]]></string>
+    <string name="download_task1">Téléchargement a </string>
+    <string name="download_task1_green">commença</string>
+    <string name="download_task2">Télécharger </string>
+    <string name="download_task2_green">Achevé</string>
+    <string name="view">Vue</string>
+    <string name="download_empty">Aucun téléchargement en cours.</string>
+    <string name="cancel_download">Annuler ce téléchargement \?</string>
+    <string name="Sure">Bien sûr</string>
+    <string name="now">Pas maintenant</string>
+    <string name="connecting">Connexion</string>
+    <string name="pending">En attente</string>
+    <string name="failed_to_connect">Échec de connexion</string>
+    <string name="empyt_player">Pas encore de téléchargement.</string>
+    <string name="Share">Partager</string>
+    <string name="delete_successfully">Supprimer avec succès</string>
+    <string name="file_valide">Le lien vidéo semble invalide ou cassé.</string>
 </resources>

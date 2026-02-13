@@ -10,6 +10,7 @@ import com.arialyy.aria.core.download.DownloadTaskListener
 import com.arialyy.aria.core.download.m3u8.M3U8VodOption
 import com.arialyy.aria.core.inf.IEntity
 import com.arialyy.aria.core.task.DownloadTask
+import com.download.video_download.App
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.room.entity.getSequentialNumber
 import com.download.video_download.base.utils.AppCache
@@ -18,43 +19,35 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * Aria下载管理类 - 修复LiveData通知问题 + 全面优化
- * 核心优化：
- * 1. 所有LiveData修改都通过setValue/postValue触发通知
- * 2. 增加空指针防护、线程安全处理
- * 3. 抽离重复逻辑，减少代码冗余
- * 4. 规范LiveData操作范式
- */
-class AriaDownloadManager(private val context: Context) : DownloadTaskListener {
+class AriaDownloadManager() : DownloadTaskListener {
     private var internalDir = ""
     private val _videoItems: MutableLiveData<MutableList<Video>> = MutableLiveData(mutableListOf())
     val videoItems: MutableLiveData<MutableList<Video>> get() = _videoItems
     val m3u8SizeList = mutableMapOf<String, Long>()
 
-    // 主线程Handler，确保LiveData操作在主线程
     private val mainHandler = Handler(Looper.getMainLooper())
-    // 防止重复更新的原子标志（可选，优化高频更新场景）
     private val isUpdating = AtomicBoolean(false)
-
+    private val _isCompete: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isCompete: MutableLiveData<Boolean> get() = _isCompete
+    companion object {
+        val INSTANCE: AriaDownloadManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            AriaDownloadManager()
+        }
+    }
     init {
         Aria.download(this).register()
-        internalDir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "").absolutePath
+        internalDir = File(App.getAppContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "").absolutePath
     }
-
-    /**
-     * 启动/恢复下载任务
-     * 修复点：所有列表修改后通过setValue触发LiveData通知
-     */
+    fun resetCompete(isCompete: Boolean){
+        _isCompete.value = isCompete
+    }
     fun startResumeDownloadTask(videoItem: MutableList<Video> = mutableListOf()) {
         m3u8SizeList.clear()
         val playVideos = getPlayList()
         val taskList = AppCache.downloadTask
 
-        // 1. 安全获取当前列表（避免null）
         val currentList = _videoItems.value ?: mutableListOf()
 
-        // 2. 加载缓存任务
         taskList.takeIf { it.isNotEmpty() }?.let {
             val cacheTask = try {
                 Json.decodeFromString<MutableList<Video>>(taskList)
@@ -74,7 +67,7 @@ class AriaDownloadManager(private val context: Context) : DownloadTaskListener {
 
         // 5. 处理重复文件名（序号生成）
         processNewVideos(playVideos, newVideos)
-
+        _isCompete.value = false
         // 6. 核心修复：通过setValue更新LiveData，触发观察者通知
         updateVideoLiveData(newVideos)
 
@@ -407,6 +400,7 @@ class AriaDownloadManager(private val context: Context) : DownloadTaskListener {
                     AppCache.playVideos = Json.encodeToString(playList)
                     // 从下载列表移除
                     newList.removeAt(index)
+                    _isCompete.value = true
                     completedItem
                 } else {
                     newList[index] = updatedItem
@@ -471,7 +465,7 @@ class AriaDownloadManager(private val context: Context) : DownloadTaskListener {
         }
     }
 
-    private fun getPlayList(): MutableList<Video> {
+    fun getPlayList(): MutableList<Video> {
         return try {
             val playListStr = AppCache.playVideos
             if (playListStr.isNotEmpty()) Json.decodeFromString(playListStr) else mutableListOf()

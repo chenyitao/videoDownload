@@ -11,9 +11,8 @@ class PlayerViewModel : BaseViewModel() {
     private val _videoList = MutableLiveData<MutableList<Video>>()
     val videoList: LiveData<MutableList<Video>> get() = _videoList
     init {
-        initVideoData()
     }
-    private fun initVideoData() {
+    fun initVideoData() {
         val list = mutableListOf<Video>()
         val videCache = AppCache.playVideos
         if (videCache.isNotEmpty()) {

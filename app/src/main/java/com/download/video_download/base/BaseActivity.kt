@@ -84,16 +84,16 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
             true
-        ViewCompat.setOnApplyWindowInsetsListener(mBind.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(
-                left = 0,
-                top = 0,
-                right = 0,
-                bottom = systemBars.bottom
-            )
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(mBind.root) { view, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            view.updatePadding(
+//                left = 0,
+//                top = 0,
+//                right = 0,
+//                bottom = systemBars.bottom
+//            )
+//            insets
+//        }
     }
     
     /**

@@ -11,7 +11,7 @@
         android:background="@drawable/shape_radius_16_2b2727"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_del">
+        app:layout_constraintTop_toTopOf="parent">
         <LinearLayout
             android:id="@+id/ll_1"
             android:layout_width="match_parent"

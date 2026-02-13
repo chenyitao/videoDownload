@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.core.view.size
 import androidx.core.view.get
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import com.download.video_download.App

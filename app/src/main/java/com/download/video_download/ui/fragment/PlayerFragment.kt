@@ -66,6 +66,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
     }
     override fun onResume() {
         super.onResume()
+        playerViewModel.initVideoData()
     }
 
     override fun onPause() {

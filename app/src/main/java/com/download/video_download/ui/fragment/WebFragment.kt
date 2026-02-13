@@ -17,19 +17,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.webkit.URLUtil
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.ext.showToast
@@ -38,13 +37,23 @@ import com.download.video_download.base.model.History
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.room.entity.Video
+import com.download.video_download.base.task.AriaDownloadManager
+import com.download.video_download.base.utils.AnimaUtils
+import com.download.video_download.base.utils.AnimaUtils.initRotateAnimation
+import com.download.video_download.base.utils.AnimaUtils.startRotateAnimation
+import com.download.video_download.base.utils.AnimaUtils.stopRotateAnimation
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.PUtils
+import com.download.video_download.base.utils.RawResourceUtils
 import com.download.video_download.databinding.FragmentSearchBinding
 import com.download.video_download.ui.dialog.DownloadDialog
 import com.download.video_download.ui.dialog.DownloadStatusDialog
+import com.download.video_download.ui.dialog.isFragmentShowing
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.net.URLEncoder
 import kotlin.getValue
 
@@ -58,6 +67,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     private val fragmentCache = HashMap<SearchState, Fragment>()
     private var currentFragment: Fragment? = null
     private var permissionDenied = false
+    private var taskCreatD:DownloadStatusDialog? = null
+    private var taskCD:DownloadStatusDialog? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -68,8 +79,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        startRippleAnimation()
-        initRotateAnimation()
+        initRotateAnimation(binding.ivFloating)
         searchViewModel.nav.observe(this) {
             curPage = it ?: SearchState.GUIDE
             switchPage()
@@ -88,12 +98,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             binding.etSearch.text?.clear()
             hideKeyboard(binding.etSearch)
             if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
-                loadFragment(SearchState.HISTORY)
                 curPage = SearchState.HISTORY
             } else {
-                loadFragment(SearchState.GUIDE)
                 curPage = SearchState.GUIDE
             }
+            switchPage()
         }
         searchViewModel.detect.observe(this) {
             when (it.state) {
@@ -103,6 +112,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
 
                 DetectState.YOUTUBE -> {
                     binding.ivFloatingNum.visibility = View.GONE
+                    AnimaUtils.stopRippleAnimation(requireContext(),binding.ivFloatingAnim)
                     binding.ivFloating.setImageResource(R.mipmap.ic_floating_grey)
                 }
 
@@ -111,14 +121,15 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         searchViewModel.isLoading.observe(this) {
             if (searchViewModel.detect.value?.state == DetectState.YOUTUBE) {
+                stopRotateAnimation(binding.ivFloating)
                 return@observe
             }
             if (it) {
                 binding.ivFloating.setImageResource(R.mipmap.ic_floating_loading)
-                resumeRotate()
+                startRotateAnimation(binding.ivFloating)
             } else {
+                stopRotateAnimation(binding.ivFloating)
                 binding.ivFloating.setImageResource(R.mipmap.ic_floating_normal)
-                pauseRotate()
             }
         }
         searchViewModel.videos.observe(this) {
@@ -128,16 +139,26 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                     createUpFingerAnimation(false)
                     startAnimations()
                 }
+                AnimaUtils.startRippleAnimation(requireContext(),binding.ivFloatingAnim)
                 binding.ivFloatingNum.visibility = View.VISIBLE
                 binding.ivFloatingNum.text = it.size.toString()
             } else {
+                binding.ivFloatingAnim.visibility = View.GONE
                 binding.ivFloatingNum.visibility = View.GONE
+                AnimaUtils.stopRippleAnimation(requireContext(),binding.ivFloatingAnim)
             }
         }
         binding.tvSearch.background = if (binding.etSearch.text.toString()
                 .isEmpty()
         ) ContextCompat.getDrawable(requireContext(), R.drawable.shape_radius_6_grey)
         else ContextCompat.getDrawable(requireContext(), R.drawable.shape_red_botton_5)
+
+        AriaDownloadManager.INSTANCE.isCompete.observe(this){
+            if (it && isVisible){
+                showTaskComp()
+                AriaDownloadManager.INSTANCE.resetCompete(false)
+            }
+        }
     }
 
     override fun initListeners() {
@@ -192,7 +213,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                         }
                     searchViewModel.addHistory(History(data, System.currentTimeMillis()))
                     if (curPage != SearchState.WEB) {
-                        loadFragment(SearchState.WEB)
+                        curPage = SearchState.WEB
+                       switchPage()
                     }
                     searchViewModel.setChromeUrl(data)
                     hideKeyboard(binding.etSearch)
@@ -263,6 +285,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             }
         }
         binding.ivFloating.setOnClickListener {
+            if(AppCache.isFirstDetect){
+                AppCache.isFirstDetect = false
+                binding.downFloatingGuide.visibility = View.GONE
+                cancelAnimations()
+            }
             if (searchViewModel.detect.value?.state == DetectState.YOUTUBE || searchViewModel.videos.value?.isEmpty() == true) {
                 requireContext().showToast(getString(R.string.no_file))
                 return@setOnClickListener
@@ -377,6 +404,13 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         } else {
             binding.floating.visibility = View.VISIBLE
         }
+        if (curPage == SearchState.WEB) {
+            binding.tvSearch.visibility = View.GONE
+            binding.ivSearch.visibility = View.VISIBLE
+        } else {
+            binding.tvSearch.visibility = View.VISIBLE
+            binding.ivSearch.visibility = View.GONE
+        }
     }
 
     private fun loadFragment(state: SearchState) {
@@ -461,41 +495,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         return heightDiff > keyboardThreshold
     }
 
-    private fun initRotateAnimation() {
-        val rotateAnimator = ObjectAnimator.ofFloat(binding.ivFloating, "rotation", 0f, 360f)
-        rotateAnimator.apply {
-            duration = 200
-            repeatCount = ValueAnimator.INFINITE
-            interpolator = LinearInterpolator()
-            repeatMode = ValueAnimator.RESTART
-        }
-        binding.ivFloating.tag = rotateAnimator
-    }
 
-    fun pauseRotate() {
-        val animator = binding.ivFloating.tag as? ValueAnimator
-        animator?.pause()
-    }
-
-    fun resumeRotate() {
-        val animator = binding.ivFloating.tag as? ValueAnimator
-        animator?.resume()
-    }
-
-    private fun startRippleAnimation() {
-        val rippleAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.ripple_circle_anim)
-        binding.ivFloatingAnim.apply {
-            startAnimation(rippleAnim) // 启动无限循环动画
-            rippleAnim.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) {}
-                override fun onAnimationEnd(animation: Animation?) {
-                    startAnimation(rippleAnim)
-                }
-
-                override fun onAnimationRepeat(animation: Animation?) {}
-            })
-        }
-    }
     fun showDownloadDialog() {
         searchViewModel.videos.value?.let {video->
             video.forEach { it.isSelect = true }
@@ -503,20 +503,72 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             downloadDialog.updateData(video)
             downloadDialog.setOnCancelListener {
                 if (PUtils.hasStoragePermission(requireContext())) {
-                    if (searchViewModel.videos.value?.isNotEmpty() == true){
-                        mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.DOWNLOAD, it))
+                    showTaskCreate(it)
+                    if (video.size == 1 && video[0].url.contains("android.resource:")){
+                        return@setOnCancelListener
                     }
+                    AriaDownloadManager.INSTANCE.startResumeDownloadTask(video)
                 } else {
                     if (permissionDenied){
                         mainViewModel.isFromPermissionBack = true
                         goToPermissionSetting()
                         return@setOnCancelListener
                     }
-                    PUtils.requestStoragePermission(requireActivity())
+                    requestPermissionLauncher.launch(arrayOf(
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ))
                 }
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
         }
+    }
+    private fun showTaskCreate(video: MutableList<Video>){
+        if (taskCreatD == null){
+            taskCreatD = DownloadStatusDialog()
+        }
+        if (taskCreatD?.isFragmentShowing() == true){
+            taskCreatD?.dismissNow()
+        }
+        taskCreatD?.setIsComplete(false)
+        taskCreatD?.setOnConfirmListener {
+            if (searchViewModel.videos.value?.isNotEmpty() == true){
+                if (video.size == 1 && video[0].url.contains("android.resource:")){
+                    mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.PLAYER))
+                    return@setOnConfirmListener
+                }
+                mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.DOWNLOAD, video))
+            }
+        }
+        taskCreatD?.show(this.childFragmentManager, "DownloadDialog")
+        val videos = searchViewModel.videos.value?: mutableListOf()
+        if (videos.size == 1 && videos[0].url.contains("android.resource:")){
+            Handler(Looper.getMainLooper()).postDelayed({
+                taskCreatD?.dismissNow()
+                val playList = AriaDownloadManager.INSTANCE.getPlayList()
+                AriaDownloadManager.INSTANCE.processNewVideos(playList,videos)
+                playList.add(videos[0])
+                AppCache.playVideos = Json.encodeToString(playList)
+                RawResourceUtils.copyRawVideoToPrivatePath(
+                    App.getAppContext(),
+                    R.raw.sample,
+                    videos[0].fileName+".mp4"
+                )
+                showTaskComp()
+            }, 2000)
+        }
+    }
+    private fun showTaskComp(){
+        if (taskCD == null){
+            taskCD = DownloadStatusDialog()
+        }
+        if (taskCD?.isFragmentShowing() == true){
+            taskCD?.dismissNow()
+        }
+        taskCD?.setIsComplete(true)
+        taskCD?.setOnConfirmListener {
+            mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.PLAYER))
+        }
+        taskCD?.show(this.childFragmentManager, "DownloadDialog")
     }
     private fun goToPermissionSetting() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -524,23 +576,20 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         intent.data = uri
         startActivity(intent)
     }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        PUtils.handlePermissionResult(
-            requestCode,
-            grantResults,
-            onGranted = {
-                if (searchViewModel.videos.value?.isNotEmpty() == true){
-                    mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.DOWNLOAD,searchViewModel.videos.value))
-                }
-            },
-            onDenied = {
-                permissionDenied = true
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionsMap ->
+        val allGranted = permissionsMap.all { it.value }
+        if (allGranted) {
+            val videos = searchViewModel.videos.value?: mutableListOf()
+            showTaskCreate(videos)
+            if (videos.size == 1 && videos[0].url.contains("android.resource:")){
+                return@registerForActivityResult
             }
-        )
+            AriaDownloadManager.INSTANCE.startResumeDownloadTask(videos)
+        } else {
+            permissionDenied = true
+        }
     }
+
 }
