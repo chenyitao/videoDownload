@@ -2,8 +2,13 @@ package com.download.video_download.base.utils
 
 import android.content.Context
 import android.content.res.Resources
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.util.Log
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.MetadataRetriever
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -92,5 +97,28 @@ object RawResourceUtils {
 
     fun getRawResourceId(context: Context, resourceName: String, resourceType: String = "raw"): Int {
         return context.resources.getIdentifier(resourceName, resourceType, context.packageName)
+    }
+    fun getLocalVideoDurationQuickly(context: Context, videoPath: String): Long {
+        val videoFile = File(videoPath)
+        if (!videoFile.exists() || !videoFile.isFile) {
+            return 0L
+        }
+
+        val retriever = MediaMetadataRetriever()
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                retriever.setDataSource(videoPath)
+            } else {
+                retriever.setDataSource(videoFile.absolutePath)
+            }
+
+            val durationStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            durationStr?.toLong() ?: 0L
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0L
+        } finally {
+            retriever.release()
+        }
     }
 }

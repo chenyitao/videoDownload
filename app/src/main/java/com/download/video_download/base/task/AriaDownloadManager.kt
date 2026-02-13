@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.download.DownloadTaskListener
@@ -14,6 +15,7 @@ import com.download.video_download.App
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.room.entity.getSequentialNumber
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.RawResourceUtils
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -87,10 +89,6 @@ class AriaDownloadManager() : DownloadTaskListener {
 
         return filterDuplicateTitleList(uniqueMap.values.toMutableList())
     }
-
-    /**
-     * 过滤重复标题（优先保留带序号括号的项）
-     */
     fun filterDuplicateTitleList(list: List<Video>): MutableList<Video> {
         val groupMap = mutableMapOf<String, MutableList<Video>>()
 
@@ -107,28 +105,20 @@ class AriaDownloadManager() : DownloadTaskListener {
 
         return resultList
     }
-
-    /**
-     * 创建下载任务（首次创建/状态更新）
-     */
     fun create(videoItem: Video) {
         if (videoItem.id < 0) {
-            // 新建任务
             val fileName = getFileExtension(videoItem)
             val taskId = if (isHlsMediaUrl(videoItem.url)) {
                 createM3u8DownloadTask(videoItem.url, fileName)
             } else {
                 createNormalDownloadTask(videoItem.url, fileName)
             }
-            // 更新videoItem的id，并同步到LiveData
             updateVideoItemInList(videoItem) { it.copy(id = taskId) }
         } else {
-            // 恢复/暂停已有任务
             when (videoItem.downloadStatus) {
                 IEntity.STATE_STOP -> stop(videoItem.id)
                 IEntity.STATE_RUNNING -> resume(videoItem.id)
             }
-            // 更新任务状态到LiveData
             updateVideoItemInList(videoItem) {
                 it.copy(
                     path = videoItem.path,
@@ -141,10 +131,6 @@ class AriaDownloadManager() : DownloadTaskListener {
             }
         }
     }
-
-    /**
-     * 添加并暂停下载任务
-     */
     fun add(videoItem: Video) {
         if (isHlsMediaUrl(videoItem.url)) {
             Aria.download(this)
@@ -158,7 +144,6 @@ class AriaDownloadManager() : DownloadTaskListener {
                 .ignoreCheckPermissions()
                 .stop()
         }
-        // 更新任务状态到LiveData
         updateVideoItemInList(videoItem) {
             it.copy(
                 path = videoItem.path,
@@ -171,10 +156,6 @@ class AriaDownloadManager() : DownloadTaskListener {
         }
     }
 
-    // ========== 下载任务操作封装（抽离重复逻辑） ==========
-    /**
-     * 创建普通文件下载任务
-     */
     private fun createNormalDownloadTask(url: String, fileName: String): Long {
         return Aria.download(this)
             .load(url)
@@ -184,9 +165,6 @@ class AriaDownloadManager() : DownloadTaskListener {
             .create()
     }
 
-    /**
-     * 创建M3U8下载任务（带默认配置）
-     */
     private fun createM3u8DownloadTask(url: String, fileName: String): Long {
         return Aria.download(this)
             .load(url)
@@ -197,9 +175,6 @@ class AriaDownloadManager() : DownloadTaskListener {
             .create()
     }
 
-    /**
-     * 获取默认M3U8下载配置（抽离重复配置）
-     */
     private fun getDefaultM3u8Option(): M3U8VodOption {
         return M3U8VodOption().apply {
             setVodTsUrlConvert(VodTsDefConverter())
@@ -211,72 +186,40 @@ class AriaDownloadManager() : DownloadTaskListener {
         }
     }
 
-    /**
-     * 暂停下载任务
-     */
     fun stop(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().stop()
-        // 更新状态到LiveData
         updateVideoStatus(taskId, IEntity.STATE_STOP)
     }
-
-    /**
-     * 恢复下载任务
-     */
     fun resume(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().resume(true)
-        // 更新状态到LiveData
         updateVideoStatus(taskId, IEntity.STATE_RUNNING)
     }
 
-    /**
-     * 重试下载任务
-     */
     fun retry(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().reTry()
     }
 
-    /**
-     * 取消任务（不删除文件）
-     */
     fun cancelNoRemove(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().cancel()
         removeVideoFromList(taskId)
     }
 
-    /**
-     * 取消任务（删除文件）
-     */
     fun cancel(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().cancel(true)
         removeVideoFromList(taskId)
     }
 
-    /**
-     * 重新开始下载任务
-     */
     fun reStart(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().reStart()
     }
-
-    // ========== LiveData 核心操作封装（解决通知不生效） ==========
-    /**
-     * 安全更新Video LiveData（主线程）
-     * @param newList 新的视频列表
-     */
     private fun updateVideoLiveData(newList: MutableList<Video>) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             _videoItems.value = newList // 主线程直接更新
         } else {
-            mainHandler.post { _videoItems.value = newList } // 子线程切换主线程
+            mainHandler.post { _videoItems.value = newList }
         }
     }
 
-    /**
-     * 更新列表中指定Video的属性
-     * @param targetItem 目标Video（匹配url+id）
-     * @param updateAction 更新操作
-     */
     private fun updateVideoItemInList(targetItem: Video, updateAction: (Video) -> Video) {
         val currentList = _videoItems.value ?: return
         val index = currentList.indexOfFirst { it.url == targetItem.url && it.id == targetItem.id }
@@ -287,9 +230,6 @@ class AriaDownloadManager() : DownloadTaskListener {
         }
     }
 
-    /**
-     * 更新指定任务id的视频状态
-     */
     private fun updateVideoStatus(taskId: Long, status: Int) {
         val currentList = _videoItems.value ?: return
         val index = currentList.indexOfFirst { it.id == taskId }
@@ -342,15 +282,9 @@ class AriaDownloadManager() : DownloadTaskListener {
     override fun onTaskComplete(task: DownloadTask?) = updatateVideoItem(task)
     override fun onTaskRunning(task: DownloadTask?) = updatateVideoItem(task)
     override fun onNoSupportBreakPoint(task: DownloadTask?) = Unit
-
-    /**
-     * 统一更新下载任务状态到LiveData
-     * 核心修复：所有修改都生成新列表，通过updateVideoLiveData触发通知
-     */
     private fun updatateVideoItem(task: DownloadTask?) {
         if (task == null || isUpdating.get()) return
         isUpdating.set(true)
-
         try {
             val entity = task.downloadEntity
             val currentList = _videoItems.value ?: return
@@ -360,35 +294,36 @@ class AriaDownloadManager() : DownloadTaskListener {
                 val newList = currentList.toMutableList()
                 val videoItem = newList[index]
 
-                // 处理M3U8文件大小计算
                 if (entity.state == IEntity.STATE_RUNNING && entity.m3U8Entity != null) {
                     handleM3u8FileSize(task, entity.id.toString())
                 }
 
-                // 构建更新后的Video对象
                 val updatedItem = videoItem.copy(
                     path = entity.filePath ?: "",
-                    downloadStatus = entity.state ?: -1,
-                    process = entity.percent?.toLong() ?: 0,
-                    speed = formatSpeed(entity.speed ?: 0),
-                    downloadProcess = "${convertBytesToHumanReadable(entity.currentProgress ?: 0)}/${convertBytesToHumanReadable(entity.fileSize ?: 0)}",
-                    totalSize = entity.fileSize ?: 0
+                    downloadStatus = entity.state,
+                    process = entity.percent.toLong(),
+                    speed = formatSpeed(entity.speed),
+                    downloadProcess = "${convertBytesToHumanReadable(entity.currentProgress)}/${convertBytesToHumanReadable(
+                        entity.fileSize
+                    )}",
+                    totalSize = entity.fileSize
                 )
 
-                // 处理下载完成逻辑
                 val finalItem = if (entity.state == IEntity.STATE_COMPLETE) {
-                    // 修正苹果格式mimeTypes
-                    val mimeType = if (updatedItem.mimeTypes?.contains("vnd.apple") == true) "video/mp4" else updatedItem.mimeTypes
-                    // 添加完成时间
+                    val mimeType = if (updatedItem.mimeTypes.contains("vnd.apple") == true) "video/mp4" else updatedItem.mimeTypes
+                    var duration = updatedItem.duration
+                    if (updatedItem.duration == 0L){
+                        duration = RawResourceUtils.getLocalVideoDurationQuickly(App.getAppContext(), updatedItem.path)
+                    }
+
                     val completedItem = updatedItem.copy(
                         mimeTypes = mimeType,
-                        downloadCompletedTime = System.currentTimeMillis()
+                        downloadCompletedTime = System.currentTimeMillis(),
+                        duration = duration
                     )
-                    // 移到播放列表
                     val playList = getPlayList()
                     playList.add(completedItem)
                     AppCache.playVideos = Json.encodeToString(playList)
-                    // 从下载列表移除
                     newList.removeAt(index)
                     _isCompete.value = true
                     completedItem
@@ -397,10 +332,8 @@ class AriaDownloadManager() : DownloadTaskListener {
                     updatedItem
                 }
 
-                // 触发LiveData通知
                 updateVideoLiveData(newList)
 
-                // 保存缓存（运行中/完成状态）
                 if (entity.state == IEntity.STATE_RUNNING || entity.state == IEntity.STATE_COMPLETE) {
                     saveDownloadTaskCache()
                 }
@@ -409,8 +342,6 @@ class AriaDownloadManager() : DownloadTaskListener {
             isUpdating.set(false)
         }
     }
-
-    // ========== 工具方法（保持不变，优化命名/空安全） ==========
     private fun getBaseTitle(title: String): String {
         val regex = Regex("^(.*)\\((\\d+)\\)$")
         return regex.find(title.trim())?.groupValues?.get(1)?.trim() ?: title.trim()

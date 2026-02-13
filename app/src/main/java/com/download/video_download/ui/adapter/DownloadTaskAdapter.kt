@@ -1,5 +1,6 @@
 package com.download.video_download.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,6 +63,7 @@ class DownloadTaskAdapter(
             binding.progress.progress = data.process.toInt()
             binding.taskSpeed.setTextColor(ContextCompat.getColor(App.getAppContext(),R.color.color_19C81C))
             binding.taskAction.visibility = View.VISIBLE
+            Log.e("task","taskname:${data.fileName}  ===== " +data.downloadStatus)
             when (data.downloadStatus) {
                 IEntity.STATE_RUNNING -> {
                     binding.taskAction.setImageResource(R.mipmap.ic_task_run)
@@ -69,8 +71,7 @@ class DownloadTaskAdapter(
                 }
                 IEntity.STATE_STOP, IEntity.STATE_CANCEL -> {
                     binding.taskAction.setImageResource(R.mipmap.ic_task_pause)
-                    binding.taskSpeed.setTextColor(ContextCompat.getColor(App.getAppContext(),R.color.white))
-                    binding.taskSpeed.text = App.getAppContext().getString(R.string.pending)
+                    binding.taskSpeed.text = "--B/S"
                 }
                 IEntity.STATE_FAIL -> {
                     binding.progress.progressDrawable = ContextCompat.getDrawable(App.getAppContext(),R.drawable.web_progress_style_yellow)

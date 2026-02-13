@@ -33,7 +33,7 @@ data class Video(
     @SerialName("fileName")
     var fileName: String = "",
     @SerialName("downloadStatus")
-    var downloadStatus: Int = 0,
+    var downloadStatus: Int = -1,
     @SerialName("audioUrl")
     var audioUrl: String = "",
     @SerialName("duration")

@@ -67,7 +67,8 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
                 fileName = "sample",
                 mimeTypes = "video/mp4",
                 duration = 16000,
-                totalSize  = 882758
+                totalSize  = 882758,
+                isSelect =  true
             )
             searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
             searchViewModel.isLoading(false)
@@ -78,7 +79,8 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
                 fileName = "sample",
                 mimeTypes = "video/mp4",
                 duration = 16000,
-                totalSize  = 882758
+                totalSize  = 882758,
+                isSelect =  true
             )
             searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
             searchViewModel.isLoading(false)

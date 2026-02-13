@@ -514,11 +514,12 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             downloadDialog.updateData(video)
             downloadDialog.setOnCancelListener {
                 if (PUtils.hasStoragePermission(requireContext())) {
-                    showTaskCreate(it)
+                    val vf = video.filter { fv-> fv.isSelect }
+                    showTaskCreate(vf.toMutableList())
                     if (video.size == 1 && video[0].url.contains("android.resource:")){
                         return@setOnCancelListener
                     }
-                    AriaDownloadManager.INSTANCE.startResumeDownloadTask(video)
+                    AriaDownloadManager.INSTANCE.startResumeDownloadTask(vf.toMutableList())
                 } else {
                     if (permissionDenied){
                         mainViewModel.isFromPermissionBack = true
@@ -594,11 +595,12 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         val allGranted = permissionsMap.all { it.value }
         if (allGranted) {
             val videos = searchViewModel.videos.value?: mutableListOf()
-            showTaskCreate(videos)
+            val vf = videos.filter { fv-> fv.isSelect }
+            showTaskCreate(vf.toMutableList())
             if (videos.size == 1 && videos[0].url.contains("android.resource:")){
                 return@registerForActivityResult
             }
-            AriaDownloadManager.INSTANCE.startResumeDownloadTask(videos)
+            AriaDownloadManager.INSTANCE.startResumeDownloadTask(vf.toMutableList())
         } else {
             permissionDenied = true
         }
