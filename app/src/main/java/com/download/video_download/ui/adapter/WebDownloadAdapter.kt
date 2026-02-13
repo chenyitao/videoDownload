@@ -55,10 +55,10 @@ class WebDownloadAdapter(
             if (data.thumb.isNotEmpty()) {
                 Glide.with(binding.logo.context)
                     .load(data.thumb)
-                    .placeholder(R.mipmap.ic_default)
+                    .placeholder(R.mipmap.ic_video_default)
                     .into(binding.logo)
             } else {
-                binding.logo.setImageResource(R.mipmap.ic_default)
+                binding.logo.setImageResource(R.mipmap.ic_video_default)
             }
             binding.tvTme.visibility = if (data.duration > 0) View.VISIBLE else View.GONE
             binding.tvTme.text = TimeFormateUtils.formatTime(data.duration)

@@ -131,7 +131,7 @@ object VideoParse {
             url = url,
             fileName = fileName ?: "Unknown",
             mimeTypes = fileExtension ?: "mp4",
-            totalSize = totalSize?.toInt() ?: 0,
+            totalSize = totalSize ?: 0,
         )
     }
     fun videoParse2(pageUrl: String,url:String,videoData: (videos: MutableList<Video>,isLoading: Boolean) -> Unit):Job{
@@ -449,7 +449,7 @@ object VideoParse {
                         mimeTypes = "video/mp4",
                         thumb = originCover?:"",
                         duration = durationSeconds?:0,
-                        totalSize = size?.toInt()?:0,
+                        totalSize = size?:0,
                         fileName = desc ?: "Unknown"
                     )
                 )

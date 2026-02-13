@@ -55,7 +55,6 @@ class DownloadDialog : DialogFragment() {
             setGravity(android.view.Gravity.BOTTOM)
             attributes = attributes?.apply {
                 windowAnimations = android.R.style.Animation_Dialog
-                val screenHeight = resources.displayMetrics.heightPixels
                 height = WindowManager.LayoutParams.WRAP_CONTENT
                 softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             }
@@ -71,6 +70,7 @@ class DownloadDialog : DialogFragment() {
         }
         binding.rvVideo.adapter = adapter
         adapter.updateData(videos)
+        updateSelection()
     }
     private fun updateSelection() {
         val isAllSelected1 = if (videos.isEmpty()) false else videos.all { it.isSelect }
@@ -91,6 +91,7 @@ class DownloadDialog : DialogFragment() {
     private fun initListeners() {
         binding.btnCancel.setOnClickListener {
             onCancelListener?.invoke(videos)
+            dismiss()
         }
         binding.tvAllSelect.setOnClickListener {
             if (binding.tvAllSelect.text.toString() == getString(R.string.select_all)){

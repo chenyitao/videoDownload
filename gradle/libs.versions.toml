@@ -31,6 +31,9 @@ lottie = { group = "com.airbnb.android", name = "lottie", version = "5.2.0" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.2" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.16.0" }
+aria-core = { module = "me.laoyuyu.aria:core", version = "3.8.16" }
+aria-compile =  { module = "me.laoyuyu.aria:compiler", version = "3.8.16" }
+aria-m3u8 = { module = "me.laoyuyu.aria:m3u8", version = "3.8.16" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -188,6 +188,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 curUrl = url?:""
                 parseJobList.forEach { it.cancel() }
                 videoList.clear()
+                searchViewModel.saveVideos(videoList)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {

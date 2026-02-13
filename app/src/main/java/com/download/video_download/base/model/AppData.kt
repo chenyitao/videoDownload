@@ -1,6 +1,7 @@
 package com.download.video_download.base.model
 
 import androidx.room.PrimaryKey
+import com.download.video_download.base.room.entity.Video
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -38,7 +39,8 @@ data class History(
 data class NavigationItem(
     val params: String,
     val from: NavState,
-    val route: NavState
+    val route: NavState,
+    val video: MutableList<Video>? = mutableListOf(),
 )
 
 data class DetectStatus(

@@ -46,4 +46,15 @@
     <string name="download_task2">Download </string>
     <string name="download_task2_green">completed</string>
     <string name="view">View</string>
+    <string name="download_empty">No downloads in progress.</string>
+    <string name="cancel_download">Cancel this download?</string>
+    <string name="Sure">Sure</string>
+    <string name="now">Not Now</string>
+    <string name="connecting">Connecting</string>
+    <string name="pending">Pending</string>
+    <string name="failed_to_connect">Failed to connect</string>
+    <string name="empyt_player">No downloads yet.</string>
+    <string name="Share">Share</string>
+    <string name="delete_successfully">Delete successfully</string>
+    <string name="file_valide">The video link appears to be invalid or broken.</string>
 </resources>

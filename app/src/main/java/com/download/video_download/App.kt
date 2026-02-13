@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.LocaleListCompat
+import com.arialyy.aria.core.Aria
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LanguageUtils
@@ -25,6 +27,9 @@ class App : Application() {
         weakApp = WeakReference(this)
         AppCache.init(this)
         LanguageUtils.initLocale(this)
+        Aria.init(applicationContext)
+            .downloadConfig
+            .setMaxTaskNum(3)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 ActivityManager.addActivity(activity)

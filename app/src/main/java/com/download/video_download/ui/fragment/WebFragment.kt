@@ -497,11 +497,15 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
     }
     fun showDownloadDialog() {
-        searchViewModel.videos.value?.let {
-            it.forEach { it.isSelect = true }
+        searchViewModel.videos.value?.let {video->
+            video.forEach { it.isSelect = true }
             val downloadDialog = DownloadDialog()
+            downloadDialog.updateData(video)
             downloadDialog.setOnCancelListener {
                 if (PUtils.hasStoragePermission(requireContext())) {
+                    if (searchViewModel.videos.value?.isNotEmpty() == true){
+                        mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.DOWNLOAD, it))
+                    }
                 } else {
                     if (permissionDenied){
                         mainViewModel.isFromPermissionBack = true
@@ -512,7 +516,6 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 }
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
-            downloadDialog.updateData(it)
         }
     }
     private fun goToPermissionSetting() {
@@ -531,7 +534,9 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             requestCode,
             grantResults,
             onGranted = {
-
+                if (searchViewModel.videos.value?.isNotEmpty() == true){
+                    mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.DOWNLOAD,searchViewModel.videos.value))
+                }
             },
             onDenied = {
                 permissionDenied = true

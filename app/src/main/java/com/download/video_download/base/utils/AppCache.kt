@@ -82,4 +82,14 @@ object AppCache {
             saveValue("isFirstDetect", value)
         }
         get() =getValue("isFirstDetect", true)
+    var downloadTask: String
+        set(value) {
+            saveValue("downloadTask", value)
+        }
+        get() =getValue("downloadTask", "")
+    var playVideos: String
+        set(value) {
+            saveValue("playVideos", value)
+        }
+        get() =getValue("playVideos", "")
 }
