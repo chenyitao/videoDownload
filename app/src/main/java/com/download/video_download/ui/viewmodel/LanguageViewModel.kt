@@ -5,7 +5,6 @@ import com.download.video_download.base.BaseViewModel
 import com.download.video_download.base.model.LanguageSelectData
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LanguageUtils
-import com.download.video_download.base.utils.LanguageUtils.getSystemOriginalLocale
 import java.util.Locale
 
 class LanguageViewModel : BaseViewModel() {
@@ -22,6 +21,8 @@ class LanguageViewModel : BaseViewModel() {
         }
         val supportedLanguages = setOf("en", "ja", "ko", "fr", "de", "es", "pt", "ru", "ar", "hi", "it", "in", "fil", "th", "tr", "ur", "ms")
         val curlg = if (language in supportedLanguages) language else "en"
+        AppCache.switchLanguage = curlg
+        LanguageUtils.setAppLanguage(App.getAppContext(),curlg)
         return curlg
     }
     fun getLanguageList(): MutableList<LanguageSelectData> {
@@ -142,16 +143,7 @@ class LanguageViewModel : BaseViewModel() {
                 languageIv = R.mipmap.ic_ur
             ),
          )
-        if (AppCache.switchLanguage.isNotEmpty()){
-            lg.forEachIndexed { index, it ->
-                if (it.languageCode == AppCache.switchLanguage && it.language == AppCache.switchLanguageName){
-                    it.isSelected = true
-                    LanguageUtils.setAppLanguage(App.getAppContext(),AppCache.switchLanguage)
-                }else{
-                    it.isSelected = false
-                }
-            }
-        }
+        LanguageUtils.setAppLanguage(App.getAppContext(),lg.get(0).languageCode)
         return lg
     }
 

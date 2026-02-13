@@ -1,4 +1,3 @@
-import org.gradle.language.nativeplatform.internal.Dimensions.applicationVariants
 
 plugins {
     alias(libs.plugins.android.application)

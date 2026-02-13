@@ -62,6 +62,7 @@ class SearchViewModel: BaseViewModel() {
                     oldHistoryList.removeAt(oldHistoryList.lastIndex)
                 }
                 oldHistoryList.add( history)
+                oldHistoryList.sortByDescending { it.time }
                 val newHistoryList = oldHistoryList.toList()
                 _historyList.value = newHistoryList
                 AppCache.history =  json.encodeToString( _historyList.value)

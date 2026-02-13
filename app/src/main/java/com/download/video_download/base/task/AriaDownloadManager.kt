@@ -59,30 +59,20 @@ class AriaDownloadManager() : DownloadTaskListener {
             }
         }
 
-        // 3. 添加新任务
         currentList.addAll(videoItem)
 
-        // 4. 去重处理
         val newVideos = deduplicateVideoItems(currentList)
 
-        // 5. 处理重复文件名（序号生成）
         processNewVideos(playVideos, newVideos)
         _isCompete.value = false
-        // 6. 核心修复：通过setValue更新LiveData，触发观察者通知
         updateVideoLiveData(newVideos)
-
-        // 7. 创建/添加下载任务
+        newVideos.sortByDescending { it.createTime }
         newVideos.forEach { item ->
             if (videoItem.isEmpty()) add(item) else create(item)
         }
 
-        // 8. 保存最新任务列表到缓存
         saveDownloadTaskCache()
     }
-
-    /**
-     * 去重视频列表（按url+fileName，优先保留有id的项）
-     */
     private fun deduplicateVideoItems(list: MutableList<Video>): MutableList<Video> {
         val uniqueMap = mutableMapOf<String, Video>()
 

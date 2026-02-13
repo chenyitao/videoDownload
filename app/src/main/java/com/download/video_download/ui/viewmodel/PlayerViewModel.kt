@@ -13,7 +13,7 @@ class PlayerViewModel : BaseViewModel() {
     init {
     }
     fun initVideoData() {
-        val list = mutableListOf<Video>()
+        var list = mutableListOf<Video>()
         val videCache = AppCache.playVideos
         if (videCache.isNotEmpty()) {
            runCatching {
@@ -22,8 +22,10 @@ class PlayerViewModel : BaseViewModel() {
                    list.addAll(json)
                }
            }.onFailure {
+               list.sortByDescending { it.downloadCompletedTime }
                _videoList.value = list
            }.onSuccess {
+               list.sortByDescending { it.downloadCompletedTime }
                _videoList.value = list
            }
         }

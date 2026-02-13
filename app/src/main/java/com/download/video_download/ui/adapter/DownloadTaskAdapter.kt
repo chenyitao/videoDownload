@@ -69,7 +69,8 @@ class DownloadTaskAdapter(
                 }
                 IEntity.STATE_STOP, IEntity.STATE_CANCEL -> {
                     binding.taskAction.setImageResource(R.mipmap.ic_task_pause)
-                    binding.taskSpeed.text = "--B/S"
+                    binding.taskSpeed.setTextColor(ContextCompat.getColor(App.getAppContext(),R.color.white))
+                    binding.taskSpeed.text = App.getAppContext().getString(R.string.pending)
                 }
                 IEntity.STATE_FAIL -> {
                     binding.progress.progressDrawable = ContextCompat.getDrawable(App.getAppContext(),R.drawable.web_progress_style_yellow)

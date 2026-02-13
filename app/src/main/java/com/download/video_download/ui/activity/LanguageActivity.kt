@@ -51,6 +51,10 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
         mBind.lottieIcon.imageAssetsFolder = "lottie/images"
         mBind.lottieIcon.playAnimation()
         updateText()
+        if (hasNavigationBar()){
+            val h = getNavigationBarHeight()
+            mBind.container.setPadding(0,0,0,h)
+        }
     }
 
     override fun initListeners() {

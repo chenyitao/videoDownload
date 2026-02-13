@@ -103,6 +103,12 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 curPage = SearchState.GUIDE
             }
             switchPage()
+            searchViewModel.saveVideos(mutableListOf())
+            if (AppCache.isFirstDetect && binding.downFloatingGuide.isVisible){
+                AppCache.isFirstDetect = false
+                binding.downFloatingGuide.visibility = View.GONE
+                cancelAnimations()
+            }
         }
         searchViewModel.detect.observe(this) {
             when (it.state) {
@@ -290,7 +296,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 binding.downFloatingGuide.visibility = View.GONE
                 cancelAnimations()
             }
-            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE || searchViewModel.videos.value?.isEmpty() == true) {
+            if (searchViewModel.detect.value?.state == DetectState.YOUTUBE) {
                 requireContext().showToast(getString(R.string.no_file))
                 return@setOnClickListener
             }
@@ -410,6 +416,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         } else {
             binding.tvSearch.visibility = View.VISIBLE
             binding.ivSearch.visibility = View.GONE
+        }
+        if (curPage == SearchState.GUIDE && AppCache.isFirstInstall) {
+            binding.upFloatingGuide.visibility = View.VISIBLE
+            createUpFingerAnimation()
+            startAnimations()
         }
     }
 
@@ -546,6 +557,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 taskCreatD?.dismissNow()
                 val playList = AriaDownloadManager.INSTANCE.getPlayList()
                 AriaDownloadManager.INSTANCE.processNewVideos(playList,videos)
+                videos[0].downloadCompletedTime = System.currentTimeMillis()
                 playList.add(videos[0])
                 AppCache.playVideos = Json.encodeToString(playList)
                 RawResourceUtils.copyRawVideoToPrivatePath(
