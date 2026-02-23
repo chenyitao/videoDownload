@@ -58,6 +58,11 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
         },{
+            if (adapter?.getData()?.any { video ->
+                    video.id == it.id && video.url == it.url
+                } == true) {
+                adapter?.removeItem(it)
+            }
             if (downloadDialog == null){
                 downloadDialog = DownloadStatusDialog()
             }
@@ -66,13 +71,11 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
             }
             downloadDialog?.setIsComplete(true)
             downloadDialog?.setOnConfirmListener {
+                mainViewModel.navigate( NavigationItem("", NavState.DOWNLOAD, NavState.PLAYER))
             }
             downloadDialog?.show(this.childFragmentManager, "DownloadDialog")
         })
         binding.rvDownload.adapter = adapter
-        mainViewModel.nav.observe( this){
-            AriaDownloadManager.INSTANCE.startResumeDownloadTask( it?.video?:mutableListOf())
-        }
         if (AriaDownloadManager.INSTANCE.videoItems.value?.isEmpty() == true){
             if (adapter?.getData()?.isEmpty() == true){
                 binding.rlEmpty.visibility = View.VISIBLE
@@ -84,7 +87,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
     }
 
     override fun initListeners() {
-        AriaDownloadManager.INSTANCE.videoItems?.observe( this){
+        AriaDownloadManager.INSTANCE.videoItems.observe( this){
             if (it.isEmpty()){
                 binding.rlEmpty.visibility = View.VISIBLE
             }else{

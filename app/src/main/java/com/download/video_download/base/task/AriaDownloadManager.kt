@@ -306,10 +306,10 @@ class AriaDownloadManager() : DownloadTaskListener {
                     downloadProcess = "${convertBytesToHumanReadable(entity.currentProgress)}/${convertBytesToHumanReadable(
                         entity.fileSize
                     )}",
-                    totalSize = entity.fileSize
+                    totalSize = entity.fileSize,
                 )
 
-                val finalItem = if (entity.state == IEntity.STATE_COMPLETE) {
+               if (entity.state == IEntity.STATE_COMPLETE) {
                     val mimeType = if (updatedItem.mimeTypes.contains("vnd.apple") == true) "video/mp4" else updatedItem.mimeTypes
                     var duration = updatedItem.duration
                     if (updatedItem.duration == 0L){
@@ -319,20 +319,22 @@ class AriaDownloadManager() : DownloadTaskListener {
                     val completedItem = updatedItem.copy(
                         mimeTypes = mimeType,
                         downloadCompletedTime = System.currentTimeMillis(),
-                        duration = duration
+                        duration = duration,
+                        downloadStatus = entity.state,
                     )
                     val playList = getPlayList()
                     playList.add(completedItem)
                     AppCache.playVideos = Json.encodeToString(playList)
-                    newList.removeAt(index)
+                   newList[index] = completedItem
+                   updateVideoLiveData(newList)
                     _isCompete.value = true
-                    completedItem
+                   newList.removeAt(index)
                 } else {
                     newList[index] = updatedItem
-                    updatedItem
+                   updateVideoLiveData(newList)
                 }
 
-                updateVideoLiveData(newList)
+
 
                 if (entity.state == IEntity.STATE_RUNNING || entity.state == IEntity.STATE_COMPLETE) {
                     saveDownloadTaskCache()

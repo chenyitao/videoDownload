@@ -22,13 +22,24 @@ class DownloadTaskAdapter(
     private val onItemDel: (Video) -> Unit,
     private val onComp: (Video) -> Unit
 ) : RecyclerView.Adapter<DownloadTaskAdapter.DownloadTaskViewHolder>() {
-
+    private val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var videoList: MutableList<Video> = mutableListOf()
 
     fun updateData(newList: List<Video>) {
         videoList.clear()
         videoList.addAll(newList)
         notifyDataSetChanged()
+    }
+    fun removeItem(video: Video) {
+        val index = videoList.indexOfFirst {
+            it.id == video.id && it.url == video.url && it.fileName == video.fileName
+        }
+
+        if (index >= 0) {
+            videoList.removeAt(index)
+            notifyItemRemoved(index)
+            notifyItemRangeChanged(index, videoList.size)
+        }
     }
 
     fun updateSelection(selectedPosition: Int) {
@@ -87,17 +98,20 @@ class DownloadTaskAdapter(
                         binding.taskSpeed.setTextColor(ContextCompat.getColor(App.getAppContext(),R.color.color_19C81C))
                         binding.taskSpeed.text= App.getAppContext().getString(R.string.connecting)
                     }
+
                     if (data.downloadStatus == IEntity.STATE_COMPLETE){
-                        onComp(data)
+                        mainHandler.post {
+                            onComp.invoke(data)
+                        }
                     }
                     binding.taskAction.visibility = View.INVISIBLE
                 }
              }
             binding.taskAction.setOnClickListener {
-                onItemClick(data)
+                onItemClick.invoke(data)
             }
             binding.avDel.setOnClickListener {
-                onItemDel(data)
+                onItemDel.invoke(data)
             }
             if (data.thumb.isNotEmpty()) {
                 Glide.with(binding.ivLogo.context)
