@@ -10,8 +10,7 @@ import com.arialyy.aria.core.inf.IEntity
 import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
-import com.download.video_download.base.task.AriaDownloadManager
-import com.download.video_download.base.utils.PUtils
+import com.download.video_download.base.task.DownloadTaskManager
 
 import com.download.video_download.databinding.FragmentDownloadBinding
 import com.download.video_download.ui.adapter.DownloadTaskAdapter
@@ -42,19 +41,19 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
         adapter = DownloadTaskAdapter({
             when (it.downloadStatus) {
                 IEntity.STATE_RUNNING -> {
-                    AriaDownloadManager.INSTANCE.stop(it.id)
+                    DownloadTaskManager.INSTANCE.stop(it.id)
                 }
                 IEntity.STATE_STOP, IEntity.STATE_CANCEL -> {
-                    AriaDownloadManager.INSTANCE.resume(it.id)
+                    DownloadTaskManager.INSTANCE.resume(it.id)
                 }
                 IEntity.STATE_FAIL -> {
-                    AriaDownloadManager.INSTANCE.resume(it.id)
+                    DownloadTaskManager.INSTANCE.resume(it.id)
                 }
             }
         },{
             val downloadDialog = DownloadCancelDialog()
             downloadDialog.setOnConfirmListener {
-                AriaDownloadManager.INSTANCE.cancel(it.id)
+                DownloadTaskManager.INSTANCE.cancel(it.id)
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
         },{
@@ -76,10 +75,10 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
             downloadDialog?.show(this.childFragmentManager, "DownloadDialog")
         })
         binding.rvDownload.adapter = adapter
-        if (AriaDownloadManager.INSTANCE.videoItems.value?.isEmpty() == true){
+        if (DownloadTaskManager.INSTANCE.videoItems.value?.isEmpty() == true){
             if (adapter?.getData()?.isEmpty() == true){
                 binding.rlEmpty.visibility = View.VISIBLE
-                AriaDownloadManager.INSTANCE.startResumeDownloadTask()
+                DownloadTaskManager.INSTANCE.startResumeTask()
         }else{
             binding.rlEmpty.visibility = View.GONE
         }
@@ -87,7 +86,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
     }
 
     override fun initListeners() {
-        AriaDownloadManager.INSTANCE.videoItems.observe( this){
+        DownloadTaskManager.INSTANCE.videoItems.observe( this){
             if (it.isEmpty()){
                 binding.rlEmpty.visibility = View.VISIBLE
             }else{

@@ -19,13 +19,13 @@ object PopMenu {
             popupView,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            true // 可点击
+            true
         )
 
         popupWindow?.apply {
             setBackgroundDrawable(App.getAppContext().resources.getDrawable(android.R.color.transparent))
-            isOutsideTouchable = true // 点击外部关闭
-            isFocusable = true // 获取焦点
+            isOutsideTouchable = true
+            isFocusable = true
         }
 
         popupView.findViewById<LinearLayout>(R.id.ll_del).setOnClickListener {

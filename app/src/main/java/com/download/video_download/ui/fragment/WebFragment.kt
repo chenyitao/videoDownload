@@ -38,7 +38,7 @@ import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.room.entity.Video
-import com.download.video_download.base.task.AriaDownloadManager
+import com.download.video_download.base.task.DownloadTaskManager
 import com.download.video_download.base.utils.AnimaUtils
 import com.download.video_download.base.utils.AnimaUtils.initRotateAnimation
 import com.download.video_download.base.utils.AnimaUtils.startRotateAnimation
@@ -159,10 +159,10 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         ) ContextCompat.getDrawable(requireContext(), R.drawable.shape_radius_6_grey)
         else ContextCompat.getDrawable(requireContext(), R.drawable.shape_red_botton_5)
 
-        AriaDownloadManager.INSTANCE.isCompete.observe(this){
+        DownloadTaskManager.INSTANCE.isCompete.observe(this){
             if (it && isVisible){
                 showTaskComp()
-                AriaDownloadManager.INSTANCE.resetCompete(false)
+                DownloadTaskManager.INSTANCE.resetCompete(false)
             }
         }
     }
@@ -519,7 +519,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                     if (video.size == 1 && video[0].url.contains("android.resource:")){
                         return@setOnCancelListener
                     }
-                    AriaDownloadManager.INSTANCE.startResumeDownloadTask(vf.toMutableList())
+                    DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
                 } else {
                     if (permissionDenied){
                         mainViewModel.isFromPermissionBack = true
@@ -556,8 +556,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         if (videos.size == 1 && videos[0].url.contains("android.resource:")){
             Handler(Looper.getMainLooper()).postDelayed({
                 taskCreatD?.dismissNow()
-                val playList = AriaDownloadManager.INSTANCE.getPlayList()
-                AriaDownloadManager.INSTANCE.processNewVideos(playList,videos)
+                val playList = DownloadTaskManager.INSTANCE.getPlayList()
+                DownloadTaskManager.INSTANCE.processNewVideos(playList,videos)
                 videos[0].downloadCompletedTime = System.currentTimeMillis()
                 playList.add(videos[0])
                 AppCache.playVideos = Json.encodeToString(playList)
@@ -600,7 +600,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             if (videos.size == 1 && videos[0].url.contains("android.resource:")){
                 return@registerForActivityResult
             }
-            AriaDownloadManager.INSTANCE.startResumeDownloadTask(vf.toMutableList())
+            DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
         } else {
             permissionDenied = true
         }

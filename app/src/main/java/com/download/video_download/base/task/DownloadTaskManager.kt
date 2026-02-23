@@ -1,10 +1,8 @@
 package com.download.video_download.base.task
 
-import android.content.Context
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.download.DownloadTaskListener
@@ -21,7 +19,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 
-class AriaDownloadManager() : DownloadTaskListener {
+class DownloadTaskManager() : DownloadTaskListener {
     private var internalDir = ""
     private val _videoItems: MutableLiveData<MutableList<Video>> = MutableLiveData(mutableListOf())
     val videoItems: MutableLiveData<MutableList<Video>> get() = _videoItems
@@ -32,8 +30,8 @@ class AriaDownloadManager() : DownloadTaskListener {
     private val _isCompete: MutableLiveData<Boolean> = MutableLiveData(false)
     val isCompete: MutableLiveData<Boolean> get() = _isCompete
     companion object {
-        val INSTANCE: AriaDownloadManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            AriaDownloadManager()
+        val INSTANCE: DownloadTaskManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            DownloadTaskManager()
         }
     }
     init {
@@ -43,7 +41,7 @@ class AriaDownloadManager() : DownloadTaskListener {
     fun resetCompete(isCompete: Boolean){
         _isCompete.value = isCompete
     }
-    fun startResumeDownloadTask(videoItem: MutableList<Video> = mutableListOf()) {
+    fun startResumeTask(videoItem: MutableList<Video> = mutableListOf()) {
         m3u8SizeList.clear()
         val playVideos = getPlayList()
         val taskList = AppCache.downloadTask
@@ -83,7 +81,7 @@ class AriaDownloadManager() : DownloadTaskListener {
             val existingItem = uniqueMap[key]
             when {
                 existingItem == null -> uniqueMap[key] = item
-                existingItem.id == -1L && item.id != -1L -> uniqueMap[key] = item // 优先保留有任务id的项
+                existingItem.id == -1L && item.id != -1L -> uniqueMap[key] = item
             }
         }
 
@@ -245,7 +243,7 @@ class AriaDownloadManager() : DownloadTaskListener {
         val currentList = _videoItems.value ?: return
         val newList = currentList.filter { it.id != taskId }.toMutableList()
         updateVideoLiveData(newList)
-        saveDownloadTaskCache() // 同步缓存
+        saveDownloadTaskCache()
     }
 
     private fun saveDownloadTaskCache() {
@@ -465,9 +463,6 @@ class AriaDownloadManager() : DownloadTaskListener {
                 lowerUrl.contains(".ts?")
     }
 
-    /**
-     * 处理M3U8文件大小计算
-     */
     private fun handleM3u8FileSize(task: DownloadTask, taskId: String) {
         val m3u8Entity = task.downloadEntity.m3U8Entity ?: return
         if (m3u8Entity.peerIndex < 6) {
@@ -479,12 +474,10 @@ class AriaDownloadManager() : DownloadTaskListener {
         }
     }
 
-    // 释放资源（建议在Activity/Fragment销毁时调用）
     fun destroy() {
         Aria.download(this).unRegister()
     }
 }
-// Video类扩展函数（补充getBaseName，避免编译错误）
 fun Video.getBaseName(): String {
     return this.fileName.substringBeforeLast('.', this.fileName).trim()
 }

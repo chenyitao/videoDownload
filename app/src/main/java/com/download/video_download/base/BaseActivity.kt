@@ -95,10 +95,7 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 //            insets
 //        }
     }
-    
-    /**
-     * 恢复沉浸式状态
-     */
+
     private fun restoreImmersiveState() {
         if (enableImmersiveStatusBar) {
             StatusBarUtils.setTransparentStatusBar(this)
