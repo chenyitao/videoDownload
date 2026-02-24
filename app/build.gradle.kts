@@ -15,11 +15,11 @@ android {
     compileSdk  = 36
 
     defaultConfig {
-        applicationId = "com.download.video_download"
+        applicationId = "com.t.a"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "2.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
@@ -44,16 +44,13 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     bundle {
         language{
             enableSplit = false
         }
     }
-    buildFeatures {
-        buildConfig = true
-    }
-
 }
 kotlin {
     compilerOptions {
@@ -76,21 +73,24 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.kotlin.serialization.json)
     ksp(libs.aria.compile)
-    api(libs.media3.ui)
-    api(libs.media3.exoplaye)
-    api(libs.room.ktx)
-    api(libs.room.runtime)
-    api(libs.aria.core)
+    implementation(libs.media3.ui)
+    implementation(libs.media3.exoplaye)
+    implementation(libs.room.ktx)
+    implementation(libs.room.runtime)
+    implementation(libs.aria.core)
     ksp(libs.room.compiler)
-    api(libs.glide)
+    implementation(libs.glide)
     ksp(libs.glide.compiler)
-    api(libs.aria.m3u8)
-    api(libs.play.services.ads)
-    api(platform(libs.firebase.bom))
-    api(libs.firebase.perf)
-    api(libs.firebase.crashlytics)
-    api(libs.facebook.android.sdk)
-    api(libs.multidex)
+    implementation(libs.aria.m3u8)
+    implementation(libs.play.services.ads)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.perf)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.facebook.android.sdk)
+    implementation(libs.multidex)
+    implementation(libs.firebase.analytics)
+    implementation(libs.installreferrer)
+    implementation(libs.af.android.sdk)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

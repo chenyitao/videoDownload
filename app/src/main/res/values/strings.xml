@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Safe Downloader-Save Video</string>
+    <string name="ad_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="loading_progress">Loading… %d%%</string>
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>

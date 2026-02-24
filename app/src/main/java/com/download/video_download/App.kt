@@ -6,20 +6,29 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
+import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.appsflyer.AppsFlyerConversionListener
+import com.appsflyer.AppsFlyerLib
+import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.arialyy.aria.core.Aria
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LanguageUtils
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.lang.ref.WeakReference
 import java.util.Locale
 
 class App : MultiDexApplication() {
-    interface AppStatusChangeListener {
-        fun onAppEnterForeground()
-        fun onAppEnterBackground()
-    }
     private var foregroundActivityCount = 0
     private val statusChangeListeners = mutableListOf<AppStatusChangeListener>()
     override fun onCreate() {
@@ -27,9 +36,7 @@ class App : MultiDexApplication() {
         weakApp = WeakReference(this)
         AppCache.init(this)
         LanguageUtils.initLocale(this)
-        Aria.init(applicationContext)
-            .downloadConfig
-            .setMaxTaskNum(3)
+        initSdk()
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 ActivityManager.addActivity(activity)
@@ -65,6 +72,18 @@ class App : MultiDexApplication() {
     companion object {
         private var weakApp: WeakReference<Application>? = null
         var isAppInForeground = false
+        fun initFB(string: JSONObject?){
+            if(!FacebookSdk.isInitialized()){
+                string?.let {
+                    val id = it.getString("facebookId")
+                    val token = it.getString("fbToken")
+                    FacebookSdk.setApplicationId(id)
+                    FacebookSdk.setClientToken(token)
+                    FacebookSdk.sdkInitialize(getAppContext())
+                    weakApp?.get()?.let { application -> AppEventsLogger.activateApp(application) }
+                }
+            }
+        }
         fun getAppContext(): Context {
             return weakApp?.get()?.applicationContext!!
         }
@@ -104,5 +123,69 @@ class App : MultiDexApplication() {
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
+    }
+
+    private fun initSdk(){
+        try {
+            if (FirebaseApp.getApps(this).isEmpty()) {
+                FirebaseApp.initializeApp(this)
+                FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!BuildConfig.DEBUG_MODE)
+            }
+            CoroutineScope(Dispatchers.IO).launch {
+                MobileAds.initialize(this@App) {}
+            }
+            val conversionListener = object : AppsFlyerConversionListener {
+                override fun onConversionDataSuccess(conversionData: MutableMap<String, Any>?) {
+                    conversionData?.let { data ->
+                    }
+                }
+
+                override fun onConversionDataFail(errorMessage: String?) {
+                    errorMessage?.let {
+                        Log.d(
+                            "appsflyer",
+                            "appsflyer: deeplink fail: $errorMessage"
+                        )
+                    }
+                }
+
+                override fun onAppOpenAttribution(attributionData: MutableMap<String, String>?) {
+                    attributionData?.let { data ->
+                    }
+                }
+
+                override fun onAttributionFailure(errorMessage: String?) {
+                    errorMessage?.let {
+                        Log.d(
+                            "appsflyer",
+                            "appsflyer: deeplink fail: $errorMessage"
+                        )
+                    }
+                }
+            }
+            AppsFlyerLib.getInstance().init("", conversionListener, this)
+            AppsFlyerLib.getInstance().start(this,"",object :
+                AppsFlyerRequestListener {
+                override fun onSuccess() {
+                    Log.d("appfly", "Launch sent successfully, got 200 response code from server")
+                }
+
+                override fun onError(p0: Int, p1: String) {
+                    Log.d("appfly", "Launch failed to be sent:\n" +
+                            "Error code: " + p0 + "\n"
+                            + "Error description: " + p1)
+                }
+            })
+            AppsFlyerLib.getInstance().setDebugLog(true)
+            AppsFlyerLib.getInstance().setCustomerUserId("")
+            Aria.init(applicationContext)
+                .downloadConfig
+                .setMaxTaskNum(3)
+        } catch (e: Exception) {
+        }
+    }
+    interface AppStatusChangeListener {
+        fun onAppEnterForeground()
+        fun onAppEnterBackground()
     }
 }

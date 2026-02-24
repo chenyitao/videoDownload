@@ -36,7 +36,14 @@ inline fun <reified T : Activity> Context.jsonParser(): Json {
         isLenient = true
     }
 }
-
+fun Context.jsonParser(): Json {
+    return Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        prettyPrint = false
+        isLenient = true
+    }
+}
 fun View.visible() {
     visibility = View.VISIBLE
 }

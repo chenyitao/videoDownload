@@ -92,4 +92,14 @@ object AppCache {
             saveValue("playVideos", value)
         }
         get() =getValue("playVideos", "")
+    var adLimitC : String
+        set(value) {
+            saveValue("adLimitC", value)
+        }
+        get() =getValue("adLimitC", "")
+    var adcf : String
+        set(value) {
+            saveValue("adcf", value)
+        }
+        get() =getValue("adcf", "")
 }
