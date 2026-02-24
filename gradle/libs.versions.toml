@@ -38,7 +38,6 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "34.8.0" }
 firebase-perf = { module = "com.google.firebase:firebase-perf"}
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics"}
-firebase-config = { module = "com.google.firebase:firebase-config"}
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk",version = "latest.release"}
 multidex = { module = "androidx.multidex:multidex", version = "2.0.1" }
 [plugins]

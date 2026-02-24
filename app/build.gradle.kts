@@ -89,7 +89,6 @@ dependencies {
     api(platform(libs.firebase.bom))
     api(libs.firebase.perf)
     api(libs.firebase.crashlytics)
-    api(libs.firebase.config)
     api(libs.facebook.android.sdk)
     api(libs.multidex)
     testImplementation(libs.junit)
@@ -103,7 +102,6 @@ tasks.register("renameApk") {
             releaseDir.listFiles { file ->
                 file.name.endsWith(".apk") && file.name.contains("release")
             }?.forEach { apkFile ->
-                // 获取应用ID和版本名
                 val appId = android.defaultConfig.applicationId
                 val versionName = android.defaultConfig.versionName
                 val newApkName = "${appId}-${versionName}.apk"
@@ -111,6 +109,19 @@ tasks.register("renameApk") {
 
                 if (apkFile.renameTo(newApkFile)) {
                     println("APK renamed to: ${newApkFile.absolutePath}")
+                }
+            }
+
+            releaseDir.listFiles { file ->
+                file.name.endsWith(".aab") && file.name.contains("release")
+            }?.forEach { aabFile ->
+                val appId = android.defaultConfig.applicationId
+                val versionName = android.defaultConfig.versionName
+                val newAabName = "${appId}-${versionName}.aab"
+                val newAabFile = File(releaseDir, newAabName)
+
+                if (aabFile.renameTo(newAabFile)) {
+                    println("AAB renamed to: ${newAabFile.absolutePath}")
                 }
             }
         }
