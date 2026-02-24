@@ -80,3 +80,29 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+tasks.register("renameApk") {
+    doLast {
+        val releaseDir = File(project.projectDir, "release")
+        if (releaseDir.exists()) {
+            releaseDir.listFiles { file ->
+                file.name.endsWith(".apk") && file.name.contains("release")
+            }?.forEach { apkFile ->
+                // 获取应用ID和版本名
+                val appId = android.defaultConfig.applicationId
+                val versionName = android.defaultConfig.versionName
+                val newApkName = "${appId}-${versionName}.apk"
+                val newApkFile = File(releaseDir, newApkName)
+
+                if (apkFile.renameTo(newApkFile)) {
+                    println("APK renamed to: ${newApkFile.absolutePath}")
+                }
+            }
+        }
+    }
+}
+
+tasks.whenTaskAdded {
+    if (name == "assembleRelease") {
+        finalizedBy("renameApk")
+    }
+}
