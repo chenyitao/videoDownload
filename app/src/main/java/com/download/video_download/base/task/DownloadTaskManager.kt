@@ -175,8 +175,8 @@ class DownloadTaskManager() : DownloadTaskListener {
 
     private fun getDefaultM3u8Option(): M3U8VodOption {
         return M3U8VodOption().apply {
-            setVodTsUrlConvert(VodTsDefConverter())
-            setBandWidthUrlConverter(BandWidthDefConverter())
+            setVodTsUrlConvert(VodDefConverter())
+            setBandWidthUrlConverter(BandDefConverter())
             setUseDefConvert(false)
             merge(true)
             generateIndexFile()

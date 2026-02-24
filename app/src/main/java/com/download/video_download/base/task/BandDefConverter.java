@@ -17,7 +17,7 @@ package com.download.video_download.base.task;
 
 import com.arialyy.aria.core.processor.IBandWidthUrlConverter;
 
-class BandWidthDefConverter implements IBandWidthUrlConverter {
+class BandDefConverter implements IBandWidthUrlConverter {
 
   @Override public String convert(String m3u8Url, String bandWidthUrl) {
       if (bandWidthUrl.startsWith("/")) {

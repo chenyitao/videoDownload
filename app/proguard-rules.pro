@@ -24,9 +24,6 @@
 -keep class androidx.media3.** {*;}
 -keep interface androidx.media3.**
 
--keep class com.shuyu.alipay.** {*;}
--keep interface com.shuyu.alipay.**
-
 -keep public class * extends android.view.View{
     *** get*();
     void set*(***);
@@ -37,3 +34,26 @@
 }
 -dontwarn com.arialyy.aria.**
 -keep class com.arialyy.aria.**{*;}
+-keep class kotlin.** { *; }
+-keep class kotlinx.** { *; }
+-dontwarn kotlin.**
+-dontwarn kotlinx.**
+-keep class androidx.multidex.** { *; }
+-keep class com.download.video_download.App { *; }
+-keep public class * extends android.app.Application
+-keep class com.download.video_download.** { *; }
+# Keep AndroidX lifecycle components
+-keep class androidx.lifecycle.** { *; }
+-keep class androidx.arch.core.** { *; }
+
+# Keep Room database classes
+-keep class androidx.room.** { *; }
+-keep class com.download.video_download.base.room.** { *; }
+
+# Keep data binding classes
+-keep class com.download.video_download.databinding.** { *; }
+
+# Keep reflection-used classes
+-keepclassmembers class * {
+    @androidx.lifecycle.OnLifecycleEvent *;
+}

@@ -9,9 +9,6 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.download.video_download.databinding.DialogHistoryClearAllBinding
 
-/**
- * 清除所有历史记录确认弹窗
- */
 class HistoryClearAllDialog : DialogFragment() {
     
     private var _binding: DialogHistoryClearAllBinding? = null
@@ -59,10 +56,7 @@ class HistoryClearAllDialog : DialogFragment() {
             dismiss()
         }
     }
-    
-    /**
-     * 设置确认按钮点击监听器
-     */
+
     fun setOnConfirmListener(listener: () -> Unit) {
         this.onConfirmListener = listener
     }

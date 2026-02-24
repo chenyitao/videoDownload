@@ -10,9 +10,6 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.download.video_download.databinding.DialogDownloadCancelBinding
 
-/**
- * 清除所有历史记录确认弹窗
- */
 class DownloadCancelDialog : DialogFragment() {
     
     private var _binding: DialogDownloadCancelBinding? = null
@@ -60,10 +57,7 @@ class DownloadCancelDialog : DialogFragment() {
             dismiss()
         }
     }
-    
-    /**
-     * 设置确认按钮点击监听器
-     */
+
     fun setOnConfirmListener(listener: () -> Unit) {
         this.onConfirmListener = listener
     }

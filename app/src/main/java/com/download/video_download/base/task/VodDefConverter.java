@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-class VodTsDefConverter implements IVodTsUrlConverter {
+class VodDefConverter implements IVodTsUrlConverter {
   @Override public List<String> convert(String m3u8Url, List<String> tsUrls) {
       List<String> convertedTsUrl = new ArrayList<>();
       if (tsUrls == null || tsUrls.isEmpty()) {

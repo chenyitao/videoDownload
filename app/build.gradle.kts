@@ -2,7 +2,7 @@ import org.gradle.language.nativeplatform.internal.Dimensions.applicationVariant
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
@@ -12,9 +12,7 @@ plugins {
 
 android {
     namespace = "com.download.video_download"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk  = 36
 
     defaultConfig {
         applicationId = "com.download.video_download"
@@ -23,6 +21,7 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
     buildTypes {
         release {
@@ -56,6 +55,11 @@ android {
     }
 
 }
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
@@ -87,6 +91,7 @@ dependencies {
     api(libs.firebase.crashlytics)
     api(libs.firebase.config)
     api(libs.facebook.android.sdk)
+    api(libs.multidex)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

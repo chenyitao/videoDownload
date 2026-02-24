@@ -5,10 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.download.video_download.base.model.History
 import com.download.video_download.databinding.ItemHistoryBinding
-
-/**
- * 语言选择列表适配器
- */
 class HistoryAdapter(
     private val onItemClick: (History) -> Unit,
     private val onItemDelClick: (History) -> Unit,
