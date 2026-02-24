@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 data class LanguageSelectData(
     val language: String,
-    var isSelected: Boolean,  // 改为可变属性以支持选中状态更新
+    var isSelected: Boolean,
     val languageIv: Int,
     var languageCode: String,
 )

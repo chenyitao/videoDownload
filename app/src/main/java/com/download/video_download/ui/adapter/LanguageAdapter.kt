@@ -6,27 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.download.video_download.base.model.LanguageSelectData
 import com.download.video_download.databinding.ItemLanguageBinding
 
-/**
- * 语言选择列表适配器
- */
 class LanguageAdapter(
     private val onItemClick: (LanguageSelectData) -> Unit
 ) : RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
     
     private var languageList: MutableList<LanguageSelectData> = mutableListOf()
-    
-    /**
-     * 更新语言列表数据
-     */
+
     fun updateData(newList: List<LanguageSelectData>) {
         languageList.clear()
         languageList.addAll(newList)
         notifyDataSetChanged()
     }
-    
-    /**
-     * 更新选中状态
-     */
+
     fun updateSelection(selectedPosition: Int) {
         languageList.forEachIndexed { index, data ->
             data.isSelected = (index == selectedPosition)
