@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     id("com.google.devtools.ksp")
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.firebase-perf")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -78,6 +81,12 @@ dependencies {
     api(libs.glide)
     ksp(libs.glide.compiler)
     api(libs.aria.m3u8)
+    api(libs.play.services.ads)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.perf)
+    api(libs.firebase.crashlytics)
+    api(libs.firebase.config)
+    api(libs.facebook.android.sdk)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

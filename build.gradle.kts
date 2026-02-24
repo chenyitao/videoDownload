@@ -5,9 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     id("com.google.devtools.ksp") version "2.3.4" apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    id("com.google.gms.google-services") version "4.4.4" apply false
+    id("com.google.firebase.firebase-perf") version "2.0.2" apply false
+    id("com.google.firebase.crashlytics") version "3.0.6" apply false
 }
-val Project.applicationId: String
-    get() = (project.extensions.getByName("android") as com.android.build.gradle.AppExtension).defaultConfig.applicationId!!
-
-val Project.versionName: String
-    get() = (project.extensions.getByName("android") as com.android.build.gradle.AppExtension).defaultConfig.versionName!!

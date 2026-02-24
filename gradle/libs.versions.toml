@@ -34,6 +34,12 @@ glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", versi
 aria-core = { module = "me.laoyuyu.aria:core", version = "3.8.16" }
 aria-compile =  { module = "me.laoyuyu.aria:compiler", version = "3.8.16" }
 aria-m3u8 = { module = "me.laoyuyu.aria:m3u8", version = "3.8.16" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version = "24.9.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version = "34.8.0" }
+firebase-perf = { module = "com.google.firebase:firebase-perf"}
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics"}
+firebase-config = { module = "com.google.firebase:firebase-config"}
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk",version = "latest.release"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
