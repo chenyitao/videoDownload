@@ -41,7 +41,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:src="@mipmap/ic_logo"
-        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="@+id/tv_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
