@@ -90,6 +90,10 @@ class DownloadDialog : DialogFragment() {
     }
     private fun initListeners() {
         binding.btnCancel.setOnClickListener {
+            val count = videos.count { it.isSelect }
+            if (count == 0){
+                return@setOnClickListener
+            }
             onCancelListener?.invoke(videos)
             dismiss()
         }
