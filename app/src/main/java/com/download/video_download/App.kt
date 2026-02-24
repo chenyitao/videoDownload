@@ -13,8 +13,10 @@ import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.arialyy.aria.core.Aria
+import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.DESUtil
 import com.download.video_download.base.utils.LanguageUtils
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
@@ -35,6 +37,13 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         AppCache.init(this)
+        val cacheStr = DESUtil.readTxtFileSync(
+            context = this,
+            fileName = "cache.txt"
+        )
+        if (cacheStr.isNotEmpty()) {
+            AppCache.adcf = DESUtil.decryptCBC(cacheStr)
+        }
         LanguageUtils.initLocale(this)
         initSdk()
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
@@ -50,7 +59,9 @@ class App : MultiDexApplication() {
                 }
             }
 
-            override fun onActivityResumed(activity: Activity) {}
+            override fun onActivityResumed(activity: Activity) {
+                AdMgr.INSTANCE.initAdLimitTime()
+            }
 
             override fun onActivityPaused(activity: Activity) {}
 
@@ -75,8 +86,8 @@ class App : MultiDexApplication() {
         fun initFB(string: JSONObject?){
             if(!FacebookSdk.isInitialized()){
                 string?.let {
-                    val id = it.getString("facebookId")
-                    val token = it.getString("fbToken")
+                    val id = it.getString("fid")
+                    val token = it.getString("ftk")
                     FacebookSdk.setApplicationId(id)
                     FacebookSdk.setClientToken(token)
                     FacebookSdk.sdkInitialize(getAppContext())
@@ -181,6 +192,7 @@ class App : MultiDexApplication() {
             Aria.init(applicationContext)
                 .downloadConfig
                 .setMaxTaskNum(3)
+            AdMgr.INSTANCE.initAdData()
         } catch (e: Exception) {
         }
     }

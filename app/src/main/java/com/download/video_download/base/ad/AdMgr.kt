@@ -15,15 +15,15 @@ import com.download.video_download.base.ad.block.emptyDismissCallback
 import com.download.video_download.base.ad.block.emptyImpressionCallback
 import com.download.video_download.base.ad.block.emptyLoadCallback
 import com.download.video_download.base.ad.block.emptyShowCallback
+import com.download.video_download.base.ad.model.Ac
 import com.download.video_download.base.ad.model.AdCacheMeta
-import com.download.video_download.base.ad.model.AdConfig
 import com.download.video_download.base.ad.model.AdCount
 import com.download.video_download.base.ad.model.AdData
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdManageData
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
-import com.download.video_download.base.ad.model.Advert
+import com.download.video_download.base.ad.model.At
 import com.download.video_download.base.ad.model.Config
 import com.download.video_download.base.ad.model.LoadAdError
 import com.download.video_download.base.ad.strategy.AdLoadStrategyFactory
@@ -57,8 +57,8 @@ class AdMgr private constructor() {
         }
     }
     private var adManageData: AdManageData? = null
-    private var advert: Advert? = null
-    private var adConfig: AdConfig? = null
+    private var advert: At? = null
+    private var adConfig: Ac? = null
     private val loadedAdCache = mutableMapOf<Pair<AdPosition, AdType>, AdCacheMeta>()
     private val loadStateCache = ConcurrentHashMap<Pair<AdPosition, AdType>, AdLoadState>()
     private val loadLocks = ConcurrentHashMap<Pair<AdPosition, AdType>, Mutex>()
@@ -68,22 +68,22 @@ class AdMgr private constructor() {
         val remoteAdConfig = AppCache.adcf
         remoteAdConfig.takeIf { it.isNotEmpty() }?.let { config ->
             val adModel = App.getAppContext().jsonParser().decodeFromString<Config>(config)
-            adModel.advertConfig.let { ad ->
-                advert = ad.advert
-                adConfig = ad.config
+            adModel.adcg.let { ad ->
+                advert = ad.at
+                adConfig = ad.ac
             }
         }
         initAdLimitTime()
         val advertMap = mutableMapOf<AdPosition, List<AdData>>()
-        advertMap[AdPosition.LOADING] =  advert?.loading ?: emptyList()
-        advertMap[AdPosition.LANGUAGE] = advert?.language ?: emptyList()
-        advertMap[AdPosition.GUIDE] = advert?.guide ?: emptyList()
-        advertMap[AdPosition.HOME] = advert?.home ?: emptyList()
-        advertMap[AdPosition.SEARCH] = advert?.search ?: emptyList()
-        advertMap[AdPosition.START_DOWNLOAD] = advert?.startDownload ?: emptyList()
-        advertMap[AdPosition.BACK] = advert?.back ?: emptyList()
-        advertMap[AdPosition.TAB] = advert?.tab ?: emptyList()
-        advertMap[AdPosition.DOWNLOAD_TASK_DIALOG] = advert?.downloadTaskDialog ?: emptyList()
+        advertMap[AdPosition.LOADING] =  advert?.ld ?: emptyList()
+        advertMap[AdPosition.LANGUAGE] = advert?.lg ?: emptyList()
+        advertMap[AdPosition.GUIDE] = advert?.gd ?: emptyList()
+        advertMap[AdPosition.HOME] = advert?.h ?: emptyList()
+        advertMap[AdPosition.SEARCH] = advert?.sh ?: emptyList()
+        advertMap[AdPosition.START_DOWNLOAD] = advert?.sd ?: emptyList()
+        advertMap[AdPosition.BACK] = advert?.bk ?: emptyList()
+        advertMap[AdPosition.TAB] = advert?.tb ?: emptyList()
+        advertMap[AdPosition.DOWNLOAD_TASK_DIALOG] = advert?.dtd ?: emptyList()
         adManageData = AdManageData(advertMap, adConfig)
     }
     fun initAdLimitTime(){
@@ -120,7 +120,7 @@ class AdMgr private constructor() {
         val config = adConfig ?: return true
         val curTodayShowCount = adCount?.todayShowCount ?:0
         val curTodayClickCount = adCount?.todayClickCount ?:0
-        return curTodayShowCount >= config.todayShowCount || curTodayClickCount >= config.todayClickCount
+        return curTodayShowCount >= config.tsc || curTodayClickCount >= config.tcc
     }
     fun isAdExpired(cacheMeta: AdCacheMeta?): Boolean {
         if (cacheMeta?.cacheTime == 0L) return true
@@ -165,7 +165,7 @@ class AdMgr private constructor() {
             onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             return
         }
-        val adUnitList = adManageData?.advert?.get(position)?.filter { it.adType == adType.type } ?: emptyList()
+        val adUnitList = adManageData?.advert?.get(position)?.filter { it.at == adType.type } ?: emptyList()
         if (adUnitList.isEmpty()) {
             val error = LoadAdError(-3, "无广告数据", "未找到${position.name}-${adType.name}类型的广告单元")
             onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
@@ -200,13 +200,13 @@ class AdMgr private constructor() {
             var adError: LoadAdError? = null
             for (adUnit in adUnitList) {
                 val loadStrategy = AdLoadStrategyFactory.getStrategy(adType)
-                val (success, adInstance) = if (adType.type == AdType.NATIVE.type) loadStrategy.load(context, adUnit.ad_unit_id?:"",adCount,position,adType) else loadStrategy.load(context, adUnit.ad_unit_id?:"")
+                val (success, adInstance) = if (adType.type == AdType.NATIVE.type) loadStrategy.load(context, adUnit.uid?:"",adCount,position,adType) else loadStrategy.load(context, adUnit.uid?:"")
                 if (success && adInstance != null) {
                     loadedMeta = AdCacheMeta(
                         adInstance = adInstance,
-                        expireTime = adUnit.expired,
+                        expireTime = adUnit.et,
                         cacheTime = System.currentTimeMillis(),
-                        adId = adUnit.ad_unit_id?:""
+                        adId = adUnit.uid?:""
                     )
                     loadedAdCache[key] = loadedMeta
                     loadSuccess = true

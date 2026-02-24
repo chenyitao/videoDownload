@@ -4,65 +4,65 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Advert(
-    @SerialName("loading")
-    val loading: MutableList<AdData> = mutableListOf(),
-    @SerialName("language")
-    val language: MutableList<AdData> = mutableListOf(),
-    @SerialName("guide")
-    val guide: MutableList<AdData> = mutableListOf(),
-    @SerialName("home")
-    val home: MutableList<AdData> = mutableListOf(),
-    @SerialName("search")
-    val search: MutableList<AdData> = mutableListOf(),
-    @SerialName("startDownload")
-    val startDownload: MutableList<AdData> = mutableListOf(),
-    @SerialName("back")
-    val back: MutableList<AdData> = mutableListOf(),
-    @SerialName("tab")
-    val tab: MutableList<AdData> = mutableListOf(),
-    @SerialName("downloadTaskDialog")
-    val downloadTaskDialog: MutableList<AdData> = mutableListOf(),
+data class At(
+    @SerialName("ld")
+    val ld: MutableList<AdData> = mutableListOf(),
+    @SerialName("lg")
+    val lg: MutableList<AdData> = mutableListOf(),
+    @SerialName("gd")
+    val gd: MutableList<AdData> = mutableListOf(),
+    @SerialName("h")
+    val h: MutableList<AdData> = mutableListOf(),
+    @SerialName("sh")
+    val sh: MutableList<AdData> = mutableListOf(),
+    @SerialName("sd")
+    val sd: MutableList<AdData> = mutableListOf(),
+    @SerialName("bk")
+    val bk: MutableList<AdData> = mutableListOf(),
+    @SerialName("tb")
+    val tb: MutableList<AdData> = mutableListOf(),
+    @SerialName("dtd")
+    val dtd: MutableList<AdData> = mutableListOf(),
 )
 @Serializable
 data class AdData(
-    @SerialName("ad_unit_id")
-    val ad_unit_id: String?,
-    @SerialName("adType")
-    val adType: Int = -1,
-    @SerialName("priority")
-    val priority: Int = 0,
-    @SerialName("expired")
-    val expired: Long = 0,
+    @SerialName("uid")
+    val uid: String?,
+    @SerialName("at")
+    val at: Int = -1,
+    @SerialName("p")
+    val p: Int = 0,
+    @SerialName("et")
+    val et: Long = 0,
 )
 
 @Serializable
-data class AdConfig(
-    @SerialName("todayShowCount")
-    val todayShowCount: Int,
-    @SerialName("todayClickCount")
-    val todayClickCount: Int,
-    @SerialName("nativeClickPlace")
-    val nativeClickPlace: Int,
-    @SerialName("installNewUac001Hour")
-    val installNewUac001Hour: Int,
+data class Ac(
+    @SerialName("tsc")
+    val tsc: Int,
+    @SerialName("tcc")
+    val tcc: Int,
+    @SerialName("ncp")
+    val ncp: Int,
+    @SerialName("installHour")
+    val installHour: Int,
 )
 
 @Serializable
 data class Config(
-    @SerialName("advertConfig")
-    val advertConfig:AdModel
+    @SerialName("adcg")
+    val adcg:AdModel
 )
 
 @Serializable
 data class AdModel(
-    @SerialName("config")
-    val config: AdConfig?,
-    @SerialName("advert")
-    val advert: Advert?
+    @SerialName("ac")
+    val ac: Ac?,
+    @SerialName("at")
+    val at: At?
 )
 data class AdManageData(
     val advert: Map<AdPosition, List<AdData>>,
-    val config: AdConfig?
+    val config: Ac?
 )
 
