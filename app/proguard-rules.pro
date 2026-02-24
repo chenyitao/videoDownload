@@ -24,9 +24,6 @@
 -keep class androidx.media3.** {*;}
 -keep interface androidx.media3.**
 
--keep class com.shuyu.alipay.** {*;}
--keep interface com.shuyu.alipay.**
-
 -keep public class * extends android.view.View{
     *** get*();
     void set*(***);
