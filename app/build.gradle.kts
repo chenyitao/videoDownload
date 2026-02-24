@@ -1,16 +1,14 @@
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.download.video_download"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk  = 36
 
     defaultConfig {
         applicationId = "com.download.video_download"
@@ -19,6 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -51,6 +50,11 @@ android {
         buildConfig = true
     }
 }
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
@@ -76,6 +80,7 @@ dependencies {
     api(libs.glide)
     ksp(libs.glide.compiler)
     api(libs.aria.m3u8)
+    api(libs.multidex)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.LocaleList
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.os.LocaleListCompat
+import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import com.arialyy.aria.core.Aria
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -15,7 +15,7 @@ import com.download.video_download.base.utils.LanguageUtils
 import java.lang.ref.WeakReference
 import java.util.Locale
 
-class App : Application() {
+class App : MultiDexApplication() {
     interface AppStatusChangeListener {
         fun onAppEnterForeground()
         fun onAppEnterBackground()
@@ -100,5 +100,9 @@ class App : Application() {
                 }
         }
         return resources
+    }
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }
