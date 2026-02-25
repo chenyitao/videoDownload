@@ -14,6 +14,7 @@ import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.arialyy.aria.core.Aria
 import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.config.cg.RemoteConfig
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -39,8 +40,15 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         AppCache.init(this)
-        GoogleRef.getInstance().init(this)
+        if (AppCache.gr.isEmpty()){
+            GoogleRef.getInstance().init(this, {
+                if (AppCache.gr.isNotEmpty()){
+                    RemoteConfig.instance.getConfigOn()
+                }
+            })
+        }
         TrackMgr.instance.init(this)
+        RemoteConfig.instance.getConfig()
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"
@@ -87,16 +95,25 @@ class App : MultiDexApplication() {
     companion object {
         private var weakApp: WeakReference<Application>? = null
         var isAppInForeground = false
-        fun initFB(string: JSONObject?){
+        fun initFB(fbobj: JSONObject?){
             if(!FacebookSdk.isInitialized()){
-                string?.let {
-                    val id = it.getString("fid")
-                    val token = it.getString("ftk")
-                    FacebookSdk.setApplicationId(id)
-                    FacebookSdk.setClientToken(token)
-                    FacebookSdk.sdkInitialize(getAppContext())
-                    weakApp?.get()?.let { application -> AppEventsLogger.activateApp(application) }
+                val fbcg = AppCache.fb
+                var id = ""
+                var token = ""
+                fbcg.takeIf { it.isNotEmpty() }?.let {
+                    val json = JSONObject(it)
+                    id = json.optString("fid","")
+                    token = json.optString("ftk","")
+                }?:run {
+                    fbobj?.let {
+                        id = it.optString("fid","")
+                        token = it.optString("ftk","")
+                    }
                 }
+                FacebookSdk.setApplicationId(id)
+                FacebookSdk.setClientToken(token)
+                FacebookSdk.sdkInitialize(getAppContext())
+                weakApp?.get()?.let { application -> AppEventsLogger.activateApp(application) }
             }
         }
         fun getAppContext(): Context {
@@ -114,24 +131,24 @@ class App : MultiDexApplication() {
     }
     override fun getResources(): android.content.res.Resources {
         val resources = super.getResources()
-            if (AppCache.isInit()){
-                val sLanguage = AppCache.switchLanguage
-                if (sLanguage.isNotEmpty()){
-                    val locale =  if (sLanguage.contains("-r")) {
-                        val parts = sLanguage.split("-r")
-                        if (parts.size == 2) {
-                            Locale(parts[0], parts[1])
-                        } else {
-                            Locale(sLanguage)
-                        }
+        if (AppCache.isInit()) {
+            val sLanguage = AppCache.switchLanguage
+            if (sLanguage.isNotEmpty()) {
+                val locale = if (sLanguage.contains("-r")) {
+                    val parts = sLanguage.split("-r")
+                    if (parts.size == 2) {
+                        Locale(parts[0], parts[1])
                     } else {
                         Locale(sLanguage)
                     }
-                    val configuration = Configuration(resources.configuration)
-                    configuration.setLocales(LocaleList(locale))
-                    resources.updateConfiguration(configuration, resources.displayMetrics)
-                    ActivityManager.currentActivity()?.let { LanguageUtils.applyLanguageConfiguration(it) }
+                } else {
+                    Locale(sLanguage)
                 }
+                val configuration = Configuration(resources.configuration)
+                configuration.setLocales(LocaleList(locale))
+                resources.updateConfiguration(configuration, resources.displayMetrics)
+                ActivityManager.currentActivity()?.let { LanguageUtils.applyLanguageConfiguration(it) }
+            }
         }
         return resources
     }
@@ -209,5 +226,6 @@ class App : MultiDexApplication() {
         super.onTerminate()
         GoogleRef.getInstance().release()
         TrackMgr.instance.destroy()
+        RemoteConfig.instance.stopConfigRequest()
     }
 }

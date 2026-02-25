@@ -112,4 +112,14 @@ object AppCache {
             saveValue("sawdust", value)
         }
         get() =getValue("sawdust", "")
+    var fb: String
+        set(value) {
+            saveValue("fb", value)
+        }
+        get() = getValue("fb", "")
+    var isFirstGetConfig: Boolean
+        set(value) {
+            saveValue("isFirstGetConfig", value)
+        }
+        get() = getValue("isFirstGetConfig", true)
 }

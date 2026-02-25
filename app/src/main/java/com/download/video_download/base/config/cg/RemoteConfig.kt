@@ -1,0 +1,134 @@
+package com.download.video_download.base.config.cg
+
+import com.download.video_download.App
+import com.download.video_download.R
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.config.utils.CfUtils
+import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.model.Rf
+import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.AsyncPostRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import org.json.JSONObject
+import java.util.UUID
+import kotlin.coroutines.resume
+
+class RemoteConfig private constructor(){
+    private var periodicReportJob: Job? = null
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val requestMutex = Mutex()
+    companion object {
+        val instance: RemoteConfig by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            RemoteConfig()
+        }
+    }
+    fun getConfig(){
+        if (periodicReportJob?.isActive == true) {
+            return
+        }
+        periodicReportJob = coroutineScope.launch(Dispatchers.IO) {
+            while (isActive) {
+                try {
+                    if (!AppCache.isFirstGetConfig){
+                        delay(50*60 * 1000)
+                        getAdminConfig()
+                    }else{
+                        getAdminConfig()
+                        delay(50*60 * 1000)
+                    }
+                } catch (e: Exception) {
+                    delay(50*60 * 1000)
+                }
+            }
+        }
+    }
+
+    private suspend fun getAdminConfig(currentRetry: Int = 0){
+        requestMutex.withLock {
+            runCatching {
+                val params = JSONObject()
+                params.put("ocnz", getConfigParams())
+                val host = App.getAppContext().getString(R.string.admin_host_test)
+                val url = "${host}/xyn/mijw/"
+                val body = params.toString()
+                val requestSuccess = suspendCancellableCoroutine { continuation ->
+                    AsyncPostRequest.sendPost(url, body,
+                        onSuccess = {
+                            continuation.resume(true)
+                            if (it.isEmpty()){
+                                return@sendPost
+                            }
+                            handleConfigSuccess(it)
+                        },
+                        onFailure = { errorMsg ->
+                            if (errorMsg.contains("timeout") && currentRetry < 1) {
+                                continuation.resume(false)
+                            } else {
+                                continuation.resume(true)
+                            }
+                        })
+                }
+                if (!requestSuccess && currentRetry < 1) {
+                    getAdminConfig(currentRetry + 1)
+                }
+            }
+        }
+    }
+    fun getConfigOn() {
+        coroutineScope.launch(Dispatchers.IO) {
+            getAdminConfig()
+        }
+    }
+    private fun handleConfigSuccess(data: String) {
+        val config = Crypt.paramsDecrypt (data)
+        AppCache.adcf = config.toString()
+        AppCache.isFirstGetConfig =  false
+        val fc = config.optJSONObject("fc")
+        fc?.let {
+            App.initFB(fc)
+            AppCache.fb = it.toString()
+        }
+        val adConfig = config.optJSONObject("adcg")
+        adConfig?.let {
+            AdMgr.INSTANCE.initAdData()
+            val advert = it.getJSONObject("at")
+        }
+    }
+    fun stopConfigRequest() {
+        periodicReportJob?.cancel()
+        periodicReportJob = null
+    }
+    private fun getConfigParams(): String {
+        val referStr: String = AppCache.gr
+        var rfUrl = ""
+        var refer: Rf? = null
+        referStr.takeIf { it.isNotEmpty() }?.let {
+            refer = App.getAppContext().jsonParser().decodeFromString<Rf>(referStr)
+            rfUrl = refer.referrerUrl
+        }
+
+        val json = JSONObject().apply {
+            put("qvugtr", TrackMgr.instance.getDistinctID())
+            put("wkzr", "SafeDownload")
+            put("sqxup", CfUtils.getVersionName(App.getAppContext()))
+            put("yfux", rfUrl.ifEmpty { if (refer == null) "XXX" else "NNN" })
+            put("pixm", "NA")
+            put("edgp", refer?.referrerClickTimestampSeconds)
+            put("oylkfx", refer?.referrerClickTimestampServerSeconds)
+            put("euzblx", App.getAppContext().packageManager.getInstallerPackageName(App.getAppContext().packageName) ?: "")
+            put("aa", UUID.randomUUID().toString())
+            put("bb", UUID.randomUUID().toString())
+        }
+        return Crypt.paramsEncrypt(json)
+    }
+}
