@@ -31,7 +31,7 @@ class GoogleRef  private constructor(){
             val INSTANCE = GoogleRef()
         }
     }
-    private lateinit var referrerClient: InstallReferrerClient
+    private  var referrerClient:InstallReferrerClient? = null
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var currentRetryCount = 0
     fun init(context: Context,success:()->Unit) {
@@ -60,18 +60,18 @@ class GoogleRef  private constructor(){
 
     private fun saveReferrerData(context: Context,success:()->Unit) {
         runCatching {
-            val response: ReferrerDetails = referrerClient.installReferrer
-            val referrerUrl: String = response.installReferrer
-            val referrerClickTimestampSeconds: Long = response.referrerClickTimestampSeconds
-            val installBeginTimestampSeconds: Long = response.installBeginTimestampSeconds
-            val referrerClickTimestampServerSeconds: Long = response.referrerClickTimestampServerSeconds
-            val installBeginTimestampServerSeconds: Long = response.installBeginTimestampServerSeconds
+            val response: ReferrerDetails? = referrerClient?.installReferrer
+            val referrerUrl: String? = response?.installReferrer
+            val referrerClickTimestampSeconds: Long = response?.referrerClickTimestampSeconds?:0
+            val installBeginTimestampSeconds: Long = response?.installBeginTimestampSeconds?:0
+            val referrerClickTimestampServerSeconds: Long = response?.referrerClickTimestampServerSeconds?:0
+            val installBeginTimestampServerSeconds: Long = response?.installBeginTimestampServerSeconds?:0
             val firstInstallTime = context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime
             val lastUpdateTime = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
-            val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
-            val installVersion: String? = response.installVersion
+            val instantExperienceLaunched: Boolean = response?.googlePlayInstantParam?:false
+            val installVersion: String? = response?.installVersion?:""
             val referrer = Rf(
-                referrerUrl = referrerUrl,
+                referrerUrl = referrerUrl?: "",
                 referrerClickTimestampSeconds = referrerClickTimestampSeconds,
                 referrerClickTimestampServerSeconds = referrerClickTimestampServerSeconds,
                 installBeginTimestampSeconds = installBeginTimestampSeconds,
@@ -94,13 +94,13 @@ class GoogleRef  private constructor(){
     private suspend fun doFetchReferrer(context: Context,success:()->Unit) = withContext(Dispatchers.Main) {
         referrerClient = InstallReferrerClient.newBuilder(context).build()
 
-        referrerClient.startConnection(object : InstallReferrerStateListener {
+        referrerClient?.startConnection(object : InstallReferrerStateListener {
             override fun onInstallReferrerSetupFinished(responseCode: Int) {
                 when (responseCode) {
                     InstallReferrerClient.InstallReferrerResponse.OK -> {
                         saveReferrerData(context,success)
                         success.invoke()
-                        referrerClient.endConnection()
+                        referrerClient?.endConnection()
                     }
                     else -> {
                         Log.d(TAG, "Referrer获取失败，响应码：$responseCode")
@@ -114,7 +114,7 @@ class GoogleRef  private constructor(){
         })
     }
     private fun handleFetchFailure(context: Context,success:()->Unit) {
-        referrerClient.endConnection()
+        referrerClient?.endConnection()
         if (currentRetryCount < MAX_RETRY_COUNT) {
             currentRetryCount++
             coroutineScope.launch {
@@ -126,7 +126,7 @@ class GoogleRef  private constructor(){
         }
     }
     fun release() {
-        referrerClient.endConnection()
+        referrerClient?.endConnection()
         coroutineScope.cancel()
     }
 }

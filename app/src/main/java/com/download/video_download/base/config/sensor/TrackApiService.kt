@@ -1,9 +1,14 @@
 package com.download.video_download.base.config.sensor
+import android.util.Log
 import com.download.video_download.App
 import com.download.video_download.R
+import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.utils.AsyncPostRequest
 import com.download.video_download.base.utils.MermLruCache
 import kotlinx.coroutines.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.encodeToJsonElement
+import org.json.JSONObject
 import kotlin.coroutines.resume
 
 
@@ -18,7 +23,7 @@ class TrackApiService private constructor() {
             val result = runCatching {
                 val host = App.getAppContext().getString(R.string.tba_host_test)
                 val url = "${host}${TrackConfig.TRACK_API_PATH}"
-                val body = params.toString()
+                val body = App.getAppContext().jsonParser().encodeToJsonElement(params).toString()
                 AsyncPostRequest.sendPost(url,body,35*1000,
                     onSuccess = {
 
@@ -39,7 +44,7 @@ class TrackApiService private constructor() {
             val result = runCatching {
                 val host = App.getAppContext().getString(R.string.tba_host_test)
                 val url = "${host}${TrackConfig.TRACK_API_PATH}"
-                val body = events.toString()
+                val body = App.getAppContext().jsonParser().encodeToJsonElement(events).toString()
 
                 AsyncPostRequest.sendPost(
                     url = url,

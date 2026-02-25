@@ -28,14 +28,6 @@ inline fun <reified T : Activity> Context.startActivityWithExtras(extras: Bundle
     intent.putExtras(bundle)
     startActivity(intent)
 }
-inline fun <reified T : Activity> Context.jsonParser(): Json {
-    return Json {
-        ignoreUnknownKeys = true
-        coerceInputValues = true
-        prettyPrint = false
-        isLenient = true
-    }
-}
 fun Context.jsonParser(): Json {
     return Json {
         ignoreUnknownKeys = true

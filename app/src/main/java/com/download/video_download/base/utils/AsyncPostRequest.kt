@@ -61,6 +61,8 @@ object AsyncPostRequest {
                     readTimeout = timeoutMs
                     setRequestProperty("Content-Type", "application/json; charset=utf-8")
                     setRequestProperty("Accept", "application/json")
+                    setRequestProperty("Connection", "Keep-Alive")
+                    setRequestProperty("Charset", "UTF-8")
                 }
                 LogUtils.d(TAG, "===== 请求头信息 =====")
                 connection.requestProperties?.forEach { (key, values) ->

@@ -15,6 +15,7 @@ import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.arialyy.aria.core.Aria
 import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.config.cg.RemoteConfig
+import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -43,12 +44,16 @@ class App : MultiDexApplication() {
         if (AppCache.gr.isEmpty()){
             GoogleRef.getInstance().init(this, {
                 if (AppCache.gr.isNotEmpty()){
-                    RemoteConfig.instance.getConfigOn()
+//                    RemoteConfig.instance.getConfigOn()
                 }
             })
         }
         TrackMgr.instance.init(this)
         RemoteConfig.instance.getConfig()
+        if (AppCache.firstOpen){
+            TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN,mutableMapOf())
+            AppCache.firstOpen = false
+        }
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"

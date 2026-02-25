@@ -122,4 +122,9 @@ object AppCache {
             saveValue("isFirstGetConfig", value)
         }
         get() = getValue("isFirstGetConfig", true)
+    var firstOpen: Boolean
+        set(value) {
+            saveValue("firstopen", value)
+        }
+        get() = getValue("firstopen", true)
 }

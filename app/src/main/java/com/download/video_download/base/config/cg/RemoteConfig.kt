@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.encodeToJsonElement
 import org.json.JSONObject
 import java.util.UUID
 import kotlin.coroutines.resume
@@ -59,10 +61,10 @@ class RemoteConfig private constructor(){
                 val params = JSONObject()
                 params.put("ocnz", getConfigParams())
                 val host = App.getAppContext().getString(R.string.admin_host_test)
-                val url = "${host}/xyn/mijw/"
-                val body = params.toString()
+
+                val body = App.getAppContext().jsonParser().encodeToJsonElement(params).toString()
                 val requestSuccess = suspendCancellableCoroutine { continuation ->
-                    AsyncPostRequest.sendPost(url, body,
+                    AsyncPostRequest.sendPost(host, body,
                         onSuccess = {
                             continuation.resume(true)
                             if (it.isEmpty()){
