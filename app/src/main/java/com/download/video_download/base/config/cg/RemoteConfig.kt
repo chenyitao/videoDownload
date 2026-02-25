@@ -102,6 +102,58 @@ class RemoteConfig private constructor(){
         adConfig?.let {
             AdMgr.INSTANCE.initAdData()
             val advert = it.getJSONObject("at")
+            var safedddd = ""
+            if (advert.has("lg")){
+                safedddd = "1"
+            }else {
+                safedddd = "2"
+            }
+//            TrackMgr.instance.trackEvent(TrackEvent.EVENT_ad_user4,mutableMapOf("safedddd" to safedddd))
+        }
+        var safedddd = ""
+        var safeddddk1 = ""
+        var safeddddk3 = ""
+        val k0 = config.optString("pusnvf","")
+        if (k0.isEmpty()){
+            safedddd = "1"
+        }else if (getLastChar(k0) == "ou"){
+            safedddd = "3"
+        }else if (getLastChar(k0) == "ji"){
+            safedddd = "2"
+        }else if (getLastChar(k0) == "zm"){
+            safedddd = "4"
+        }
+        val k1 = config.optString("tnkgb","")
+        if (k1.isNotEmpty()){
+            if (getLastChar(k1) == "ji"){
+                safeddddk1 = "1"
+            }else if (getLastChar(k1) == "zm"){
+                safeddddk1 = "2"
+            }
+        }
+        val k3 = config.optString("kmhq","")
+        if (k3.isEmpty()){
+            safeddddk3 = "3"
+        } else if (k3.last().isDigit() && k3.last().digitToInt() == 0){
+            safeddddk3 = "4"
+        } else if (getLastChar(k3) == "ji" || getLastChar(k3) == "ou"){
+            safeddddk3 = "1"
+        }else if (getLastChar(k3) == "zm"){
+            safeddddk3 = "2"
+        }
+//        TrackMgr.instance.trackEvent(TrackEvent.EVENT_ad_user3,mutableMapOf("safedddd" to safedddd, "safeddddk1" to safeddddk1,"safeddddk3" to safeddddk3))
+    }
+    private fun getLastChar(str: String?): String {
+        val lastChar = str?.last()
+        return if (lastChar?.isDigit() == true) {
+            val num = lastChar.digitToInt()
+            if (num % 2 == 0) "ou" else "ji"
+        }
+        else if (lastChar?.isLetter() == true) {
+            "zm"
+        }
+        else {
+            ""
         }
     }
     fun stopConfigRequest() {
