@@ -3,6 +3,8 @@ package com.download.video_download.base.config.sensor
 
 import android.os.Build
 import com.download.video_download.App
+import com.download.video_download.base.config.utils.CfUtils
+import com.download.video_download.base.model.Rf
 import java.util.Locale
 import java.util.UUID
 
@@ -16,19 +18,19 @@ class TrackParamBuilder private constructor() {
         fun createCommonParams(): TrackParamBuilder {
             val builder = TrackParamBuilder()
             with(builder.params) {
-                put("ugh", UUID.randomUUID().toString())
-                put("rime", "")
-                put("tito", System.currentTimeMillis())
-                put("comanche", App.getAppContext().packageName)
-                put("abysmal", "ketosis")
-                put("gratis", Locale.getDefault().language)
-                put("seagull", getRawDeviceModel())
-                put("oughtnt", getOSVersionName())
-                put("casteth", Build.BRAND)
-                put("roxbury", getRawManufacturer())
-                put("ablate", DeviceUtils.getAppVersionName(App.getAppContext()))
-                put("april", UUID.randomUUID().toString())
-                put("gresham", "")
+                put("ambulant", UUID.randomUUID().toString())
+                put("sawdust", "")
+                put("mcdowell", System.currentTimeMillis())
+                put("woe", App.getAppContext().packageName)
+                put("delight", "mob")
+                put("vilify", Locale.getDefault().language)
+                put("memorial", CfUtils.getDeviceModel())
+                put("missoula", CfUtils.getOSVersionName())
+                put("abutted", Build.BRAND)
+                put("reverent", CfUtils.getManufacturer())
+                put("cogitate", CfUtils.getVersionName(App.getAppContext()))
+                put("furbish", UUID.randomUUID().toString())
+                put("megavolt", "")
             }
             return builder
         }
@@ -43,20 +45,20 @@ class TrackParamBuilder private constructor() {
         /**
          * 创建安装参数构建器
          */
-        fun createInstallParams(refer: Refer): TrackParamBuilder {
+        fun createInstallParams(refer: Rf): TrackParamBuilder {
             val builder = TrackParamBuilder()
             with(builder.params) {
-                put("damage", "build/${Build.ID}")
-                put("vacant", refer.installVersion ?: "")
-                put("truthful", "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
-                put("mnemonic", "fungus")
-                put("railway", refer.referrerClickTimestampSeconds)
-                put("homemake", refer.installBeginTimestampSeconds)
-                put("kickback", refer.referrerClickTimestampServerSeconds)
-                put("egyptian", refer.installBeginTimestampServerSeconds)
-                put("ignite", refer.firstInstallTime)
-                put("novelty", refer.lastUpdateTime)
-                put("noblemen", refer.googlePlayInstantParam)
+                put("atheism", "build/${Build.ID}")
+                put("abeyant", refer.installVersion ?: "")
+                put("constant", "Mozilla/5.0 (Linux; Android 12; Galaxy S23) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
+                put("hayward", "pot")
+                put("prize", refer.referrerClickTimestampSeconds)
+                put("fraction", refer.installBeginTimestampSeconds)
+                put("child", refer.referrerClickTimestampServerSeconds)
+                put("hookworm", refer.installBeginTimestampServerSeconds)
+                put("afraid", refer.firstInstallTime)
+                put("moses", refer.lastUpdateTime)
+//                put("noblemen", refer.googlePlayInstantParam)
             }
             return builder
         }
@@ -76,11 +78,11 @@ class TrackParamBuilder private constructor() {
             val adSourceName = loadedAdapterResponseInfo?.adSourceName ?: ""
 
             with(builder.params) {
-                put("bawdy", adValue.valueMicros)
-                put("whit", adSourceName)
-                put("pentane", adUnitId)
-                put("michael", type)
-                put("fred", adType.toString())
+                put("scruple", adValue.valueMicros)
+                put("piteous", adSourceName)
+                put("carlton", adUnitId)
+                put("ancestor", type)
+                put("load", adType.toString())
             }
             return builder
         }

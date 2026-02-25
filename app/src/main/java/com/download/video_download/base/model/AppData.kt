@@ -46,3 +46,24 @@ data class NavigationItem(
 data class DetectStatus(
     val state: DetectState = DetectState.SUPPORTWEB,
 )
+@Serializable
+data class Rf(
+    @SerialName("referrerUrl")
+    val referrerUrl: String,
+    @SerialName("referrerClickTimestampSeconds")
+    val referrerClickTimestampSeconds: Long,
+    @SerialName("referrerClickTimestampServerSeconds")
+    val referrerClickTimestampServerSeconds: Long,
+    @SerialName("installBeginTimestampSeconds")
+    val installBeginTimestampSeconds: Long,
+    @SerialName("googlePlayInstantParam")
+    val googlePlayInstantParam: Boolean,
+    @SerialName("installBeginTimestampServerSeconds")
+    val installBeginTimestampServerSeconds: Long,
+    @SerialName("firstInstallTime")
+    val firstInstallTime: Long,
+    @SerialName("lastUpdateTime")
+    val lastUpdateTime: Long,
+    @SerialName("installVersion")
+    val installVersion: String?
+)

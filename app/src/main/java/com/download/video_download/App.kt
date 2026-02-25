@@ -14,9 +14,11 @@ import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.arialyy.aria.core.Aria
 import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DESUtil
+import com.download.video_download.base.utils.GoogleRef
 import com.download.video_download.base.utils.LanguageUtils
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
@@ -37,6 +39,8 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         AppCache.init(this)
+        GoogleRef.getInstance().init(this)
+        TrackMgr.instance.init(this)
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"
@@ -187,8 +191,8 @@ class App : MultiDexApplication() {
                             + "Error description: " + p1)
                 }
             })
-            AppsFlyerLib.getInstance().setDebugLog(true)
-            AppsFlyerLib.getInstance().setCustomerUserId("")
+            AppsFlyerLib.getInstance().setDebugLog(BuildConfig.DEBUG_MODE)
+            AppsFlyerLib.getInstance().setCustomerUserId(TrackMgr.instance.getDistinctID())
             Aria.init(applicationContext)
                 .downloadConfig
                 .setMaxTaskNum(3)
@@ -199,5 +203,11 @@ class App : MultiDexApplication() {
     interface AppStatusChangeListener {
         fun onAppEnterForeground()
         fun onAppEnterBackground()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        GoogleRef.getInstance().release()
+        TrackMgr.instance.destroy()
     }
 }

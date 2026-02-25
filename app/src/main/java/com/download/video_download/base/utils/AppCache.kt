@@ -102,4 +102,14 @@ object AppCache {
             saveValue("adcf", value)
         }
         get() =getValue("adcf", "")
+    var gr : String
+        set(value) {
+            saveValue("gr", value)
+        }
+        get() =getValue("gr", "")
+    var sawdust: String
+        set(value) {
+            saveValue("sawdust", value)
+        }
+        get() =getValue("sawdust", "")
 }

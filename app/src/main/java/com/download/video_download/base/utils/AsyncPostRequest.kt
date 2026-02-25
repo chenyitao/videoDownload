@@ -18,33 +18,36 @@ object AsyncPostRequest {
     private val mainHandler = Handler(Looper.getMainLooper())
 
     private const val TIMEOUT_MS = 20 * 1000
-    private const val MAX_RETRY = 1
-
-    interface Callback {
-        fun onSuccess(response: String)
-        fun onFailure(errorMsg: String)
-    }
-
     fun sendPost(
         url: String,
         bodyParams: String,
-        callback: Callback
+        timeoutMs: Int = TIMEOUT_MS, // 可选参数，默认20秒
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
     ) {
-        sendPostWithRetry(url, bodyParams, callback, currentRetry = 0)
+        sendPostWithRetry(url, bodyParams, timeoutMs, onSuccess, onFailure)
+    }
+    fun sendPost(
+        url: String,
+        bodyParams: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        sendPostWithRetry(url, bodyParams,  TIMEOUT_MS,onSuccess, onFailure)
     }
 
     private fun sendPostWithRetry(
         url: String,
         bodyParams: String,
-        callback: Callback,
-        currentRetry: Int
+        timeoutMs: Int,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit,
     ) {
         executor.execute {
             var connection: HttpURLConnection? = null
             var inputStream: InputStream? = null
 
             try {
-                LogUtils.d(TAG, "===== 发起POST请求 [重试次数：$currentRetry] =====")
                 LogUtils.d(TAG, "请求URL：$url")
                 LogUtils.d(TAG, "请求超时时间：${TIMEOUT_MS / 1000}秒")
                 val requestUrl = URL(url)
@@ -54,8 +57,8 @@ object AsyncPostRequest {
                     requestMethod = "POST"
                     doOutput = true
                     doInput = true
-                    connectTimeout = TIMEOUT_MS
-                    readTimeout = TIMEOUT_MS
+                    connectTimeout = timeoutMs
+                    readTimeout = timeoutMs
                     setRequestProperty("Content-Type", "application/json; charset=utf-8")
                     setRequestProperty("Accept", "application/json")
                 }
@@ -83,13 +86,13 @@ object AsyncPostRequest {
                         inputStream = connection.inputStream
                         val response = inputStream.readToString()
                         LogUtils.d(TAG, "响应体：$response")
-                        postToMainThread { callback.onSuccess(response) }
+                        postToMainThread {onSuccess.invoke (response) }
                     }
                     else -> {
                         val errorResponse = connection.errorStream?.readToString() ?: "无错误响应体"
                         LogUtils.e(TAG, "服务器响应错误，错误响应体：$errorResponse")
                         val errorMsg = "error，code：$responseCode"
-                        postToMainThread { callback.onFailure(errorMsg) }
+                        postToMainThread { onFailure.invoke(errorMsg) }
                     }
                 }
 
@@ -100,12 +103,7 @@ object AsyncPostRequest {
                     else -> "exception：${e.message ?: "unkown"}"
                 }
                 LogUtils.e(TAG, "请求异常：$errorMsg", e)
-                if (e is java.net.SocketTimeoutException && currentRetry < MAX_RETRY) {
-                    sendPostWithRetry(url, bodyParams, callback, currentRetry + 1)
-                } else {
-                    postToMainThread { callback.onFailure(errorMsg) }
-                }
-
+                postToMainThread { onFailure.invoke(errorMsg) }
             } finally {
                 inputStream?.close()
                 connection?.disconnect()

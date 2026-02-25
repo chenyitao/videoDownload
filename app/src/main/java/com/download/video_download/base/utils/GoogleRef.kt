@@ -1,0 +1,131 @@
+package com.download.video_download.base.utils
+
+import android.content.Context
+import android.util.Log
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
+import com.android.installreferrer.api.ReferrerDetails
+import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.model.Rf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.encodeToString
+
+class GoogleRef  private constructor(){
+    companion object {
+        private const val TAG = "GoogleRefer"
+        private const val FETCH_TIMEOUT_MS = 9000L
+        private const val RETRY_DELAY_MS = 3000L
+        private const val MAX_RETRY_COUNT = 2
+
+        fun getInstance(): GoogleRef = SingletonHolder.INSTANCE
+
+        private object SingletonHolder {
+            val INSTANCE = GoogleRef()
+        }
+    }
+    private lateinit var referrerClient: InstallReferrerClient
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var currentRetryCount = 0
+    fun init(context: Context) {
+        if (AppCache.gr.isNotEmpty()) {
+            Log.d(TAG, "Referrer已获取成功，无需重复获取")
+            return
+        }
+        currentRetryCount = 0
+        fetchReferrer(context)
+    }
+    private fun fetchReferrer(context: Context) {
+        coroutineScope.launch {
+            try {
+                withTimeout(FETCH_TIMEOUT_MS) {
+                    doFetchReferrer(context)
+                }
+            } catch (e: TimeoutCancellationException) {
+                Log.e(TAG, "Referrer获取超时(${FETCH_TIMEOUT_MS}ms)，当前重试次数：$currentRetryCount")
+                handleFetchFailure(context)
+            } catch (e: Exception) {
+                Log.e(TAG, "Referrer获取异常，当前重试次数：$currentRetryCount", e)
+                handleFetchFailure(context)
+            }
+        }
+    }
+
+    private fun saveReferrerData(context: Context) {
+        runCatching {
+            val response: ReferrerDetails = referrerClient.installReferrer
+            val referrerUrl: String = response.installReferrer
+            val referrerClickTimestampSeconds: Long = response.referrerClickTimestampSeconds
+            val installBeginTimestampSeconds: Long = response.installBeginTimestampSeconds
+            val referrerClickTimestampServerSeconds: Long = response.referrerClickTimestampServerSeconds
+            val installBeginTimestampServerSeconds: Long = response.installBeginTimestampServerSeconds
+            val firstInstallTime = context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime
+            val lastUpdateTime = context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
+            val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
+            val installVersion: String? = response.installVersion
+            val referrer = Rf(
+                referrerUrl = referrerUrl,
+                referrerClickTimestampSeconds = referrerClickTimestampSeconds,
+                referrerClickTimestampServerSeconds = referrerClickTimestampServerSeconds,
+                installBeginTimestampSeconds = installBeginTimestampSeconds,
+                googlePlayInstantParam = instantExperienceLaunched,
+                installBeginTimestampServerSeconds = installBeginTimestampServerSeconds,
+                firstInstallTime = firstInstallTime,
+                lastUpdateTime = lastUpdateTime,
+                installVersion = installVersion
+            )
+            Log.d(
+                "InstallRefer",
+                "InstallRefer: InstallRefer request success  ,referdata: ${context.jsonParser().encodeToString(referrer)}"
+            )
+            AppCache.gr = context.jsonParser().encodeToString(referrer)
+        }.onSuccess {
+        }.onFailure {
+            handleFetchFailure(context)
+        }
+    }
+    private suspend fun doFetchReferrer(context: Context) = withContext(Dispatchers.Main) {
+        referrerClient = InstallReferrerClient.newBuilder(context).build()
+
+        referrerClient.startConnection(object : InstallReferrerStateListener {
+            override fun onInstallReferrerSetupFinished(responseCode: Int) {
+                when (responseCode) {
+                    InstallReferrerClient.InstallReferrerResponse.OK -> {
+                        saveReferrerData(context)
+                        referrerClient.endConnection()
+                    }
+                    else -> {
+                        Log.d(TAG, "Referrer获取失败，响应码：$responseCode")
+                        handleFetchFailure(context)
+                    }
+                }
+            }
+
+            override fun onInstallReferrerServiceDisconnected() {
+            }
+        })
+    }
+    private fun handleFetchFailure(context: Context) {
+        referrerClient.endConnection()
+        if (currentRetryCount < MAX_RETRY_COUNT) {
+            currentRetryCount++
+            coroutineScope.launch {
+                delay(RETRY_DELAY_MS)
+                fetchReferrer(context)
+            }
+        } else {
+            currentRetryCount = 0
+        }
+    }
+    fun release() {
+        referrerClient.endConnection()
+        coroutineScope.cancel()
+    }
+}

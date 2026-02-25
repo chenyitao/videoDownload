@@ -1,57 +1,50 @@
 package com.download.video_download.base.config.sensor
 
 import android.content.Context
+import com.download.video_download.App
+import com.download.video_download.base.config.utils.CfUtils
+import com.download.video_download.base.utils.AppCache
+import java.math.BigDecimal
+import java.util.Currency
+import java.util.UUID
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 class TrackMgr private constructor() {
-    private lateinit var commonParams: Map<String, Any>
+    private lateinit var tbaCP: Map<String, Any>
     private var distinctID: String = ""
-
-    // 各种上报策略
     private val serverStrategy by lazy { ServerTrackStrategy() }
     private val firebaseStrategy by lazy { FirebaseTrackStrategy() }
     private val facebookStrategy by lazy { FacebookTrackStrategy() }
     private val batchManager by lazy { BTrackMgr.instance }
 
-    /**
-     * 初始化埋点管理器
-     */
     fun init(context: Context) {
-        // 构建通用参数
-        commonParams = TrackParamBuilder.createCommonParams()
+        tbaCP = TrackParamBuilder.createCommonParams()
             .apply {
-                // 初始化唯一标识
-                var rimeId = SpUtils.getString("rime", "")
-                if (rimeId.isEmpty()) {
-                    rimeId = DeviceUtils.generateRandomString(App.getAppContext())
-                    SpUtils.putString("rime", rimeId)
+                var sawdustId = AppCache.sawdust
+                if (sawdustId.isEmpty()) {
+                    sawdustId = CfUtils.generateDistinctId(App.getAppContext())
+                    AppCache.sawdust = sawdustId
                 }
-                addParam("rime", rimeId)
-                addParam("gresham", "$rimeId" + "a")
+                addParam("sawdust", sawdustId)
+                addParam("megavolt", sawdustId + "c")
             }
             .build()
 
-        distinctID = commonParams["rime"] as String
-
-        // 启动批量上报
-        batchManager.startTimedReport(context)
-
-        Timber.d("埋点管理器初始化完成，distinctID=$distinctID")
+        distinctID = tbaCP["sawdust"] as String
+        batchManager.startTbaBatchReport(context)
     }
+    fun getDistinctID(): String {
+        return distinctID
+    }
+    fun trackEvent(eventType: TrackEventType, params: Map<String, Any> = emptyMap()) {
+        val finalParams = buildFinalParams(eventType, params)
 
-    /**
-     * 上报埋点事件
-     */
-    fun trackEvent(eventType: TrackEventType, eventName: String, params: Map<String, Any> = emptyMap()) {
-        // 构建最终上报参数
-        val finalParams = buildFinalParams(eventType, eventName, params)
+        serverStrategy.reportEvent(eventType.tn, finalParams)
 
-        // 1. 上报到服务器
-        serverStrategy.reportEvent(eventName, finalParams)
-
-        // 2. 根据事件类型决定是否上报到Firebase
         if (shouldReportToFirebase(eventType)) {
-            val firebaseParams = filterFirebaseParams(params)
-            firebaseStrategy.reportEvent(eventName, firebaseParams)
+            firebaseStrategy.reportEvent(eventType.tn, finalParams)
         }
     }
 
@@ -68,60 +61,46 @@ class TrackMgr private constructor() {
      */
     private fun buildFinalParams(
         eventType: TrackEventType,
-        eventName: String,
         customParams: Map<String, Any>
     ): Map<String, Any> {
-        return TrackParamBuilder.createCommonParams()
-            .addParams(commonParams) // 添加通用参数
-            .addParam("ugh", java.util.UUID.randomUUID().toString()) // 每次上报生成新的uuid
-            .addParam("tito", System.currentTimeMillis()) // 上报时间戳
-            .apply {
-                // 根据事件类型添加特定参数
-                when (eventType) {
-                    TrackEventType.EVENT_SESSION -> addParam(TrackEventType.EVENT_SESSION.name, TrackParamBuilder.createSessionParams().build())
-                    TrackEventType.EVENT_INSTALL -> addParam(TrackEventType.EVENT_INSTALL.name, customParams)
-                    TrackEventType.EVENT_AD_IMPRESSION -> addParam(TrackEventType.EVENT_AD_IMPRESSION.name, customParams)
-                    else -> {
-                        addParam("oldster", eventName)
-                        // 处理自定义参数
-                        customParams.forEach { (key, value) ->
-                            addParam("$key%clinch", value)
-                        }
-                    }
-                }
+        val map = mutableMapOf<String, Any>()
+        if (shouldReportToFirebase(eventType)) {
+            val firebaseMap = mutableMapOf<String, Any>()
+            customParams.forEach { (key, value) ->
+                firebaseMap[key] = value
             }
-            .build()
+            return firebaseMap
+        }
+        map.putAll(tbaCP)
+        map["ambulant"] = UUID.randomUUID().toString()
+        map["mcdowell"] = System.currentTimeMillis()
+        when (eventType) {
+            TrackEventType.SESSION -> {
+                map[TrackEventType.SESSION.tn] = TrackParamBuilder.createSessionParams().build()
+            }
+            TrackEventType.INSTALL ->{
+                map[TrackEventType.INSTALL.tn] = customParams
+            }
+            TrackEventType.AD_IMPRESSION ->{
+                map[TrackEventType.AD_IMPRESSION.tn] = customParams
+            }
+            else -> {
+                map["lust"] = eventType.tn
+                map["lust"] = customParams
+            }
+        }
+        return map
     }
 
-    /**
-     * 判断是否需要上报到Firebase
-     */
     private fun shouldReportToFirebase(eventType: TrackEventType): Boolean {
         return when (eventType) {
-            TrackEventType.EVENT_FIRST_OPEN,
-            TrackEventType.EVENT_SESSION_START -> false
+            TrackEventType.FIRST_OPEN,
+            TrackEventType.SESSION,
+            TrackEventType.INSTALL,
+            TrackEventType.AD_IMPRESSION,
+            TrackEventType.SESSION_START -> false
             else -> true
         }
-    }
-
-    /**
-     * 过滤Firebase上报参数
-     */
-    private fun filterFirebaseParams(params: Map<String, Any>): Map<String, Any> {
-        // 可以在这里过滤掉Firebase不支持的参数
-        return params.filter { (_, value) ->
-            when (value) {
-                is String, is Int, is Long, is Float, is Double, is Boolean -> true
-                else -> false
-            }
-        }
-    }
-
-    /**
-     * 手动触发批量上报
-     */
-    fun triggerManualBatchReport(context: Context) {
-        batchManager.triggerManualReport(context)
     }
 
     /**
@@ -130,7 +109,6 @@ class TrackMgr private constructor() {
     fun destroy() {
         batchManager.stopTimedReport()
         TrackApiService.instance.cancelAllRequests()
-        Timber.d("埋点管理器已销毁")
     }
 
     companion object {

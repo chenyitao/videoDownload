@@ -2,6 +2,9 @@ package com.download.video_download.base.config.sensor
 
 import android.os.Bundle
 import android.os.Parcelable
+import com.download.video_download.App
+import com.google.firebase.analytics.FirebaseAnalytics
+import java.io.Serializable
 
 /**
  * Firebase上报策略
