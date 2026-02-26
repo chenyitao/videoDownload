@@ -1,16 +1,24 @@
 package com.download.video_download.base.config.cg
 
 import android.util.Base64
+import com.download.video_download.base.utils.LogUtils
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
+import kotlin.collections.toByteArray
 
 object Crypt {
     private fun aesEncrypt(data: ByteArray, key: ByteArray): ByteArray {
         val secretKey = SecretKeySpec(key, "AES")
         val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+        return cipher.doFinal(data)
+    }
+    private fun aesDecrypt(data: ByteArray, key: ByteArray): ByteArray {
+        val secretKey = SecretKeySpec(key, "AES")
+        val cipher = Cipher.getInstance("AES/ECB/PKCS7Padding")
+        cipher.init(Cipher.DECRYPT_MODE, secretKey)
         return cipher.doFinal(data)
     }
     fun String.swapCaseLetter(): String {
@@ -23,44 +31,47 @@ object Crypt {
         }.joinToString("")
     }
     fun  paramsEncrypt(params: JSONObject): String {
-        val jsonParams = params.toString()
-        val paramsBase64 = Base64.encodeToString(jsonParams.toByteArray(), Base64.NO_WRAP)
-        val aesKey = Base64.decode("tZTjValb2BynAg7Y8iPRSE==", Base64.NO_WRAP)
-        val paramsAes =
-           aesEncrypt(paramsBase64.toByteArray(), aesKey)
-        val paramsAesBase64 = Base64.encodeToString(paramsAes, Base64.NO_WRAP)
-        val pAesBase64Ascii = paramsAesBase64.map { c ->
-            (c.code + 5).toChar()
-        }.joinToString("")
-        val asciiBase64 = Base64.encodeToString(pAesBase64Ascii.toByteArray(), Base64.NO_WRAP)
-        asciiBase64.swapCaseLetter()
-        val asciiBase64Rever = asciiBase64.reversed()
-        val prefix = "a"
-        val suffix = "1234567"
-        return prefix + asciiBase64Rever + suffix
+        runCatching {
+            val jsonStr = params.toString()
+            val step1Base64 = Base64.encodeToString(jsonStr.toByteArray(), Base64.NO_WRAP)
+            val aesKeyBytes = Base64.decode("tZTjValb2BynAg7Y8iPRSE==", Base64.NO_WRAP)
+            val step2AesEncrypted = aesEncrypt(step1Base64.toByteArray(), aesKeyBytes)
+            val step2Base64 = Base64.encodeToString(step2AesEncrypted, Base64.NO_WRAP)
+            val step3Str = step2Base64.map { c ->
+                (c.code + 5).toChar()
+            }.joinToString("")
+            val step4Base64 = Base64.encodeToString(step3Str.toByteArray(), Base64.NO_WRAP)
+            val step5SwapCase = step4Base64.swapCaseLetter()
+            val step6Reversed = step5SwapCase.reversed()
+            val prefix = "a"
+            val suffix = "1234567"
+            val finalEncrypted = prefix + step6Reversed + suffix
+            return finalEncrypted
+        }
+        return ""
     }
-
     fun paramsDecrypt(params: String): JSONObject {
-        if (params.isEmpty()){
-            return JSONObject()
+        runCatching {
+            var decodedStr = params
+            if (decodedStr.length < 10) {
+                return@runCatching null
+            }
+            decodedStr = decodedStr.substring(7, decodedStr.length - 3)
+            decodedStr = exchange9Chars(decodedStr)
+            decodedStr = decodedStr.reversed()
+            decodedStr = decodedStr.map { c ->
+                (c.code - 4).toChar()
+            }.joinToString("")
+            val step6Bytes = Base64.decode(decodedStr, Base64.NO_WRAP)
+            decodedStr = String(step6Bytes, Charsets.UTF_8)
+            decodedStr = decodedStr.swapCaseLetter()
+            val step8Bytes = Base64.decode(decodedStr, Base64.NO_WRAP)
+            val aesKeyBytes = Base64.decode("yoKPOFRSjbAeWkMJ7ZXnq8==", Base64.NO_WRAP)
+            val step9DecryptedBytes = aesDecrypt(step8Bytes, aesKeyBytes)
+            val step10Str = String(step9DecryptedBytes)
+            return  JSONObject(step10Str)
         }
-        val decryptedParams = String(params.toByteArray(), StandardCharsets.UTF_8)
-        if (decryptedParams.length < 11) {
-            return JSONObject()
-        }
-        val paramsSub = decryptedParams.substring(7, decryptedParams.length - 3)
-        val paramsExchange = exchange9Chars(paramsSub)
-        val paramsRever = paramsExchange.reversed()
-        val paramsAsc = paramsRever.map { c ->
-            (c.code - 4).toChar()
-        }.joinToString("")
-        var paramsB64 = String(Base64.decode(paramsAsc, Base64.DEFAULT), Charsets.UTF_8)
-        paramsB64.swapCaseLetter()
-        paramsB64 =  String(Base64.decode(paramsB64, Base64.DEFAULT), Charsets.UTF_8)
-        val aesKey = Base64.decode("yoKPOFRSjbAeWkMJ7ZXnq8==", Base64.DEFAULT)
-        val decryptedAes = aesEncrypt(paramsB64.toByteArray(), aesKey)
-        val json = String(decryptedAes, StandardCharsets.UTF_8)
-        return JSONObject(json)
+        return JSONObject()
     }
     private fun exchange9Chars(str: String): String {
         val len = str.length

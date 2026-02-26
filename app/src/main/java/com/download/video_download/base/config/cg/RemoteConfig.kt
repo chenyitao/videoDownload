@@ -62,7 +62,7 @@ class RemoteConfig private constructor(){
                 params.put("ocnz", getConfigParams())
                 val host = App.getAppContext().getString(R.string.admin_host_test)
 
-                val body = App.getAppContext().jsonParser().encodeToJsonElement(params).toString()
+                val body = params.toString()
                 val requestSuccess = suspendCancellableCoroutine { continuation ->
                     AsyncPostRequest.sendPost(host, body,
                         onSuccess = {

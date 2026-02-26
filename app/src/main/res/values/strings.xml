@@ -2,9 +2,7 @@
     <string name="app_name" translatable="false">Safe Downloader-Save Video</string>
     <string name="ad_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admin_host_test" translatable="false">https://test.safedownloadersavevideo.com/xyn/mijw/</string>
-    <string name="tba_host_test" translatable="false">https://test.safedownloadersavevideo.com</string>
-    <string name="admin_host" translatable="false">https://test-real.safedownloadersavevideo.com</string>
-    <string name="tba_host" translatable="false">https://test.safedownloadersavevideo.com</string>
+    <string name="tba_host_test" translatable="false">https://test-real.safedownloadersavevideo.com</string>
     <string name="loading_progress">Loading… %d%%</string>
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>

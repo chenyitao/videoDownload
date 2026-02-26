@@ -86,7 +86,7 @@ class TrackMgr private constructor() {
             }
             else -> {
                 map["lust"] = eventType.tn
-                map["lust"] = customParams
+                map[eventType.tn] = customParams
             }
         }
         return map
