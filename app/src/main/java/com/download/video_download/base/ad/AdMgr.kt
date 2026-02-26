@@ -110,7 +110,7 @@ class AdMgr private constructor() {
         return loadStateCache[Pair(position, adType)] ?: AdLoadState.UNLOADED
     }
     fun getNativeAd(position: AdPosition): NativeAd? {
-        return loadedAdCache[Pair(position, AdType.NATIVE)] as? NativeAd
+        return loadedAdCache[Pair(position, AdType.NATIVE)]?.adInstance as? NativeAd
     }
     private fun getLoadLock(position: AdPosition, adType: AdType): Mutex {
         val key = Pair(position, adType)
@@ -220,7 +220,8 @@ class AdMgr private constructor() {
                     loadSuccess = true
                     break
                 }else{
-                    adError = adInstance as LoadAdError? as LoadAdError?
+                    val error = adInstance as com.google.android.gms.ads.LoadAdError
+                    adError = LoadAdError(error.code, error.message, error.domain)
                 }
             }
 

@@ -65,6 +65,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                             if (success){
                                 mViewModel.preloadAd(this@SplashActivity)
                             }
+                            if (!AppCache.isSelectLng){
+                                mViewModel.preloadLgAd(this@SplashActivity)
+                            }
                         },
                         onAdDismissed = { position, adType ->
                             route()
@@ -91,6 +94,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
     override fun onResume() {
         super.onResume()
+        if (!AppCache.isSelectLng){
+            mViewModel.preloadLgAd(this)
+        }
         mViewModel.preloadAd(this)
         mViewModel.startLoading {
             AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
@@ -125,9 +131,6 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         }
     }
 
-    /**
-     * 更新进度文本
-     */
     private fun updateProgressText(progress: Int) {
         val progressText =
             String.format(App.getAppContext().getString(R.string.loading_progress), progress)
@@ -140,9 +143,6 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         mBind.loadingProgress.text = progressText
     }
 
-    /**
-     * 在闪屏页禁用返回键
-     */
     override fun handleBackPressed(): Boolean {
         return true // 拦截返回事件
     }
