@@ -15,10 +15,15 @@ class HomeViewModel: BaseViewModel() {
     }
 
     fun initWebSiteData(){
-        val imdb = WebsiteData(
-            title = App.getAppContext().getString(R.string.imdb),
-            image = R.mipmap.ic_imdb,
-            url = "www.imdb.com"
+        val fb = WebsiteData(
+            title = "Facebook",
+            image = R.mipmap.ic_fb,
+            url = "https://www.facebook.com"
+        )
+        val x = WebsiteData(
+            title = "X",
+            image = R.mipmap.ic_x,
+            url = "https://www.x.com"
         )
         val video = WebsiteData(
             title = App.getAppContext().getString(R.string.video),
@@ -30,7 +35,12 @@ class HomeViewModel: BaseViewModel() {
             image = R.mipmap.ic_mixkit,
             url = "https://mixkit.co/"
         )
-        val newData = mutableListOf(imdb,video,mixkit)
+        val imdb = WebsiteData(
+            title = App.getAppContext().getString(R.string.imdb),
+            image = R.mipmap.ic_imdb,
+            url = "www.imdb.com"
+        )
+        val newData = mutableListOf(fb,x,video,mixkit,imdb)
         _videoList.value = newData
     }
 }

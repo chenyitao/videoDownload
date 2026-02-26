@@ -2,6 +2,7 @@ package com.download.video_download.ui.fragment
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
     var task2 = ""
     private var curUrl = ""
     var videoList: MutableList<Video> = CopyOnWriteArrayList()
+    val interceptorCache = Collections.synchronizedSet<Uri>(mutableSetOf())
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -173,9 +175,9 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 super.onProgressChanged(view, newProgress)
                 binding.webProgress.progress = newProgress
                 if (newProgress == 100) {
-                    binding.webProgress.visibility = View.GONE // 加载完成隐藏
+                    binding.webProgress.visibility = View.GONE
                 } else {
-                    binding.webProgress.visibility = View.VISIBLE // 加载中显示
+                    binding.webProgress.visibility = View.VISIBLE
                 }
             }
         }
@@ -255,6 +257,32 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 view: WebView?,
                 request: WebResourceRequest?
             ): WebResourceResponse? {
+                val url = view?.url
+                url?.let {
+                    val job = VideoParse.handleVideoSource(request,it,
+                        interceptorCache){ videos,isLoading ->
+                        updateVideoList(videos)
+                        Log.d("VideoEnginexxxxxFB", "videoData: $videos")
+                        val currentHost =
+                            curUrl.toUri().host
+                        val findItem =
+                            VideoParse.perWebsite.find {
+                                currentHost?.contains(
+                                    it
+                                ) == true
+                            }
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            findItem?.let {
+                                searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+                            }
+                            searchViewModel.isLoading(isLoading)
+                            searchViewModel.saveVideos(videoList)
+                        }
+                        }
+                    if (job != null){
+                        parseJobList.add(job)
+                    }
+                }
                 return super.shouldInterceptRequest(view, request)
             }
 

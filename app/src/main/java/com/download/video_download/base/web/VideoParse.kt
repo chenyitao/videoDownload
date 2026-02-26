@@ -1,9 +1,13 @@
 package com.download.video_download.base.web
 
+import android.net.Uri
+import android.util.Base64
 import android.util.Log
+import android.webkit.WebResourceRequest
 import androidx.core.net.toUri
 import com.download.video_download.base.room.entity.Video
 import com.google.common.net.HttpHeaders
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -11,6 +15,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -21,8 +26,12 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.json.JSONObject
+import java.net.URLDecoder
 import java.util.Collections
+import java.util.stream.LongStream.range
 import kotlin.collections.set
+import kotlin.ranges.contains
 import kotlin.text.contains
 
 object VideoParse {
@@ -468,5 +477,238 @@ object VideoParse {
             Regex("^https?://t\\.zijieimg\\.com/\\w+/?$")
         )
         return patterns.any { it.matches(url) }
+    }
+    fun handleVideoSource(request: WebResourceRequest?, url: String,
+                               interceptorVideoCache: MutableSet<Uri>,
+                               dectResult: (videos: MutableList<Video>,isLoading: Boolean) -> Unit):Job? {
+        val uri = request?.url ?: return null
+        val lastPathSegment = uri.buildUpon().clearQuery().build().lastPathSegment
+        val pictureType =
+            lastPathSegment?.endsWith("jpg") == true || lastPathSegment?.endsWith("png") == true || lastPathSegment?.endsWith(
+                "webp"
+            ) == true
+        val mp4Type = lastPathSegment?.endsWith("mp4") == true
+        val m3u8Type = lastPathSegment?.endsWith("m3u8") == true
+        if (pictureType || mp4Type || m3u8Type){
+            if (mp4Type && (url.contains("instagram.com") || url.contains("facebook.com"))){
+                return facebookParse(uri,interceptorVideoCache,dectResult)
+            }
+            if ((pictureType || m3u8Type) && url.contains("x.com")){
+                return xParse(uri,interceptorVideoCache,dectResult)
+            }
+        }
+        return null
+    }
+    private fun xParse(uri: Uri,interceptorVideoCache: MutableSet<Uri>,
+                       dectResult: (videos: MutableList<Video>,isLoading: Boolean) -> Unit):Job?{
+        interceptorVideoCache.add(uri)
+        return scope.launch{
+            runCatching {
+                dectResult.invoke(mutableListOf(),true)
+                delay(2_000L)
+                mutex.withLock {
+                    val xVideoUrlList = interceptorVideoCache.toList()
+                        .filter { it.lastPathSegment?.endsWith("m3u8") == true }
+                    if (xVideoUrlList.isEmpty()) {
+                        return@launch
+                    }
+                    val xPhotoUrlList = interceptorVideoCache.toList().filter {
+                        it.lastPathSegment?.endsWith("png") == true || it.lastPathSegment?.endsWith(
+                            "jpg"
+                        ) == true
+                                || it.lastPathSegment?.endsWith("webp") == true
+                    }
+                    val needRequestUrlList = xVideoUrlList.filter { url ->
+                        val noQueryUrl = url.buildUpon().clearQuery().build().toString()
+                        detectVideo[noQueryUrl] == null
+                    }.map {
+                        it.toString()
+                    }
+                    val resultInfoList =
+                        parseM3u8MutiListMethods(needRequestUrlList).filter { resultInfo ->
+                            val noQueryUrl =
+                                resultInfo.first.toUri().buildUpon().clearQuery().build().toString()
+                            detectVideo[noQueryUrl] == null
+                        }
+
+                    val videoDetectInfoList = resultInfoList.map { info ->
+                        val videoId = info.first.toUri().pathSegments?.getOrNull(1)
+                        val videoCoverUrl = if (!videoId.isNullOrEmpty()) {
+                            xPhotoUrlList.find {
+                                it.pathSegments?.contains(videoId) == true
+                            }?.toString()
+                        } else {
+                            null
+                        }
+                        info.second.thumb = videoCoverUrl?:""
+                        val item = info.second
+                        Pair(info.first, item)
+                    }
+                    videoDetectInfoList.forEach {
+                        detectVideo[it.first] = it.second
+                    }
+                    var list = detectVideo.values.toMutableList()
+                    val filterList = list.filter {
+                        !(it.url.contains("pl/acv") || it.url.contains("pl/mp4")) && it.url.contains("variant_version")
+                    }
+                    dectResult.invoke(filterList.toMutableList(),false)
+                }
+            }.fold(
+                onSuccess = { value ->
+                },
+                onFailure = { exception ->
+                    dectResult.invoke(detectVideo.values.toMutableList(),false)
+                }
+            )
+        }
+    }
+    private suspend fun parseM3u8MutiListMethods(urls: List<String>): List<Pair<String, Video>>{
+        return try {
+            scope.run {
+                urls.map { url ->
+                    async {
+                        val isMultiPlaylist = isM3U8Url(url)
+                        if (isMultiPlaylist) {
+                            Pair(url, parseVideoUrl(url))
+                        } else {
+                            null
+                        }
+                    }
+                }.awaitAll().filterNotNull()
+            }
+        }finally {
+
+        }
+    }
+    suspend fun isM3U8Url(url: String): Boolean {
+        return try {
+            if (url.endsWith(".m3u8", ignoreCase = true)) {
+                return true
+            }
+
+            val response =  NativeHttpUtils.getUrlHeaders(url)
+            val contentType = response["Content-Type"] ?: ""
+            when {
+                contentType.contains("application/x-mpegURL") -> true
+                contentType.contains("vnd.apple.mpegURL") -> true
+                else -> {
+                    NativeHttpUtils.checkIsM3U8ByHttpURLConnection(url)
+                }
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+    private fun facebookParse(uri: Uri,interceptorVideoCache: MutableSet<Uri>,
+                              dectResult: (videos: MutableList<Video>,isLoading: Boolean) -> Unit):Job?{
+        val efg = uri.getQueryParameter("efg")
+        if(efg.isNullOrEmpty()){
+            return null
+        }
+        val ncGid = uri.getQueryParameter("_nc_gid")
+        if(ncGid.isNullOrEmpty()){
+            return null
+        }
+        val queries = uri.queryParameterNames ?: mutableSetOf()
+        val queriesWithoutByte = queries.toMutableList().apply {
+            remove("bytestart")
+            remove("byteend")
+        }
+        val noByteStartUri = uri.buildUpon()
+            .clearQuery()
+            .apply {
+                queriesWithoutByte.forEach {
+                    appendQueryParameter(it, uri.getQueryParameter(it))
+                }
+            }.build()
+        interceptorVideoCache.add(noByteStartUri)
+        return scope.launch{
+            runCatching {
+                dectResult.invoke (mutableListOf(),true)
+                delay(2_000L)
+                mutex.withLock {
+                    val facebookVideoUrlList = interceptorVideoCache.toList()
+                    val ncGidGroup = facebookVideoUrlList.groupBy { url ->
+                        val efg = url.getQueryParameter("gfe".reversed())
+                        val efgJson = String(Base64.decode(URLDecoder.decode(efg, "UTF-8"), Base64.NO_WRAP))
+                        val efgObj = JSONObject(efgJson)
+                        val videoId = efgObj.optString("video_id")
+                        if(videoId.isNullOrEmpty() || videoId == "null"){
+                            return@groupBy efgObj.optString("xpv_asset_id")
+                        }
+                        videoId
+                    }.filter { !it.key.isNullOrEmpty() }
+                    if(ncGidGroup.isEmpty()){
+                        return@launch
+                    }
+                    val resultList = ncGidGroup.filter { entry ->
+                        val gid = entry.key
+                        if(gid.isNullOrEmpty()){
+                            return@filter false
+                        }
+                        true
+                    }.filter { entry ->
+                        val gid = entry.key
+                        detectVideo[gid] == null
+                    }.map { entry ->
+                        val gid = entry.key
+                        val valueList = entry.value
+                        if(valueList.size == 1 && valueList.first().getQueryParameter("tag") != null) {
+                            val videoUrl = valueList.first()
+                            Pair(gid, Video(
+                                url = videoUrl.toString(),
+                                fileName = videoUrl.lastPathSegment ?: "facebook",
+                                mimeTypes = "video/mp4"
+                            ))
+                        } else if(valueList.size == 2){
+                            val withBitrateList = valueList.map { url ->
+                                // 拿到efg参数
+                                val efg = url.getQueryParameter("efg")
+                                val efgJson = String(Base64.decode(URLDecoder.decode(efg, "UTF-8"), Base64.NO_WRAP))
+                                val efgObj = JSONObject(efgJson)
+                                val bitrate = efgObj.optLong("bitrate")
+                                Pair(bitrate, url)
+                            }.sortedByDescending { it.first }
+                                .map { it.second }
+                            val videoUrl = withBitrateList[0].toString()
+                            val audioUrl = withBitrateList[1].toString()
+                            Pair(gid, Video(
+                                url = videoUrl,
+                                fileName = videoUrl.toUri().lastPathSegment ?: "facebook",
+                                mimeTypes = "video/mp4",
+                                audioUrl = audioUrl
+                            ))
+                        } else {
+                            val withBitrateList = valueList.map { url ->
+                                val efg = url.getQueryParameter("efg")
+                                val efgJson = String(Base64.decode(URLDecoder.decode(efg, "UTF-8"), Base64.NO_WRAP))
+                                val efgObj = JSONObject(efgJson)
+                                val bitrate = efgObj.optLong("bitrate")
+                                Pair(bitrate, url)
+                            }.sortedByDescending { it.first }
+                                .map { it.second }
+                            val videoUrl = withBitrateList.first().toString()
+                            val audioUrl = withBitrateList.last().toString()
+                            Pair(gid, Video(
+                                url = videoUrl,
+                                fileName = videoUrl.toUri().lastPathSegment ?: "facebook",
+                                mimeTypes = "video/mp4",
+                                audioUrl = audioUrl
+                            ))
+                        }
+                    }
+                    resultList.forEach { info ->
+                        detectVideo[info.first] = info.second
+                    }
+                    dectResult.invoke(detectVideo.values.toMutableList(), false)
+                }
+            }.fold(
+                onSuccess = { value ->
+                },
+                onFailure = { exception ->
+                    dectResult.invoke(detectVideo.values.toMutableList(), false)
+                }
+            )
+        }
     }
 }
