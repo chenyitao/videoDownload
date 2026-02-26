@@ -1,6 +1,5 @@
 package com.download.video_download.base.wiget
 import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Handler
@@ -11,7 +10,6 @@ import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.SeekBar
-import androidx.core.content.FileProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -21,7 +19,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.download.video_download.R
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.databinding.LayoutInnerVideoPlayerBinding
-import java.io.File
 import java.util.Locale
 
 class InnerPlayer @JvmOverloads constructor(
@@ -29,7 +26,8 @@ class InnerPlayer @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val onFinish: () -> Unit = {},
-    private val playClick: () -> Unit = {}
+    private val playClick: () -> Unit = {},
+    private val share: () -> Unit = {}
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     // 常量定义
@@ -71,6 +69,7 @@ class InnerPlayer @JvmOverloads constructor(
         initPlayer()
         initViewListeners()
         initSeekBarListeners()
+        resetHideControllerTimer()
     }
 
     /**
@@ -149,10 +148,8 @@ class InnerPlayer @JvmOverloads constructor(
 
         // 分享按钮
         binding.ivShare.setOnClickListener {
+            share.invoke()
             resetHideControllerTimer()
-            getVideoPath()?.let { path ->
-                shareVideo(File(path))
-            }
         }
 
         // 竖屏播放/暂停
@@ -179,7 +176,11 @@ class InnerPlayer @JvmOverloads constructor(
 
         // 竖屏全屏
         binding.ivFullScreenPortrait.setOnClickListener {
-            enterFullScreen()
+            if (isFullScreen) {
+                exitFullScreen()
+            } else {
+                enterFullScreen()
+            }
             resetHideControllerTimer()
         }
     }
@@ -294,14 +295,7 @@ class InnerPlayer @JvmOverloads constructor(
         val activity = ActivityManager.currentActivity()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         activity?.window?.let { hideSystemUI(it) }
-        binding.topBar.setPadding(
-            binding.topBar.paddingLeft,
-            54.dpToPx(context),
-            binding.topBar.paddingRight,
-            binding.topBar.paddingBottom
-        )
     }
-
     /**
      * 退出全屏
      */
@@ -310,12 +304,6 @@ class InnerPlayer @JvmOverloads constructor(
         val activity = ActivityManager.currentActivity()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         activity?.window?.let { showSystemUI(it) }
-        binding.topBar.setPadding(
-            binding.topBar.paddingLeft,
-            44.dpToPx(context),
-            binding.topBar.paddingRight,
-            binding.topBar.paddingBottom
-        )
     }
 
     // ===================== 控制器显示/隐藏 =====================
@@ -362,9 +350,9 @@ class InnerPlayer @JvmOverloads constructor(
 
     private fun updateMuteIcon() {
         if (isMuted) {
-            binding.ivMutePortrait.setImageResource(R.mipmap.ic_video_volume_close)
-        } else {
             binding.ivMutePortrait.setImageResource(R.mipmap.ic_video_volume_open)
+        } else {
+            binding.ivMutePortrait.setImageResource(R.mipmap.ic_video_volume_close)
         }
     }
 
@@ -441,34 +429,6 @@ class InnerPlayer @JvmOverloads constructor(
                             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     )
         }
-    }
-    private fun shareVideo(videoFile: File) {
-        if (!videoFile.exists()) return
-
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.provider",
-            videoFile
-        )
-
-        val mimeType = when (videoFile.extension.lowercase(Locale.getDefault())) {
-            "mp4" -> "video/mp4"
-            "mkv" -> "video/x-matroska"
-            "avi" -> "video/x-msvideo"
-            else -> "video/*"
-        }
-
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_STREAM, uri)
-            type = mimeType
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-
-        context.startActivity(Intent.createChooser(intent, ""))
-    }
-    private fun getVideoPath(): String? {
-        return null
     }
 
     fun setVideoPath(path: String) {

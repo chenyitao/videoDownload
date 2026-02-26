@@ -58,48 +58,21 @@ android:background="#393A58">
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/bottomControllerPortrait"
         android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:orientation="vertical"
-        android:background="#80000000">
-
-        <!-- 进度条 -->
-        <SeekBar
-            android:id="@+id/progressBarPortrait"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:progressDrawable="@drawable/progress_bar_style"
-            android:thumb="@drawable/seek_bar_thumb"
-            android:thumbOffset="0dp" />
-
-        <!-- 时间文本 -->
-        <TextView
-            android:id="@+id/tvTimePortrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:text="00:00 / 00:00"
-            android:textColor="#CCFFFFFF"
-            android:textSize="12sp"
-            android:background="#66000000"
-            android:paddingVertical="4dp"
-            android:paddingHorizontal="8dp"
-            android:radius="20dp" />
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <!-- 控制按钮 -->
         <LinearLayout
+            android:id="@+id/ll_b"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="28dp"
+            android:layout_height="83dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:gravity="center_vertical"
+            android:layout_below="@+id/progressBarPortrait"
+            android:background="#80000000"
             android:orientation="horizontal">
 
             <ImageView
@@ -112,8 +85,8 @@ android:background="#393A58">
                 android:id="@+id/ivSeekBackPortrait"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_weight="1"
-                android:src="@mipmap/ic_video_seek_front" />
+                android:layout_marginStart="45dp"
+                android:src="@mipmap/ic_video_seek_back" />
 
             <ImageView
                 android:id="@+id/ivPlayPausePortrait"
@@ -126,8 +99,8 @@ android:background="#393A58">
                 android:id="@+id/ivSeekForwardPortrait"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_weight="1"
-                android:src="@mipmap/ic_video_seek_back" />
+                android:layout_marginEnd="45dp"
+                android:src="@mipmap/ic_video_seek_front" />
 
             <ImageView
                 android:id="@+id/ivFullScreenPortrait"
@@ -136,8 +109,31 @@ android:background="#393A58">
                 android:src="@mipmap/ic_video_fullscreen" />
 
         </LinearLayout>
-
-    </LinearLayout>
+        <SeekBar
+            android:id="@+id/progressBarPortrait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="2dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:minHeight="2dp"
+            android:layout_marginBottom="-1dp"
+            android:layout_gravity="center_vertical"
+            android:progressDrawable="@drawable/seekbar_progress_drawable"
+            android:thumb="@drawable/seekbar_thumb"
+            android:max="100"
+            android:progress="0"
+            android:splitTrack="false"
+            android:layout_below="@+id/tvTimePortrait"/>
+        <TextView
+            android:id="@+id/tvTimePortrait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="00:00 / 00:00"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:gravity="center" />
+    </RelativeLayout>
 
 
 </LinearLayout>

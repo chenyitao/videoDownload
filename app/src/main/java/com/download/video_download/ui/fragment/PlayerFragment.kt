@@ -12,8 +12,11 @@ import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.ext.showToast
+import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.databinding.FragmentPlayerBinding
+import com.download.video_download.ui.activity.GuideActivity
+import com.download.video_download.ui.activity.InnerVideoActivity
 import com.download.video_download.ui.adapter.PlayerAdapter
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.PlayerViewModel
@@ -154,28 +157,51 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
                 data.url
             )
         )
-        val uri = FileProvider.getUriForFile(
-            App.getAppContext(),
-            "${App.getAppContext().packageName}.provider",
-            file
-        )
         if (!file.exists()) {
             return
         }
-        val mimeType = when (file.extension.lowercase(getDefault())) {
-            "mp4" -> "video/mp4"
-            "mkv" -> "video/x-matroska"
-            "avi" -> "video/x-msvideo"
-            else -> "video/*" // 兜底
+        val path = requireContext().getExternalFilesDir(
+            DIRECTORY_DOWNLOADS
+        )?.absolutePath
+        val fileName = data.fileName + getVideoFileExtension(
+            data.mimeTypes,
+            data.url
+        )
+        requireActivity().startActivity<InnerVideoActivity> {
+            putExtra("path", path)
+            putExtra("fileName",fileName)
         }
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, mimeType)
-            putExtra(Intent.EXTRA_TITLE, data.fileName)
-            putExtra("filename", data.fileName)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-
-        requireContext().startActivity(Intent.createChooser(intent, ""))
+//        val file = File(
+//            requireContext().getExternalFilesDir(
+//                DIRECTORY_DOWNLOADS
+//            )?.absolutePath,
+//            data.fileName + getVideoFileExtension(
+//                data.mimeTypes,
+//                data.url
+//            )
+//        )
+//        val uri = FileProvider.getUriForFile(
+//            App.getAppContext(),
+//            "${App.getAppContext().packageName}.provider",
+//            file
+//        )
+//        if (!file.exists()) {
+//            return
+//        }
+//        val mimeType = when (file.extension.lowercase(getDefault())) {
+//            "mp4" -> "video/mp4"
+//            "mkv" -> "video/x-matroska"
+//            "avi" -> "video/x-msvideo"
+//            else -> "video/*" // 兜底
+//        }
+//        val intent = Intent(Intent.ACTION_VIEW).apply {
+//            setDataAndType(uri, mimeType)
+//            putExtra(Intent.EXTRA_TITLE, data.fileName)
+//            putExtra("filename", data.fileName)
+//            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        }
+//
+//        requireContext().startActivity(Intent.createChooser(intent, ""))
     }
 }
