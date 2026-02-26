@@ -80,3 +80,7 @@ fun DialogFragment.isFragmentShowing(): Boolean {
             && dialog?.isShowing == true
             && !isRemoving
 }
+fun DownloadStatusDialog?.isFragmentValidAndNotAdded(): Boolean {
+    this ?: return true
+    return !(this.isAdded || this.isRemoving || this.isDetached)
+}

@@ -17,6 +17,7 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.config.cg.RemoteConfig
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.task.HlsMerger
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DESUtil
@@ -63,6 +64,7 @@ class App : MultiDexApplication() {
         }
         LanguageUtils.initLocale(this)
         initSdk()
+        HlsMerger.init()
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 ActivityManager.addActivity(activity)

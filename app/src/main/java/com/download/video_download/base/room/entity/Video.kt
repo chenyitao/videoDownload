@@ -41,7 +41,7 @@ data class Video(
     @SerialName("isSelect")
     var isSelect: Boolean = false,
     @SerialName("audioTaskId")
-    val audioTaskId: Long = -1L,
+    var audioTaskId: Long = -1L,
     @SerialName("downloadCompletedTime")
     var downloadCompletedTime: Long = 0L,
     @SerialName("downloadProcess")

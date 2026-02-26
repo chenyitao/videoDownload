@@ -257,30 +257,32 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                 view: WebView?,
                 request: WebResourceRequest?
             ): WebResourceResponse? {
-                val url = view?.url
-                url?.let {
-                    val job = VideoParse.handleVideoSource(request,it,
-                        interceptorCache){ videos,isLoading ->
-                        updateVideoList(videos)
-                        Log.d("VideoEnginexxxxxFB", "videoData: $videos")
-                        val currentHost =
-                            curUrl.toUri().host
-                        val findItem =
-                            VideoParse.perWebsite.find {
-                                currentHost?.contains(
-                                    it
-                                ) == true
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val url = view?.url
+                    url?.let {
+                        val job = VideoParse.handleVideoSource(request,it,
+                            interceptorCache){ videos,isLoading ->
+                            updateVideoList(videos)
+                            Log.d("VideoEnginexxxxxFB", "videoData: $videos")
+                            val currentHost =
+                                curUrl.toUri().host
+                            val findItem =
+                                VideoParse.perWebsite.find {
+                                    currentHost?.contains(
+                                        it
+                                    ) == true
+                                }
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                findItem?.let {
+                                    searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
+                                }
+                                searchViewModel.isLoading(isLoading)
+                                searchViewModel.saveVideos(videoList)
                             }
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            findItem?.let {
-                                searchViewModel.detect(DetectStatus(DetectState.SUPPORTWEB))
-                            }
-                            searchViewModel.isLoading(isLoading)
-                            searchViewModel.saveVideos(videoList)
                         }
+                        if (job != null){
+                            parseJobList.add(job)
                         }
-                    if (job != null){
-                        parseJobList.add(job)
                     }
                 }
                 return super.shouldInterceptRequest(view, request)

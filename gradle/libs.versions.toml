@@ -43,6 +43,8 @@ facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk",ve
 installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2"}
 af-android-sdk = { module = "com.appsflyer:af-android-sdk", version = "6.17.5"}
 multidex = { module = "androidx.multidex:multidex", version = "2.0.1" }
+transformer = { module = "androidx.media3:media3-transformer", version = "1.9.0"}
+exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version = "1.9.0"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

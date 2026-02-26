@@ -91,6 +91,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.installreferrer)
     implementation(libs.af.android.sdk)
+    implementation(libs.transformer)
+    implementation(libs.exoplayer.hls)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

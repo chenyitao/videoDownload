@@ -62,15 +62,22 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
                 } == true) {
                 adapter?.removeItem(it)
             }
-            if (downloadDialog == null){
-                downloadDialog = DownloadStatusDialog()
+            if (downloadDialog != null) {
+                if (downloadDialog?.isAdded == true) {
+                    downloadDialog?.dismissAllowingStateLoss()
+                    val fragmentTransaction = childFragmentManager.beginTransaction()
+                    fragmentTransaction.remove(downloadDialog!!)
+                    fragmentTransaction.commitAllowingStateLoss()
+                } else if (downloadDialog?.isFragmentShowing() == true) {
+                    downloadDialog?.dismissNow()
+                }
+                downloadDialog = null
             }
-            if (downloadDialog?.isFragmentShowing() == true){
-                downloadDialog?.dismissNow()
-            }
-            downloadDialog?.setIsComplete(true)
-            downloadDialog?.setOnConfirmListener {
-                mainViewModel.navigate( NavigationItem("", NavState.DOWNLOAD, NavState.PLAYER))
+            downloadDialog = DownloadStatusDialog().apply {
+                setIsComplete(true)
+                setOnConfirmListener {
+                    mainViewModel.navigate(NavigationItem("", NavState.DOWNLOAD, NavState.PLAYER))
+                }
             }
             downloadDialog?.show(this.childFragmentManager, "DownloadDialog")
         })

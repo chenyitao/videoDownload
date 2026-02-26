@@ -112,7 +112,7 @@ object VideoParse {
                             .takeUnless { it.isBlank() }?.let { fileName = it }
                     }
                 }
-                val contentType = headers["Content-Type"]
+                val contentType = headers["content-type"]
                 fileExtension = contentType
                 totalSize = headers["Content-Length"]?.toLongOrNull()
                 if (fileExtension.isNullOrEmpty()) {

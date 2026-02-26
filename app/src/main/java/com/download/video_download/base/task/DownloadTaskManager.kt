@@ -18,6 +18,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.text.get
 
 class DownloadTaskManager() : DownloadTaskListener {
     private var internalDir = ""
@@ -107,15 +108,33 @@ class DownloadTaskManager() : DownloadTaskListener {
         if (videoItem.id < 0) {
             val fileName = getFileExtension(videoItem)
             val taskId = if (isHlsMediaUrl(videoItem.url)) {
+                if (videoItem.mimeTypes.contains("application/x-mpegURL")){
+                    HlsMerger.startDownload(videoItem.url, videoItem.fileName)
+                }
                 createM3u8DownloadTask(videoItem.url, fileName)
             } else {
-                createNormalDownloadTask(videoItem.url, fileName)
+                if (videoItem.audioUrl.isNotEmpty()){
+                    videoItem.audioTaskId = createFBANormalDownloadTask(videoItem.audioUrl, fileName)
+                    createFBVNormalDownloadTask(videoItem.url, fileName)
+                }else{
+                    createNormalDownloadTask(videoItem.url, fileName)
+                }
             }
             updateVideoItemInList(videoItem) { it.copy(id = taskId) }
         } else {
             when (videoItem.downloadStatus) {
-                IEntity.STATE_STOP -> stop(videoItem.id)
-                IEntity.STATE_RUNNING -> resume(videoItem.id)
+                IEntity.STATE_STOP -> {
+                    stop(videoItem.id)
+                    if (videoItem.audioUrl.isNotEmpty()){
+                        stop(videoItem.audioTaskId)
+                    }
+                }
+                IEntity.STATE_RUNNING -> {
+                    resume(videoItem.id)
+                    if (videoItem.audioUrl.isNotEmpty()){
+                        resume(videoItem.audioTaskId)
+                    }
+                }
             }
             updateVideoItemInList(videoItem) {
                 it.copy(
@@ -141,6 +160,12 @@ class DownloadTaskManager() : DownloadTaskListener {
                 .load(videoItem.id)
                 .ignoreCheckPermissions()
                 .stop()
+            if (videoItem.audioUrl.isNotEmpty()){
+                Aria.download(this)
+                    .load(videoItem.audioTaskId)
+                    .ignoreCheckPermissions()
+                    .stop()
+            }
         }
         updateVideoItemInList(videoItem) {
             it.copy(
@@ -153,7 +178,22 @@ class DownloadTaskManager() : DownloadTaskListener {
             )
         }
     }
-
+    private fun createFBVNormalDownloadTask(url: String, fileName: String): Long {
+        return Aria.download(this)
+            .load(url)
+            .setFilePath("$internalDir/video_$fileName")
+            .ignoreFilePathOccupy()
+            .ignoreCheckPermissions()
+            .create()
+    }
+    private fun createFBANormalDownloadTask(url: String, fileName: String): Long {
+        return Aria.download(this)
+            .load(url)
+            .setFilePath("$internalDir/audio_$fileName")
+            .ignoreFilePathOccupy()
+            .ignoreCheckPermissions()
+            .create()
+    }
     private fun createNormalDownloadTask(url: String, fileName: String): Long {
         return Aria.download(this)
             .load(url)
@@ -183,7 +223,6 @@ class DownloadTaskManager() : DownloadTaskListener {
             ignoreFailureTs()
         }
     }
-
     fun stop(taskId: Long) {
         Aria.download(this).load(taskId).ignoreCheckPermissions().stop()
         updateVideoStatus(taskId, IEntity.STATE_STOP)
@@ -323,6 +362,18 @@ class DownloadTaskManager() : DownloadTaskListener {
                     val playList = getPlayList()
                     playList.add(completedItem)
                     AppCache.playVideos = Json.encodeToString(playList)
+                   if (completedItem.audioUrl.isNotEmpty()){
+                       val fileName = getFileExtension(completedItem)
+                       val audio = File("$internalDir/audio_$fileName")
+                       val video = File("$internalDir/video_$fileName")
+                       if (audio.exists() && video.exists()){
+                           val path = App.getAppContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath?:""
+                           FbMerger.merge(
+                               "$path/audio_$fileName",
+                               "$path/video_$fileName", "$path/$fileName"
+                           )
+                       }
+                   }
                    newList[index] = completedItem
                    updateVideoLiveData(newList)
                     _isCompete.value = true
@@ -331,9 +382,6 @@ class DownloadTaskManager() : DownloadTaskListener {
                     newList[index] = updatedItem
                    updateVideoLiveData(newList)
                 }
-
-
-
                 if (entity.state == IEntity.STATE_RUNNING || entity.state == IEntity.STATE_COMPLETE) {
                     saveDownloadTaskCache()
                 }
