@@ -584,6 +584,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         taskCD?.show(this.childFragmentManager, "DownloadDialog")
     }
     private fun goToPermissionSetting() {
+        App.isJumpingToSystemSetting = true
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         val uri = Uri.fromParts("package", requireContext().packageName, null)
         intent.data = uri

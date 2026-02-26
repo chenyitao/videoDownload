@@ -62,7 +62,7 @@ class AdMgr private constructor() {
     private val loadedAdCache = mutableMapOf<Pair<AdPosition, AdType>, AdCacheMeta>()
     private val loadStateCache = ConcurrentHashMap<Pair<AdPosition, AdType>, AdLoadState>()
     private val loadLocks = ConcurrentHashMap<Pair<AdPosition, AdType>, Mutex>()
-    private var isPrivacyConsentGiven = false
+    private var isPrivacyConsentGiven = true
     private var adCount: AdCount? =  null
     fun initAdData() {
         val remoteAdConfig = AppCache.adcf
@@ -182,7 +182,12 @@ class AdMgr private constructor() {
         }
         val currentState = loadStateCache[key] ?: AdLoadState.UNLOADED
         if (currentState == AdLoadState.LOADED || currentState == AdLoadState.LOADING) {
-            onLoadStateChanged(position, adType, currentState, null)
+            val key = Pair(position, adType)
+            val cachedMeta = loadedAdCache[key]
+            val message = if (currentState == AdLoadState.LOADED) "已存在广告数据" else "广告正在缓存中"
+            val domain = if (currentState == AdLoadState.LOADED) "找到${position.name}-${adType.name}类型的广告单元,广告数据:${cachedMeta?.adInstance}" else "正在加载${position.name}-${adType.name}类型的广告单元"
+            val error = LoadAdError(-4,  message,domain)
+            onLoadStateChanged(position, adType, currentState, error)
             return
         }
 
@@ -194,7 +199,10 @@ class AdMgr private constructor() {
             }
 
             loadStateCache[key] = AdLoadState.LOADING
-            onLoadStateChanged(position, adType, AdLoadState.LOADING, null)
+            val message = "广告正在缓存中"
+            val domain = "正在加载${position.name}-${adType.name}类型的广告单元"
+            val error = LoadAdError(-4,  message,domain)
+            onLoadStateChanged(position, adType, AdLoadState.LOADING, error)
             var loadSuccess = false
             var loadedMeta: AdCacheMeta? = null
             var adError: LoadAdError? = null
@@ -218,10 +226,13 @@ class AdMgr private constructor() {
 
             if (loadSuccess) {
                 loadStateCache[key] = AdLoadState.LOADED
-                onLoadStateChanged(position, adType, AdLoadState.LOADED, null)
+                val message ="广告数据加载成功"
+                val domain = "${position.name}-${adType.name}类型的广告单元,广告数据:${loadedMeta?.adInstance}"
+                val error = LoadAdError(-4,  message,domain)
+                onLoadStateChanged(position, adType, AdLoadState.LOADED, error)
             } else {
                 loadStateCache[key] = AdLoadState.FAILED
-                val error = LoadAdError(adError?.code?:-1, adError?.message?:"", "${position.name}-${adType.name}所有广告单元加载失败")
+                val error = LoadAdError(adError?.code?:-1, adError?.message?:"", "${position.name}-${adType.name}广告单元加载失败")
                 onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             }
         }

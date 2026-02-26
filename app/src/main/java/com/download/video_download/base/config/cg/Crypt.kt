@@ -1,12 +1,9 @@
 package com.download.video_download.base.config.cg
 
 import android.util.Base64
-import com.download.video_download.base.utils.LogUtils
 import org.json.JSONObject
-import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
-import kotlin.collections.toByteArray
 
 object Crypt {
     private fun aesEncrypt(data: ByteArray, key: ByteArray): ByteArray {

@@ -186,6 +186,10 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         if (ActivityManager.currentActivity() is SplashActivity){
             return
         }
+        if (App.isJumpingToSystemSetting){
+            App.isJumpingToSystemSetting = false
+            return
+        }
         startActivity<SplashActivity>{
             putExtra("from", "Background")
             addFlags(

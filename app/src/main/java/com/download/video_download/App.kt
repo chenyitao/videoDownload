@@ -50,10 +50,10 @@ class App : MultiDexApplication() {
         }
         TrackMgr.instance.init(this)
         RemoteConfig.instance.getConfig()
-//        if (AppCache.firstOpen){
-//            TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN,mutableMapOf())
-//            AppCache.firstOpen = false
-//        }
+        if (AppCache.firstOpen){
+            TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN,mutableMapOf())
+            AppCache.firstOpen = false
+        }
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"
@@ -100,6 +100,7 @@ class App : MultiDexApplication() {
     companion object {
         private var weakApp: WeakReference<Application>? = null
         var isAppInForeground = false
+        var isJumpingToSystemSetting = false
         fun initFB(fbobj: JSONObject?){
             if(!FacebookSdk.isInitialized()){
                 val fbcg = AppCache.fb
