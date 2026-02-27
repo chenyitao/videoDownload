@@ -66,6 +66,8 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         }
         homeViewModel.preloadAd(requireContext())
         homeViewModel.preloadSNAd(requireContext())
+        homeViewModel.preloadBkAd( requireContext())
+        homeViewModel.preloadTabAd(requireContext())
     }
 
     override fun initListeners() {

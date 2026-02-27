@@ -27,6 +27,8 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
         player = InnerPlayer(this, playClick = {
 
         }, onFinish = {
+            val resultIntent = Intent()
+            setResult(RESULT_OK, resultIntent)
             finish()
         }, share = {
             shareVideo("$path/$fileName")
@@ -51,6 +53,13 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
         super.onDestroy()
         player.release()
     }
+
+    override fun handleBackPressed(): Boolean {
+        val resultIntent = Intent()
+        setResult(RESULT_OK, resultIntent)
+        return super.handleBackPressed()
+    }
+
     private fun shareVideo(path: String) {
         val file = File(
             path

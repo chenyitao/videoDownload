@@ -15,7 +15,12 @@ import androidx.core.view.get
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.ui.fragment.DownloadFragment
@@ -25,6 +30,7 @@ import com.download.video_download.ui.fragment.WebChromeFragment
 import com.download.video_download.ui.fragment.WebFragment
 import com.download.video_download.ui.fragment.WebGuideFragment
 import com.download.video_download.ui.fragment.WebHistoryFragment
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     val viewModel: MainViewModel by viewModels()
@@ -45,6 +51,23 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
 
     override fun initListeners() {
         mBind.navBottom.setOnItemSelectedListener { item ->
+            if (item.itemId == mBind.navBottom.selectedItemId){
+                return@setOnItemSelectedListener  true
+            }
+            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.TAB, AdType.INTERSTITIAL) == AdLoadState.LOADED
+            if (cache) {
+                lifecycleScope.launch {
+                    AdMgr.INSTANCE.showAd(AdPosition.TAB, AdType.INTERSTITIAL,this@MainActivity,
+                        onShowResult = { position, adType, success, error->
+
+                        }, onAdDismissed =  {position, adType->
+                            viewModel.preloadTabAd(this@MainActivity)
+                            loadFragment(item.itemId)
+                        })
+                }
+                return@setOnItemSelectedListener true
+            }
+            viewModel.preloadTabAd(this@MainActivity)
             loadFragment(item.itemId)
             true
         }

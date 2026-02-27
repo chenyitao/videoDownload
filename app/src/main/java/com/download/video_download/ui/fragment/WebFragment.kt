@@ -58,7 +58,10 @@ import com.download.video_download.ui.dialog.DownloadStatusDialog
 import com.download.video_download.ui.dialog.isFragmentShowing
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URLEncoder
@@ -104,18 +107,37 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         searchViewModel.goBackDone.observe(this) {
             binding.etSearch.text?.clear()
             hideKeyboard(binding.etSearch)
-            if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
-                curPage = SearchState.HISTORY
-            } else {
-                curPage = SearchState.GUIDE
-            }
-            switchPage()
             searchViewModel.saveVideos(mutableListOf())
             if (AppCache.isFirstDetect && binding.downFloatingGuide.isVisible){
                 AppCache.isFirstDetect = false
                 binding.downFloatingGuide.visibility = View.GONE
                 cancelAnimations()
             }
+            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+            if (cache) {
+                lifecycleScope.launch {
+                    AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
+                        onShowResult = { position, adType, success, error->
+
+                        }, onAdDismissed =  {position, adType->
+                            viewModel.preloadBkAd(requireActivity())
+                            if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
+                                curPage = SearchState.HISTORY
+                            } else {
+                                curPage = SearchState.GUIDE
+                            }
+                            switchPage()
+                        })
+                }
+                return@observe
+            }
+            viewModel.preloadBkAd(requireActivity())
+            if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
+                curPage = SearchState.HISTORY
+            } else {
+                curPage = SearchState.GUIDE
+            }
+            switchPage()
         }
         searchViewModel.detect.observe(this) {
             when (it.state) {
@@ -294,6 +316,21 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
             } else {
+                val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+                if (cache) {
+                    lifecycleScope.launch {
+                        AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
+                            onShowResult = { position, adType, success, error->
+
+                            }, onAdDismissed =  {position, adType->
+                                viewModel.preloadBkAd(requireActivity())
+                                binding.etSearch.text?.clear()
+                                mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
+                            })
+                    }
+                    return@setOnClickListener
+                }
+                viewModel.preloadBkAd(requireActivity())
                 binding.etSearch.text?.clear()
                 mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
             }
@@ -332,6 +369,21 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
             } else {
+                val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+                if (cache) {
+                    lifecycleScope.launch {
+                        AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
+                            onShowResult = { position, adType, success, error->
+
+                            }, onAdDismissed =  {position, adType->
+                                viewModel.preloadBkAd(requireActivity())
+                                binding.etSearch.text?.clear()
+                                mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
+                            })
+                    }
+                    return true
+                }
+                viewModel.preloadBkAd(requireActivity())
                 binding.etSearch.text?.clear()
                 mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
             }

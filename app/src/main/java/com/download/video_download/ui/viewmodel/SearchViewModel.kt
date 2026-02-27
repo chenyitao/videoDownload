@@ -175,4 +175,12 @@ class SearchViewModel: BaseViewModel() {
                 })
         }
     }
+    fun preloadBkAd(context: Context) {
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.BACK, AdType.INTERSTITIAL, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
 }

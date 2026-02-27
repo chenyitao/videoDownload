@@ -97,6 +97,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
     override fun onResume() {
         super.onResume()
         viewModel.checkNAd(requireContext())
+        viewModel.preloadBkAd(requireContext())
     }
 
     override fun onDestroy() {

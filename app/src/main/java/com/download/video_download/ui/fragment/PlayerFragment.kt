@@ -6,20 +6,29 @@ import android.os.Environment.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.ext.showToast
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.room.entity.Video
+import com.download.video_download.base.utils.AppCache
 import com.download.video_download.databinding.FragmentPlayerBinding
 import com.download.video_download.ui.activity.GuideActivity
 import com.download.video_download.ui.activity.InnerVideoActivity
 import com.download.video_download.ui.adapter.PlayerAdapter
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.PlayerViewModel
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale.getDefault
 
@@ -147,6 +156,25 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
         )
         return file.exists()
     }
+    private val activityLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == android.app.Activity.RESULT_OK) {
+            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+            if (cache) {
+                lifecycleScope.launch {
+                    AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
+                        onShowResult = { position, adType, success, error->
+
+                        }, onAdDismissed =  {position, adType->
+                            viewModel.preloadBkAd(requireActivity())
+                        })
+                }
+                return@registerForActivityResult
+            }
+            viewModel.preloadBkAd(requireActivity())
+        }
+    }
     fun playVideoWithSystemPlayer(data: Video) {
         val file = File(
             requireContext().getExternalFilesDir(
@@ -167,10 +195,10 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
             data.mimeTypes,
             data.url
         )
-        requireActivity().startActivity<InnerVideoActivity> {
-            putExtra("path", path)
-            putExtra("fileName",fileName)
-        }
+        val intent = Intent(requireContext(), InnerVideoActivity::class.java)
+        intent.putExtra("path", path)
+        intent.putExtra("fileName",fileName)
+        activityLauncher.launch(intent)
 //        val file = File(
 //            requireContext().getExternalFilesDir(
 //                DIRECTORY_DOWNLOADS
