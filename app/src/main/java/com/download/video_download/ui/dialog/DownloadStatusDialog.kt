@@ -8,9 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.model.NavState
+import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.databinding.DialogDownloadTaskBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DownloadStatusDialog : DialogFragment() {
     
@@ -40,6 +51,28 @@ class DownloadStatusDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initListeners()
+        lifecycleScope.launch {
+            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL) == AdLoadState.LOADED
+            if (!cache){
+                initAd()
+                return@launch
+            }
+            AdMgr.INSTANCE.showAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL,requireActivity(),
+                onShowResult = { position, adType, success, error->
+                    if (success){
+                        AdMgr.INSTANCE.getNativeAd( position)?.let {
+                            binding.taskAdView.visibility = View.VISIBLE
+                            binding.taskAdView.setNativeAd(it,requireActivity())
+                        }
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.Main){
+                                delay(200)
+                                initAd()
+                            }
+                        }
+                    }
+                })
+        }
     }
     
     private fun initViews() {
@@ -53,6 +86,13 @@ class DownloadStatusDialog : DialogFragment() {
         } else {
             binding.tvTitle.text = App.getAppContext().getString(R.string.download_task1)
             binding.tvMessage.text = App.getAppContext().getString(R.string.download_task1_green)
+            initAd()
+        }
+    }
+
+    private fun initAd(){
+        lifecycleScope.launch {
+           AdMgr.INSTANCE.preloadAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL, requireActivity())
         }
     }
     
@@ -68,6 +108,7 @@ class DownloadStatusDialog : DialogFragment() {
     
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.taskAdView.releaseAd()
         _binding = null
     }
     fun setIsComplete(isComplete: Boolean) {

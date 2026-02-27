@@ -5,8 +5,11 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
 import android.os.LocaleList
+import android.os.Looper
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.appsflyer.AppsFlyerConversionListener
@@ -25,12 +28,15 @@ import com.download.video_download.base.utils.GoogleRef
 import com.download.video_download.base.utils.LanguageUtils
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.ads.AdActivity
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.lang.ref.WeakReference
 import java.util.Locale
@@ -89,6 +95,12 @@ class App : MultiDexApplication() {
                 if (foregroundActivityCount == 0 && isAppInForeground) {
                     isAppInForeground = false
                     statusChangeListeners.forEach { it.onAppEnterBackground() }
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val topActivity = ActivityManager.currentActivity()
+                        if (topActivity is AdActivity) {
+                            topActivity.finish()
+                        }
+                    }, 200)
                 }
             }
 

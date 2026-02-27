@@ -657,7 +657,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             taskCD = DownloadStatusDialog()
         }
         if (taskCD?.isFragmentShowing() == true){
-            taskCD?.dismissNow()
+            return
         }
         taskCD?.setIsComplete(true)
         taskCD?.setOnConfirmListener {
