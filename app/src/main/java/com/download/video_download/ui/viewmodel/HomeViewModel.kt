@@ -62,6 +62,14 @@ class HomeViewModel: BaseViewModel() {
                 })
         }
     }
+    fun preloadSNAd(context: Context) {
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
     fun preloadNAd(context: Context) {
         val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.HOME, AdType.NATIVE) == AdLoadState.LOADED
         if (hasCache){

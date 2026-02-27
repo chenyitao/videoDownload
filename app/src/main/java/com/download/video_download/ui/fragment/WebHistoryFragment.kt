@@ -2,18 +2,26 @@ package com.download.video_download.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.databinding.FragmentSearchHistoryBinding
 import com.download.video_download.ui.adapter.HistoryAdapter
 import com.download.video_download.ui.dialog.HistoryClearAllDialog
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBinding>() {
     val searchViewModel: SearchViewModel by viewModels(
@@ -55,6 +63,26 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         binding.tvClearAll.setOnClickListener {
             showClearAllDialog()
         }
+        viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
+            if (!isLoaded) return@Observer
+            lifecycleScope.launch {
+                AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
+                    onShowResult = { position, adType, success, error->
+                        if (success){
+                            AdMgr.INSTANCE.getNativeAd( position)?.let {
+                                binding.sId.visibility = View.VISIBLE
+                                binding.sId.setNativeAd(it,requireContext())
+                            }
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main){
+                                    delay(200)
+                                    viewModel.preloadNAd(requireContext())
+                                }
+                            }
+                        }
+                    })
+            }
+        })
     }
     
     private fun showClearAllDialog() {
@@ -64,5 +92,15 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
             viewModel.navigate(SearchState.GUIDE)
         }
         dialog.show(parentFragmentManager, "HistoryClearAllDialog")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkNAd(requireContext())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.sId.releaseAd()
     }
 }

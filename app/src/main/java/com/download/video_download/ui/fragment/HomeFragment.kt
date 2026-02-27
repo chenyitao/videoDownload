@@ -65,6 +65,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             adapter.updateData(videoUrls)
         }
         homeViewModel.preloadAd(requireContext())
+        homeViewModel.preloadSNAd(requireContext())
     }
 
     override fun initListeners() {
@@ -82,7 +83,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         if (success){
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 binding.homeAd.visibility = View.VISIBLE
-                                binding.homeAd.setNativeAd(it,requireActivity())
+                                binding.homeAd.setNativeAd(it,requireContext())
                             }
                         }
                     })

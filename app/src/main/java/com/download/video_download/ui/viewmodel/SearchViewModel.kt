@@ -1,14 +1,20 @@
 package com.download.video_download.ui.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.download.video_download.base.BaseViewModel
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.model.DetectStatus
 import com.download.video_download.base.model.History
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LogUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +44,9 @@ class SearchViewModel: BaseViewModel() {
     val isLoading: LiveData<Boolean> get() = _isLoading
     private val _detect= MutableLiveData<DetectStatus>()
     val detect: LiveData<DetectStatus> get() = _detect
+    private val _isAdLoaded = MutableLiveData<Boolean>(false)
+
+    val isAdLoaded: MutableLiveData<Boolean> = _isAdLoaded
     fun getHistoryData(){
         viewModelScope.launch {
             val historyStr = AppCache.history
@@ -131,5 +140,27 @@ class SearchViewModel: BaseViewModel() {
     }
     fun detect(state: DetectStatus) {
         _detect.value = state
+    }
+    fun preloadNAd(context: Context) {
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
+    fun checkNAd(context: Context) {
+        val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.SEARCH, AdType.NATIVE) == AdLoadState.LOADED
+        if (hasCache){
+            _isAdLoaded.postValue(true)
+            return
+        }
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
     }
 }

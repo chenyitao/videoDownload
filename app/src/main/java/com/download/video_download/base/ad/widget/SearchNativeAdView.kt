@@ -13,7 +13,7 @@ import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 
-class HomeNativeAdView @JvmOverloads constructor(
+class SearchNativeAdView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -29,7 +29,7 @@ class HomeNativeAdView @JvmOverloads constructor(
 
     private fun bindNativeAdToView(nativeAd: NativeAd,context: Context) {
         val inflater = LayoutInflater.from(context)
-        val nativeAdView = inflater.inflate(R.layout.home_native_ad_layout, null) as NativeAdView
+        val nativeAdView = inflater.inflate(R.layout.search_ad_layout, null) as NativeAdView
         val headlineView = nativeAdView.findViewById<TextView>(R.id.ad_headline)
         val bodyView = nativeAdView.findViewById<TextView>(R.id.ad_body)
         val callToActionView = nativeAdView.findViewById<AppCompatButton>(R.id.ad_call_to_action)
