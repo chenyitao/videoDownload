@@ -149,4 +149,13 @@ class SplashViewModel : BaseViewModel() {
                 })
         }
     }
+    fun preloadGuideAd(context: Context) {
+        viewModelScope.launch {
+            val gdAdPair = listOf(AdPosition.GUIDE to AdType.NATIVE, AdPosition.GUIDE  to AdType.INTERSTITIAL)
+            AdMgr.INSTANCE.batchPreloadAds(gdAdPair, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
 }

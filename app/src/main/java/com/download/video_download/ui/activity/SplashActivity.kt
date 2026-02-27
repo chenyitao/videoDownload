@@ -68,6 +68,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                             if (!AppCache.isSelectLng){
                                 mViewModel.preloadLgAd(this@SplashActivity)
                             }
+                            if (!AppCache.guideShow){
+                                mViewModel.preloadGuideAd( this@SplashActivity)
+                            }
                         },
                         onAdDismissed = { position, adType ->
                             route()
@@ -96,6 +99,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         super.onResume()
         if (!AppCache.isSelectLng){
             mViewModel.preloadLgAd(this)
+        }
+        if (!AppCache.guideShow){
+            mViewModel.preloadGuideAd( this)
         }
         mViewModel.preloadAd(this)
         mViewModel.startLoading {

@@ -14,19 +14,30 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.model.GuideData
+import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DpUtils.dp2px
 import com.download.video_download.base.utils.StringUtils.boldTargetSubStr
 import com.download.video_download.databinding.ActivityGuideBinding
 import com.download.video_download.ui.viewmodel.GuideViewModel
+import com.google.android.gms.ads.AdActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
@@ -52,6 +63,14 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 super.onPageSelected(position)
                 if (position == 2){
                     mBind.skip.visibility = View.INVISIBLE
+                    if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.Main) {
+                                delay(200)
+                                viewModel.handleNativeAd( this@GuideActivity)
+                            }
+                        }
+                    }
                 }else{
                     mBind.skip.visibility = View.VISIBLE
                 }
@@ -77,6 +96,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 super.onPageScrollStateChanged(state)
             }
         })
+        if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+            viewModel.handInvestAd(this)
+        }
     }
 
     override fun initListeners() {
@@ -94,7 +116,37 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             }
             mBind.viewPager.currentItem += 1
         }
+        viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
+            if (!isLoaded) return@Observer
+            lifecycleScope.launch {
+                AdMgr.INSTANCE.showAd(AdPosition.GUIDE , AdType.NATIVE,this@GuideActivity,
+                    onShowResult = { position, adType, success, error->
+                        if (success){
+                            AdMgr.INSTANCE.getNativeAd( position)?.let {
+                                mBind.adFrameLayout.visibility = View.VISIBLE
+                                mBind.adFrameLayout.setNativeAd(it,this@GuideActivity)
+                            }
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    delay(200)
+                                    if ( mBind.viewPager.currentItem == 0){
+                                        viewModel.preNativeAd( this@GuideActivity)
+                                    }
+                                }
+                            }
+                        }
+                    })
+            }
+        })
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+            viewModel.handleNativeAd(this)
+        }
+    }
+
     class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: AppCompatTextView = itemView.findViewById(R.id.tv_title)
         val tvIntro: AppCompatTextView = itemView.findViewById(R.id.tv_intro)
@@ -147,5 +199,8 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+            mBind.adFrameLayout.releaseAd()
+        }
     }
 }

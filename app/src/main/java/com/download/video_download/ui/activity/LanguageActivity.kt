@@ -126,7 +126,9 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     }
     private fun jump(){
         if (!AppCache.guideShow) {
-            startActivity<GuideActivity>()
+            startActivity<GuideActivity>(){
+                putExtra("from", "language")
+            }
         }else{
             startActivity<MainActivity>()
         }
