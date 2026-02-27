@@ -221,6 +221,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone">
             <View
+                android:id="@+id/up_floating_guide_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#85000000"

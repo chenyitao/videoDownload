@@ -41,6 +41,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     private val fragmentCache = HashMap<Int, Fragment>()
     private var currentFragment: Fragment? = null
     private var trackJob: kotlinx.coroutines.Job? = null
+    private var isTabClick = true
 
     override fun createViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
@@ -72,6 +73,12 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 return@setOnItemSelectedListener  true
             }
             TrackMgr.instance.trackAdEvent(AdPosition.TAB, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
+
+            if (!isTabClick){
+                isTabClick = true
+                loadFragment(item.itemId)
+                return@setOnItemSelectedListener  true
+            }
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.TAB, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (cache) {
                 lifecycleScope.launch {
@@ -93,6 +100,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             if (item == null){
                 return@observe
             }
+            isTabClick = false
             when(item.route){
                 NavState.HOME -> {
                     mBind.navBottom.selectedItemId = R.id.nav_home

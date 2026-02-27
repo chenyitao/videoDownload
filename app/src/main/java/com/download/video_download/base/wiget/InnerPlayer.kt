@@ -227,7 +227,9 @@ class InnerPlayer @JvmOverloads constructor(
             }
         })
     }
-
+    fun getFullScreen(): Boolean{
+        return isFullScreen
+    }
     // ===================== 核心功能方法 =====================
 
     /**
@@ -299,7 +301,7 @@ class InnerPlayer @JvmOverloads constructor(
     /**
      * 退出全屏
      */
-    private fun exitFullScreen() {
+     fun exitFullScreen() {
         isFullScreen = false
         val activity = ActivityManager.currentActivity()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT

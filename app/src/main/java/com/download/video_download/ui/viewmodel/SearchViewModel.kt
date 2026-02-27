@@ -47,6 +47,9 @@ class SearchViewModel: BaseViewModel() {
     private val _isAdLoaded = MutableLiveData<Boolean>(false)
 
     val isAdLoaded: MutableLiveData<Boolean> = _isAdLoaded
+    private val _adjustGuideView = MutableLiveData<Boolean>(false)
+
+    val adjustGuideView: MutableLiveData<Boolean> = _adjustGuideView
     fun getHistoryData(){
         viewModelScope.launch {
             val historyStr = AppCache.history
@@ -182,5 +185,9 @@ class SearchViewModel: BaseViewModel() {
                     LogUtils.d("广告:  ${error?.message}${error?.domain}")
                 })
         }
+    }
+
+    fun adjustGuideView(){
+        _adjustGuideView.postValue( true)
     }
 }

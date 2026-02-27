@@ -23,7 +23,10 @@ import com.download.video_download.ui.activity.GuideActivity
 import com.download.video_download.ui.adapter.HomeSiteAdapter
 import com.download.video_download.ui.viewmodel.HomeViewModel
 import com.download.video_download.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     val homeViewModel: HomeViewModel by viewModels()
@@ -93,6 +96,15 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 binding.homeAd.visibility = View.VISIBLE
                                 binding.homeAd.setNativeAd(it,requireContext())
+                            }
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main){
+                                    delay(200)
+                                    AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.NATIVE, requireContext(),
+                                        onLoadStateChanged = { position, adType, loadState,error ->
+                                            LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                                        })
+                                }
                             }
                         }
                     })

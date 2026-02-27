@@ -2,11 +2,17 @@ package com.download.video_download.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.DetectState
@@ -15,6 +21,10 @@ import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.wiget.Player
 import com.download.video_download.databinding.FragmentSearchGuideBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding>() {
     val searchViewModel: SearchViewModel by viewModels(ownerProducer = { requireParentFragment() })
@@ -42,10 +52,34 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     }
 
     override fun initListeners() {
+        viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
+            if (!isLoaded) return@Observer
+            lifecycleScope.launch {
+                AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
+                    onShowResult = { position, adType, success, error->
+                        if (success){
+                            AdMgr.INSTANCE.getNativeAd( position)?.let {
+                                viewModel.adjustGuideView()
+                                binding.adView.visibility = View.VISIBLE
+                                binding.adView.setNativeAd(it,requireContext())
+                            }
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main){
+                                    delay(200)
+                                    viewModel.preloadNAd(requireContext())
+                                }
+                            }
+                        }
+                    })
+            }
+        })
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.checkNAd(requireContext())
+        viewModel.preloadBkAd(requireContext())
+        TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
     }
 
     override fun onPause() {
@@ -56,6 +90,7 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun onDestroy() {
         super.onDestroy()
         player.release()
+        binding.adView.releaseAd()
     }
     private fun addVideo(){
         val vs = searchViewModel.videos.value

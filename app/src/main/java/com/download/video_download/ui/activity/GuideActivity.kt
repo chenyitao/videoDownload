@@ -74,16 +74,19 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 TrackMgr.instance.trackEvent(TrackEventType.safedddd_new1, mapOf("safedddd" to position+1,"safeddddA" to safeddddA))
                 if (position == 2){
                     mBind.skip.visibility = View.INVISIBLE
-                    if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
-                        lifecycleScope.launch {
-                            withContext(Dispatchers.Main) {
-                                delay(200)
-                                viewModel.handleNativeAd( this@GuideActivity)
+                }else{
+                    mBind.skip.visibility = View.VISIBLE
+                    if (intent.getStringExtra("from") == "language"
+                        || intent.getStringExtra("from") == "splash"){
+                        if (position == guideList.size-1){
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.Main) {
+                                    delay(200)
+                                    viewModel.handleNativeAd( this@GuideActivity)
+                                }
                             }
                         }
                     }
-                }else{
-                    mBind.skip.visibility = View.VISIBLE
                 }
             }
 

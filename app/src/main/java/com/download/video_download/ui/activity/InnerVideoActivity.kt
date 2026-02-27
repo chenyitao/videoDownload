@@ -59,9 +59,14 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
     }
 
     override fun handleBackPressed(): Boolean {
-        val resultIntent = Intent()
-        setResult(RESULT_OK, resultIntent)
-        return super.handleBackPressed()
+        if (player.getFullScreen()) {
+            player.exitFullScreen()
+            return true
+        } else {
+            val resultIntent = Intent()
+            setResult(RESULT_OK, resultIntent)
+            return super.handleBackPressed()
+        }
     }
 
     private fun shareVideo(path: String) {
