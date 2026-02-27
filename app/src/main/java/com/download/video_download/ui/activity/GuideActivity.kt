@@ -121,6 +121,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             }
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_new3, mapOf("safedddd" to  mBind.viewPager.currentItem+1,"safeddddA" to safeddddA))
             if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
                 val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED
                 if (hascache){
                     lifecycleScope.launch {
@@ -148,6 +149,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_new2, mapOf("safedddd" to  mBind.viewPager.currentItem+1,"safeddddA" to safeddddA))
             if (mBind.viewPager.currentItem == guideList.size - 1){
                 if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                    TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
                     val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED
                     if (hascache){
                         lifecycleScope.launch {
@@ -196,6 +198,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun onResume() {
         super.onResume()
         if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+            TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
             viewModel.handleNativeAd(this)
         }
     }

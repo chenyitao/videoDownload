@@ -102,6 +102,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         super.onResume()
         viewModel.checkNAd(requireContext())
         viewModel.preloadBkAd(requireContext())
+        TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
     }
 
     override fun onDestroy() {

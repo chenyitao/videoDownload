@@ -15,6 +15,8 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.databinding.DialogDownloadTaskBinding
@@ -52,12 +54,14 @@ class DownloadStatusDialog : DialogFragment() {
         initViews()
         initListeners()
         lifecycleScope.launch {
-            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL) == AdLoadState.LOADED
+            TrackMgr.instance.trackAdEvent(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE, TrackEventType.safedddd_bg)
+
+            val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE) == AdLoadState.LOADED
             if (!cache){
                 initAd()
                 return@launch
             }
-            AdMgr.INSTANCE.showAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL,requireActivity(),
+            AdMgr.INSTANCE.showAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE,requireActivity(),
                 onShowResult = { position, adType, success, error->
                     if (success){
                         AdMgr.INSTANCE.getNativeAd( position)?.let {
@@ -92,7 +96,7 @@ class DownloadStatusDialog : DialogFragment() {
 
     private fun initAd(){
         lifecycleScope.launch {
-           AdMgr.INSTANCE.preloadAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.INTERSTITIAL, requireActivity())
+           AdMgr.INSTANCE.preloadAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE, requireActivity())
         }
     }
     

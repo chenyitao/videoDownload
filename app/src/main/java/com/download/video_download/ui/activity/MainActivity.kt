@@ -71,6 +71,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             if (item.itemId == mBind.navBottom.selectedItemId){
                 return@setOnItemSelectedListener  true
             }
+            TrackMgr.instance.trackAdEvent(AdPosition.TAB, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.TAB, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (cache) {
                 lifecycleScope.launch {

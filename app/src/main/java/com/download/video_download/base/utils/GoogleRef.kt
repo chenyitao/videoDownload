@@ -5,6 +5,9 @@ import android.util.Log
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.config.sensor.TrackParamBuilder
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.Rf
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +44,7 @@ class GoogleRef  private constructor(){
         }
         currentRetryCount = 0
         fetchReferrer(context,success)
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_ref1)
     }
     private fun fetchReferrer(context: Context,success:()->Unit) {
         coroutineScope.launch {

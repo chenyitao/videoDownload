@@ -9,6 +9,8 @@ import com.download.video_download.base.ad.block.AdShowCallback
 import com.download.video_download.base.ad.model.AdCount
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.utils.AppCache
 import kotlinx.serialization.encodeToString
@@ -46,12 +48,14 @@ class AppOpenAdShowStrategy : AdShowStrategy {
 
             override fun onAdImpression() {
                 impressionCallback(position, adType)
+                TrackMgr.instance.trackAdEvent(position, adType, TrackEventType.safedddd_bi)
             }
 
             override fun onAdClicked() {
                 adCount?.todayClickCount += 1
                 AppCache.adLimitC =  activity.jsonParser().encodeToString(adCount)
                 clickCallback(position, adType)
+                TrackMgr.instance.trackAdEvent(position, adType, TrackEventType.safedddd_dianji)
             }
         }
         appOpenAd.show(activity)

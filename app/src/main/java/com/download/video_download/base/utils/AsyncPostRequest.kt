@@ -93,7 +93,7 @@ object AsyncPostRequest {
                     else -> {
                         val errorResponse = connection.errorStream?.readToString() ?: "无错误响应体"
                         LogUtils.e(TAG, "服务器响应错误，错误响应体：$errorResponse")
-                        val errorMsg = "error，code：$responseCode"
+                        val errorMsg = "$responseCode"
                         postToMainThread { onFailure.invoke(errorMsg) }
                     }
                 }

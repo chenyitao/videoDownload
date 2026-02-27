@@ -165,6 +165,8 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == android.app.Activity.RESULT_OK) {
+            TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
+
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (cache) {
                 lifecycleScope.launch {

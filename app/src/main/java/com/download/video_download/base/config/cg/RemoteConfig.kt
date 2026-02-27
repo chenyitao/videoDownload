@@ -3,6 +3,7 @@ package com.download.video_download.base.config.cg
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.config.utils.CfUtils
 import com.download.video_download.base.ext.jsonParser
@@ -22,6 +23,7 @@ import kotlinx.coroutines.sync.withLock
 import org.json.JSONObject
 import java.util.UUID
 import kotlin.coroutines.resume
+import kotlin.math.max
 
 class RemoteConfig private constructor(){
     private var periodicReportJob: Job? = null
@@ -39,6 +41,7 @@ class RemoteConfig private constructor(){
         periodicReportJob = coroutineScope.launch(Dispatchers.IO) {
             while (isActive) {
                 try {
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 2))
                     if (!AppCache.isFirstGetConfig){
                         delay(50*60 * 1000)
                         getAdminConfig()
@@ -56,6 +59,7 @@ class RemoteConfig private constructor(){
     private suspend fun getAdminConfig(currentRetry: Int = 0){
         requestMutex.withLock {
             runCatching {
+                val startTime = System.currentTimeMillis()
                 val params = JSONObject()
                 params.put("ocnz", getConfigParams())
                 val host = App.getAppContext().getString(R.string.admin_host_test)
@@ -64,6 +68,11 @@ class RemoteConfig private constructor(){
                 val requestSuccess = suspendCancellableCoroutine { continuation ->
                     AsyncPostRequest.sendPost(host, body,
                         onSuccess = {
+                            val endTime = System.currentTimeMillis()
+                            val timeDiffMs = max(0, endTime - startTime)
+                            val seconds = timeDiffMs / 1000
+                            val sec = if (seconds.toInt() == 0 && timeDiffMs > 0) 1 else seconds.toInt()
+                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user2, mapOf("safedddd" to 1, "safedddd1" to sec))
                             continuation.resume(true)
                             if (it.isEmpty()){
                                 return@sendPost
@@ -71,6 +80,11 @@ class RemoteConfig private constructor(){
                             handleConfigSuccess(it)
                         },
                         onFailure = { errorMsg ->
+                            val endTime = System.currentTimeMillis()
+                            val timeDiffMs = max(0, endTime - startTime)
+                            val seconds = timeDiffMs / 1000
+                            val sec = if (seconds.toInt() == 0 && timeDiffMs > 0) 1 else seconds.toInt()
+                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user2, mapOf("safedddd" to errorMsg, "safedddd1" to sec))
                             if (errorMsg.contains("timeout") && currentRetry < 1) {
                                 continuation.resume(false)
                             } else {
@@ -86,6 +100,7 @@ class RemoteConfig private constructor(){
     }
     fun getConfigOn() {
         coroutineScope.launch(Dispatchers.IO) {
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 3))
             getAdminConfig()
         }
     }
@@ -108,12 +123,12 @@ class RemoteConfig private constructor(){
             }else {
                 safedddd = "2"
             }
-//            TrackMgr.instance.trackEvent(TrackEvent.EVENT_ad_user4,mutableMapOf("safedddd" to safedddd))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user4,mutableMapOf("safedddd" to safedddd))
         }
         var safedddd = ""
         var safeddddk1 = ""
         var safeddddk3 = ""
-        val k0 = config.optString("pusnvf","")
+        val k0 = config.optString("kionfz","")
         if (k0.isEmpty()){
             safedddd = "1"
         }else if (getLastChar(k0) == "ou"){
@@ -123,7 +138,7 @@ class RemoteConfig private constructor(){
         }else if (getLastChar(k0) == "zm"){
             safedddd = "4"
         }
-        val k1 = config.optString("tnkgb","")
+        val k1 = config.optString("huxwlv","")
         if (k1.isNotEmpty()){
             if (getLastChar(k1) == "ji"){
                 safeddddk1 = "1"
@@ -131,7 +146,7 @@ class RemoteConfig private constructor(){
                 safeddddk1 = "2"
             }
         }
-        val k3 = config.optString("kmhq","")
+        val k3 = config.optString("yptrj","")
         if (k3.isEmpty()){
             safeddddk3 = "3"
         } else if (k3.last().isDigit() && k3.last().digitToInt() == 0){
@@ -141,7 +156,7 @@ class RemoteConfig private constructor(){
         }else if (getLastChar(k3) == "zm"){
             safeddddk3 = "2"
         }
-//        TrackMgr.instance.trackEvent(TrackEvent.EVENT_ad_user3,mutableMapOf("safedddd" to safedddd, "safeddddk1" to safeddddk1,"safeddddk3" to safeddddk3))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_user3,mutableMapOf("safedddd" to safedddd, "safeddddk1" to safeddddk1,"safeddddk3" to safeddddk3))
     }
     private fun getLastChar(str: String?): String {
         val lastChar = str?.last()

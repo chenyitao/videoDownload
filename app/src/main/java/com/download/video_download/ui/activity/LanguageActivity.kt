@@ -98,6 +98,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     override fun onResume() {
         super.onResume()
         viewModel.handleNativeAd(this)
+        TrackMgr.instance.trackAdEvent(AdPosition.LANGUAGE, AdType.NATIVE, TrackEventType.safedddd_bg)
     }
 
     override fun handleBackPressed(): Boolean {
@@ -117,6 +118,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
 
     private fun handleGoNext(){
         lifecycleScope.launch {
+            TrackMgr.instance.trackAdEvent(AdPosition.LANGUAGE, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.LANGUAGE, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (hasCache){
                 AdMgr.INSTANCE.showAd(AdPosition.LANGUAGE, AdType.INTERSTITIAL,this@LanguageActivity,

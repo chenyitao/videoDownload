@@ -9,6 +9,8 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.utils.AppCache
 import kotlinx.serialization.encodeToString
@@ -48,10 +50,12 @@ class NativeAdLoadStrategy : AdLoadStrategy {
                     super.onAdClicked()
                     adCount?.todayClickCount += 1
                     AppCache.adLimitC =  context.jsonParser().encodeToString(adCount)
+                    TrackMgr.instance.trackAdEvent(position!!, adType!!, TrackEventType.safedddd_dianji)
                 }
 
                 override fun onAdImpression() {
                     super.onAdImpression()
+                    TrackMgr.instance.trackAdEvent(position!!, adType!!, TrackEventType.safedddd_bi)
                 }
             })
             .withNativeAdOptions(NativeAdOptions.Builder().build())

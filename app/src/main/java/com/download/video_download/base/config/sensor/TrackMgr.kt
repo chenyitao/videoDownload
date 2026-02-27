@@ -5,9 +5,12 @@ import android.util.Log
 import com.appsflyer.AFAdRevenueData
 import com.appsflyer.AppsFlyerLib
 import com.download.video_download.App
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.utils.CfUtils
 import com.download.video_download.base.utils.AppCache
 import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.ads.LoadAdError
 import java.math.BigDecimal
 import java.util.Currency
 import java.util.UUID
@@ -66,7 +69,64 @@ class TrackMgr private constructor() {
     fun trackAppflyEvent(adRevenueData: AFAdRevenueData, params: Map<String, Any> = emptyMap()) {
         appsflyer?.logAdRevenue(adRevenueData, params)
     }
+    fun trackAdEvent(adLoc: AdPosition, type: AdType, event: TrackEventType, error: com.download.video_download.base.ad.model.LoadAdError?= null){
+        var safedddd = ""
+        when(adLoc){
+            AdPosition.LOADING -> {
+                safedddd = "1"
+            }
+            AdPosition.LANGUAGE->{
+                if (type == AdType.NATIVE){
+                    safedddd = "10"
+                }else{
+                    safedddd = "11"
+                }
+            }
+            AdPosition.GUIDE->{
+                if (type == AdType.NATIVE){
+                    safedddd = "5"
+                }else{
+                    safedddd = "6"
+                }
+            }
+            AdPosition.START_DOWNLOAD->{
+                safedddd = "3"
+            }
+            AdPosition.BACK->{
+                safedddd = "2"
+            }
+            AdPosition.TAB->{
+                safedddd = "4"
+            }
+            AdPosition.DOWNLOAD_TASK_DIALOG->{
+                if (type == AdType.NATIVE){
+                    safedddd = "9"
+                }
+            }
+            AdPosition.HOME->{
+                if (type == AdType.NATIVE){
+                    safedddd = "7"
+                }else{
+                    safedddd = "12"
+                }
+            }
+            AdPosition.SEARCH->{
+                if (type == AdType.NATIVE){
+                    safedddd = "8"
+                }
+            }
+            else->{
 
+            }
+        }
+        if (event == TrackEventType.safedddd_sbb){
+            val code:String? =  error?.code?.toString()
+            val message:String =  error?.message.toString()
+            trackEvent(event, mutableMapOf("safedddd" to safedddd,"safedddd4" to code.toString(),"safedddd5" to message))
+        }else{
+            trackEvent(event, mapOf("safedddd" to safedddd))
+        }
+    }
     private fun buildFinalParams(
         eventType: TrackEventType,
         customParams: Map<String, Any>

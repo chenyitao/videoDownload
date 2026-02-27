@@ -43,6 +43,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         adapter = HomeSiteAdapter{
+            TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_home2, mapOf("safedddd1" to it.url))
             val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.HOME, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (hasCache){
@@ -101,6 +102,8 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         homeViewModel.preloadNAd(requireContext())
+        TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.NATIVE, TrackEventType.safedddd_bg)
+
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_main1)
     }
 

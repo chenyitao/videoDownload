@@ -58,6 +58,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             if (!isComplete) return@Observer
             mBind.loadingProgress.visibility = View.INVISIBLE
             mBind.progress.visibility = View.INVISIBLE
+            TrackMgr.instance.trackAdEvent(AdPosition.LOADING, AdType.APP_OPEN, TrackEventType.safedddd_bg)
             if (mViewModel.isAdLoaded.value == true) {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(

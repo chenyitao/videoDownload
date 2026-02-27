@@ -210,6 +210,7 @@ class AdMgr private constructor() {
                 onLoadStateChanged(position, adType, latestState, null)
                 return@withLock
             }
+            TrackMgr.instance.trackAdEvent(position,adType, TrackEventType.safedddd_bf)
 
             loadStateCache[key] = AdLoadState.LOADING
             val message = "广告正在缓存中"
@@ -231,10 +232,12 @@ class AdMgr private constructor() {
                     )
                     loadedAdCache[key] = loadedMeta
                     loadSuccess = true
+                    TrackMgr.instance.trackAdEvent(position,adType, TrackEventType.safedddd_cgg)
                     break
                 }else{
                     val error = adInstance as com.google.android.gms.ads.LoadAdError
                     adError = LoadAdError(error.code, error.message, error.domain)
+                    TrackMgr.instance.trackAdEvent(position,adType, TrackEventType.safedddd_sbb,adError)
                 }
             }
 
@@ -421,6 +424,7 @@ class AdMgr private constructor() {
                 }
                 Unit
             }
+            TrackMgr.instance.trackAdEvent(position, adType, TrackEventType.safedddd_bh)
             val showStrategy = AdShowStrategyFactory.getStrategy(adType)
             showStrategy.show(
                 adInstance = adMeta.adInstance,

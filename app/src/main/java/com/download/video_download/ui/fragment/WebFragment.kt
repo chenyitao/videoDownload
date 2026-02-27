@@ -115,6 +115,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 binding.downFloatingGuide.visibility = View.GONE
                 cancelAnimations()
             }
+            TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (cache) {
                 lifecycleScope.launch {
@@ -321,6 +322,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
             } else {
+                TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
+
                 val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
                 if (cache) {
                     lifecycleScope.launch {
@@ -375,6 +378,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             if (curPage == SearchState.WEB) {
                 searchViewModel.canWebGoBack()
             } else {
+                TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
+
                 val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
                 if (cache) {
                     lifecycleScope.launch {
@@ -581,6 +586,8 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             val downloadDialog = DownloadDialog()
             downloadDialog.updateData(video)
             downloadDialog.setOnCancelListener {
+                TrackMgr.instance.trackAdEvent(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
+
                 val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL) == AdLoadState.LOADED
                 if (hasCache){
                     lifecycleScope.launch {

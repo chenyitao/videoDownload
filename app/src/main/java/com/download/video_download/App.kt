@@ -21,6 +21,8 @@ import com.download.video_download.base.config.cg.RemoteConfig
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.config.sensor.TrackParamBuilder
+import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.model.Rf
 import com.download.video_download.base.task.HlsMerger
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -53,7 +55,12 @@ class App : MultiDexApplication() {
             GoogleRef.getInstance().init(this, {
                 if (AppCache.gr.isNotEmpty()){
                     RemoteConfig.instance.getConfigOn()
+                    val rf = AppCache.gr
+                    val refer =  this.jsonParser().decodeFromString<Rf>(rf)
+                    val referrerUrl = refer.referrerUrl
+                    val safedddd  = if (referrerUrl.contains("organic")) "1" else if (referrerUrl.isEmpty()) "2" else "3"
                     TrackMgr.instance.trackEvent(TrackEventType.INSTALL, TrackParamBuilder.createInstallParams().build())
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_ref2, mutableMapOf("safedddd" to safedddd))
                 }
             })
         }
@@ -192,6 +199,7 @@ class App : MultiDexApplication() {
             val conversionListener = object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(conversionData: MutableMap<String, Any>?) {
                     conversionData?.let { data ->
+                        TrackMgr.instance.trackEvent(TrackEventType.safedddd_panduan,mutableMapOf("safeddddstr" to data))
                     }
                 }
 
@@ -218,6 +226,7 @@ class App : MultiDexApplication() {
                     }
                 }
             }
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_guiyin)
             AppsFlyerLib.getInstance().init("", conversionListener, this)
             AppsFlyerLib.getInstance().start(this,"",object :
                 AppsFlyerRequestListener {
