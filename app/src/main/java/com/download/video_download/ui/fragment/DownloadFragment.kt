@@ -8,6 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.arialyy.aria.core.inf.IEntity
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.task.DownloadTaskManager
@@ -38,6 +40,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
     override fun createViewModel(): DownloadViewModel = downloadViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         adapter = DownloadTaskAdapter({
             when (it.downloadStatus) {
                 IEntity.STATE_RUNNING -> {

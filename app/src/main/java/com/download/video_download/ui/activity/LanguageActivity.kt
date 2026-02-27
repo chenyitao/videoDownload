@@ -15,6 +15,8 @@ import com.download.video_download.base.ad.block.AdShowCallback
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.ext.startActivityWithExtras
 import com.download.video_download.base.utils.ActivityManager
@@ -40,6 +42,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     override fun createViewModel(): LanguageViewModel =  viewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         mBind.rvLanguage.layoutManager = LinearLayoutManager(this)
         adapter = LanguageAdapter {
             if (it.language == "Use system language"){

@@ -13,6 +13,8 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -37,6 +39,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     override fun initViews(savedInstanceState: Bundle?) {
         updateProgressText(0)
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
     }
 
     override fun initListeners() {

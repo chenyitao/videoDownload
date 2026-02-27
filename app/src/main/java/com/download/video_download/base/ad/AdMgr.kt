@@ -2,6 +2,8 @@ package com.download.video_download.base.ad
 
 import android.app.Activity
 import android.content.Context
+import com.appsflyer.AFAdRevenueData
+import com.appsflyer.MediationNetwork
 import com.download.video_download.App
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.appopen.AppOpenAd
@@ -28,9 +30,15 @@ import com.download.video_download.base.ad.model.Config
 import com.download.video_download.base.ad.model.LoadAdError
 import com.download.video_download.base.ad.strategy.AdLoadStrategyFactory
 import com.download.video_download.base.ad.strategy.AdShowStrategyFactory
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.config.sensor.TrackParamBuilder
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.TimeFormateUtils
+import com.facebook.appevents.AppEventsConstants
+import com.google.android.gms.ads.AdValue
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -38,6 +46,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.math.BigDecimal
+import java.util.Currency
 import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.filter
@@ -64,6 +74,9 @@ class AdMgr private constructor() {
     private val loadLocks = ConcurrentHashMap<Pair<AdPosition, AdType>, Mutex>()
     private var isPrivacyConsentGiven = true
     private var adCount: AdCount? =  null
+    private val MIN_REPORT_VALUE = BigDecimal("0.01")
+    private var acRevenue: BigDecimal = BigDecimal.ZERO
+    private val decimalPlaces: Int = 6
     fun initAdData() {
         val remoteAdConfig = AppCache.adcf
         remoteAdConfig.takeIf { it.isNotEmpty() }?.let { config ->
@@ -321,16 +334,71 @@ class AdMgr private constructor() {
             AdType.NATIVE.type->{
                 val nativeAd =  adMeta.adInstance as NativeAd
                 nativeAd.setOnPaidEventListener {
+                    val params = TrackParamBuilder.createAdImpressionParams(it,nativeAd.responseInfo,adMeta.adId?:"", position.desc, adType.type).build()
+                    TrackMgr.instance.trackEvent(TrackEventType.AD_IMPRESSION,params )
+                    val adRevenueData = AFAdRevenueData(
+                        "admob",
+                        MediationNetwork.GOOGLE_ADMOB,
+                        it.currencyCode,
+                        (it.valueMicros/1000000.0)
+                    )
+                    val afParams = TrackParamBuilder.createAfAdRevenueParams(it,adMeta.adId?:"", position.desc, adType.type).build()
+                    TrackMgr.instance.trackAppflyEvent(adRevenueData,afParams )
+
+                    val firebaseParams = mutableMapOf<String, Any>()
+                    firebaseParams[FirebaseAnalytics.Param.VALUE] = it.valueMicros/(1000000.0)
+                    firebaseParams[FirebaseAnalytics.Param.CURRENCY] = it.currencyCode
+                    firebaseParams[FirebaseAnalytics.Param.AD_FORMAT] = position.desc
+                    firebaseParams["precisionType"] = it.precisionType
+                    firebaseParams["adNetwork"] = "admob"
+                    TrackMgr.instance.trackFireBaseEvent(TrackEventType.Ad_Impression_revenue.tn, firebaseParams)
+                    revenueAccumulator(it)
                 }
             }
             AdType.INTERSTITIAL.type->{
                 val inAd =  adMeta.adInstance as InterstitialAd
                 inAd.setOnPaidEventListener {
+                    val params = TrackParamBuilder.createAdImpressionParams(it,inAd.responseInfo,inAd.adUnitId, position.desc, adType.type).build()
+                    TrackMgr.instance.trackEvent(TrackEventType.AD_IMPRESSION,params )
+                    val adRevenueData = AFAdRevenueData(
+                        "admob",
+                        MediationNetwork.GOOGLE_ADMOB,
+                        it.currencyCode,
+                        (it.valueMicros/1000000.0)
+                    )
+                    val afParams = TrackParamBuilder.createAfAdRevenueParams(it,inAd.adUnitId, position.desc, adType.type).build()
+                    TrackMgr.instance.trackAppflyEvent(adRevenueData,afParams )
+                    val firebaseParams = mutableMapOf<String, Any>()
+                    firebaseParams[FirebaseAnalytics.Param.VALUE] = it.valueMicros/(1000000.0)
+                    firebaseParams[FirebaseAnalytics.Param.CURRENCY] = it.currencyCode
+                    firebaseParams[FirebaseAnalytics.Param.AD_FORMAT] = position.desc
+                    firebaseParams["precisionType"] = it.precisionType
+                    firebaseParams["adNetwork"] = "admob"
+                    TrackMgr.instance.trackFireBaseEvent(TrackEventType.Ad_Impression_revenue.tn, firebaseParams)
+                    revenueAccumulator(it)
                 }
             }
             AdType.APP_OPEN.type->{
                 val openAd =  adMeta.adInstance as AppOpenAd
                 openAd.setOnPaidEventListener {
+                    val params = TrackParamBuilder.createAdImpressionParams(it,openAd.responseInfo,openAd.adUnitId, position.desc, adType.type).build()
+                    TrackMgr.instance.trackEvent(TrackEventType.AD_IMPRESSION,params )
+                    val adRevenueData = AFAdRevenueData(
+                        "admob",
+                        MediationNetwork.GOOGLE_ADMOB,
+                        it.currencyCode,
+                        (it.valueMicros/1000000.0)
+                    )
+                    val afParams = TrackParamBuilder.createAfAdRevenueParams(it,openAd.adUnitId, position.desc, adType.type).build()
+                    TrackMgr.instance.trackAppflyEvent(adRevenueData,afParams )
+                    val firebaseParams = mutableMapOf<String, Any>()
+                    firebaseParams[FirebaseAnalytics.Param.VALUE] = it.valueMicros/(1000000.0)
+                    firebaseParams[FirebaseAnalytics.Param.CURRENCY] = it.currencyCode
+                    firebaseParams[FirebaseAnalytics.Param.AD_FORMAT] = position.desc
+                    firebaseParams["precisionType"] = it.precisionType
+                    firebaseParams["adNetwork"] = "admob"
+                    TrackMgr.instance.trackFireBaseEvent(TrackEventType.Ad_Impression_revenue.tn, firebaseParams)
+                    revenueAccumulator(it)
                 }
             }
         }
@@ -417,5 +485,37 @@ class AdMgr private constructor() {
         loadedAdCache.clear()
         loadStateCache.clear()
         loadLocks.clear()
+    }
+    private fun revenueAccumulator(it: AdValue){
+        val singleRevenue = BigDecimal.valueOf(it.valueMicros)
+            .divide(BigDecimal.valueOf(1_000_000), decimalPlaces, BigDecimal.ROUND_DOWN)
+        val saveDecimal = AppCache.totalRv
+        if (saveDecimal.isNotEmpty()){
+            acRevenue = BigDecimal.valueOf(saveDecimal.toDouble())
+        }
+        acRevenue = acRevenue.add(singleRevenue)
+        acRevenue = acRevenue.setScale(decimalPlaces, BigDecimal.ROUND_DOWN)
+        val appinsTime = App.getAppContext().packageManager.getPackageInfo(App.getAppContext().packageName, 0).firstInstallTime
+        val currentTime = System.currentTimeMillis()
+        val timeDifference = currentTime - appinsTime
+        val currencyCode = it.currencyCode
+        if (acRevenue > MIN_REPORT_VALUE){
+            val currencyCode = it.currencyCode
+            val params = mutableMapOf<String, Any>()
+            params[FirebaseAnalytics.Param.VALUE] = acRevenue
+            params[FirebaseAnalytics.Param.CURRENCY] = currencyCode
+            TrackMgr.instance.trackFireBaseEvent(TrackEventType.Total_ADS_REVENUE_001.tn, params)
+            TrackMgr.instance.trackFbPurchaseEvent(TrackEventType.FB_PURCHASE, Currency.getInstance(currencyCode), acRevenue)
+            if (timeDifference <= (adConfig?.installHour?:0)*(60*60*1000)) {
+                TrackMgr.instance.trackFireBaseEvent(TrackEventType.Total_ADS_REVENUEXIN_001.tn, params)
+            }
+            acRevenue = BigDecimal.ZERO
+        }
+        AppCache.totalRv = acRevenue.toString()
+        val fbParams = mutableMapOf<String, Any>()
+        fbParams[FirebaseAnalytics.Param.VALUE ] = acRevenue
+        fbParams[AppEventsConstants.EVENT_PARAM_CURRENCY] = currencyCode
+        TrackMgr.instance.trackFbPurchaseEvent(TrackEventType.FB_AD_IMPRESSION, Currency.getInstance(currencyCode), BigDecimal.valueOf(it.valueMicros),fbParams)
+
     }
 }

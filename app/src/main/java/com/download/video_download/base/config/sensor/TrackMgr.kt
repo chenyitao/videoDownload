@@ -1,9 +1,13 @@
 package com.download.video_download.base.config.sensor
 
 import android.content.Context
+import android.util.Log
+import com.appsflyer.AFAdRevenueData
+import com.appsflyer.AppsFlyerLib
 import com.download.video_download.App
 import com.download.video_download.base.config.utils.CfUtils
 import com.download.video_download.base.utils.AppCache
+import com.facebook.appevents.AppEventsLogger
 import java.math.BigDecimal
 import java.util.Currency
 import java.util.UUID
@@ -18,8 +22,9 @@ class TrackMgr private constructor() {
     private val firebaseStrategy by lazy { FirebaseTrackStrategy() }
     private val facebookStrategy by lazy { FacebookTrackStrategy() }
     private val batchManager by lazy { BTrackMgr.instance }
-
+    private var appsflyer: AppsFlyerLib? = null
     fun init(context: Context) {
+        appsflyer = AppsFlyerLib.getInstance()
         tbaCP = TrackParamBuilder.createCommonParams()
             .apply {
                 var sawdustId = AppCache.sawdust
@@ -47,18 +52,21 @@ class TrackMgr private constructor() {
             firebaseStrategy.reportEvent(eventType.tn, finalParams)
         }
     }
-
-    /**
-     * 上报Facebook购买事件
-     */
-    fun trackFbPurchaseEvent(currency: Currency, amount: BigDecimal, params: Map<String, Any> = emptyMap()) {
-        facebookStrategy.reportPurchaseEvent(currency, amount)
-        facebookStrategy.reportEvent(TrackEventType.AD_FB_PURCHASE.name, params)
+    fun trackFireBaseEvent(eventName: String, params: Map<String, Any>) {
+        firebaseStrategy.reportEvent(eventName, params)
+    }
+    fun trackFbPurchaseEvent(eventType:TrackEventType ,currency: Currency, amount: BigDecimal, params: MutableMap<String, Any> = mutableMapOf()) {
+        if (eventType == TrackEventType.FB_PURCHASE){
+            facebookStrategy.reportPurchaseEvent(currency, amount)
+            return
+        }
+        facebookStrategy.reportEvent(TrackEventType.FB_AD_IMPRESSION.tn, params)
     }
 
-    /**
-     * 构建最终的上报参数
-     */
+    fun trackAppflyEvent(adRevenueData: AFAdRevenueData, params: Map<String, Any> = emptyMap()) {
+        appsflyer?.logAdRevenue(adRevenueData, params)
+    }
+
     private fun buildFinalParams(
         eventType: TrackEventType,
         customParams: Map<String, Any>

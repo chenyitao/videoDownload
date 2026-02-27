@@ -20,6 +20,7 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.config.cg.RemoteConfig
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.config.sensor.TrackParamBuilder
 import com.download.video_download.base.task.HlsMerger
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -51,7 +52,8 @@ class App : MultiDexApplication() {
         if (AppCache.gr.isEmpty()){
             GoogleRef.getInstance().init(this, {
                 if (AppCache.gr.isNotEmpty()){
-//                    RemoteConfig.instance.getConfigOn()
+                    RemoteConfig.instance.getConfigOn()
+                    TrackMgr.instance.trackEvent(TrackEventType.INSTALL, TrackParamBuilder.createInstallParams().build())
                 }
             })
         }

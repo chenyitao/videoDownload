@@ -7,6 +7,8 @@ import androidx.fragment.app.viewModels
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.DetectState
 import com.download.video_download.base.model.DetectStatus
 import com.download.video_download.base.room.entity.Video
@@ -27,6 +29,7 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         player = Player(requireContext(), playClick = {
             searchViewModel.showGuide()
             addVideo()

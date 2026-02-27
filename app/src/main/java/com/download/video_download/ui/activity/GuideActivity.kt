@@ -25,6 +25,8 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.model.GuideData
 import com.download.video_download.base.utils.ActivityManager
@@ -53,6 +55,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun createViewModel(): GuideViewModel  = viewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         val from = intent.getStringExtra("from")
         guideList = viewModel.getGuideList(from?:"")
         mBind.viewPager.adapter = ViewPager2Adapter(guideList)

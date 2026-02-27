@@ -127,4 +127,10 @@ object AppCache {
             saveValue("firstopen", value)
         }
         get() = getValue("firstopen", true)
+
+    var totalRv: String
+        set(value) {
+            saveValue("totalRv", value)
+        }
+        get() = getValue("totalRv", "")
 }

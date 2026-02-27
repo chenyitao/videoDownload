@@ -13,8 +13,11 @@ enum class TrackEventType(val tn: String) {
     AD_IMPRESSION("escapee"),
     FIRST_OPEN("first_open"),
     SESSION_START("session_start"),
-    AD_FB_PURCHASE("Ad_fb_purchase"),
-    CUSTOM_EVENT("")
+    Total_ADS_REVENUE_001("Total_Ads_Revenue_001"),
+    FB_PURCHASE("fb_purchase"),
+    FB_AD_IMPRESSION("Adimpression"),
+    Total_ADS_REVENUEXIN_001("Total_Ads_Revenuexin_001"),
+    Ad_Impression_revenue("Ad_Impression_revenue")
 }
 interface TrackReportStrategy {
     fun reportEvent(eventName: String, params: Map<String, Any>)

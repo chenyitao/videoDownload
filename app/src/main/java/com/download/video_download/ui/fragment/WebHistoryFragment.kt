@@ -13,6 +13,8 @@ import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.databinding.FragmentSearchHistoryBinding
 import com.download.video_download.ui.adapter.HistoryAdapter
@@ -38,6 +40,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
     override fun createViewModel(): SearchViewModel = searchViewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         adapter = HistoryAdapter(onItemDelClick = {
             viewModel.deleteHistory(it)
         }, onItemClick ={

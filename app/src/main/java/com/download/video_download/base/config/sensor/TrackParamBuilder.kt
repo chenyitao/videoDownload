@@ -2,11 +2,20 @@ package com.download.video_download.base.config.sensor
 
 
 import android.os.Build
+import com.appsflyer.AFAdRevenueData
+import com.appsflyer.AdRevenueScheme.AD_TYPE
+import com.appsflyer.AdRevenueScheme.AD_UNIT
+import com.appsflyer.AdRevenueScheme.COUNTRY
+import com.appsflyer.AdRevenueScheme.PLACEMENT
+import com.appsflyer.MediationNetwork
 import com.download.video_download.App
 import com.download.video_download.base.config.utils.CfUtils
+import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.Rf
+import com.download.video_download.base.utils.AppCache
 import java.util.Locale
 import java.util.UUID
+import kotlin.collections.set
 
 class TrackParamBuilder private constructor() {
     private val params = mutableMapOf<String, Any>()
@@ -45,7 +54,9 @@ class TrackParamBuilder private constructor() {
         /**
          * 创建安装参数构建器
          */
-        fun createInstallParams(refer: Rf): TrackParamBuilder {
+        fun createInstallParams(): TrackParamBuilder {
+            val rf = AppCache.gr
+            val refer =  App.getAppContext().jsonParser().decodeFromString<Rf>(rf)
             val builder = TrackParamBuilder()
             with(builder.params) {
                 put("atheism", "build/${Build.ID}")
@@ -83,6 +94,30 @@ class TrackParamBuilder private constructor() {
                 put("carlton", adUnitId)
                 put("ancestor", type)
                 put("load", adType.toString())
+            }
+            return builder
+        }
+        fun createAfAdRevenueParams(
+            adValue: com.google.android.gms.ads.AdValue,
+            adUnitId: String,
+            type: String = "",
+            adType: Int
+        ): TrackParamBuilder {
+            val builder = TrackParamBuilder()
+            val valueMicros = adValue.valueMicros
+            val currencyCode = adValue.currencyCode
+            val localeCountry = Locale.getDefault().country.uppercase(Locale.US)
+            val adRevenueData = AFAdRevenueData(
+                "admob",
+                MediationNetwork.GOOGLE_ADMOB,
+                currencyCode,
+                (valueMicros/1000000.0)
+            )
+            with(builder.params) {
+                put(COUNTRY,localeCountry)
+                put(AD_UNIT, adUnitId)
+                put(AD_TYPE, adType)
+                put(PLACEMENT, type)
             }
             return builder
         }

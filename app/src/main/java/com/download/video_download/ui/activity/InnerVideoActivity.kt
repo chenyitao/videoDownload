@@ -6,6 +6,8 @@ import android.os.Environment.DIRECTORY_DOWNLOADS
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import com.download.video_download.base.BaseActivity
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.wiget.InnerPlayer
 import com.download.video_download.databinding.ActivityInnerPlayerBinding
 import com.download.video_download.ui.viewmodel.InnerVideoViewModel
@@ -22,6 +24,7 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
 
     override fun createViewModel(): InnerVideoViewModel =viewModel
     override fun initViews(savedInstanceState: Bundle?) {
+        TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         val path = intent.getStringExtra("path")
         val fileName = intent.getStringExtra("fileName")
         player = InnerPlayer(this, playClick = {
