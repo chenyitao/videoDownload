@@ -9,6 +9,7 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LogUtils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable.isActive
@@ -140,19 +141,19 @@ class SplashViewModel : BaseViewModel() {
             })
         }
     }
-    fun preloadLgAd(context: Context) {
-        viewModelScope.launch {
-            val lgAdPair = listOf(AdPosition.LANGUAGE to AdType.NATIVE, AdPosition.LANGUAGE to AdType.INTERSTITIAL)
-            AdMgr.INSTANCE.batchPreloadAds(lgAdPair, context,
-                onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
-                })
+    fun preloadBatchAds(context: Context) {
+        val adPairs = mutableListOf<Pair<AdPosition, AdType>>()
+        if (!AppCache.isSelectLng){
+            adPairs.add(AdPosition.LANGUAGE to AdType.NATIVE)
+            adPairs.add(AdPosition.LANGUAGE to AdType.INTERSTITIAL)
         }
-    }
-    fun preloadGuideAd(context: Context) {
+        if (!AppCache.guideShow){
+            adPairs.add(AdPosition.GUIDE to AdType.NATIVE)
+            adPairs.add(AdPosition.GUIDE to AdType.INTERSTITIAL)
+        }
+        adPairs.add(AdPosition.HOME to AdType.INTERSTITIAL)
         viewModelScope.launch {
-            val gdAdPair = listOf(AdPosition.GUIDE to AdType.NATIVE, AdPosition.GUIDE  to AdType.INTERSTITIAL)
-            AdMgr.INSTANCE.batchPreloadAds(gdAdPair, context,
+            AdMgr.INSTANCE.batchPreloadAds(adPairs, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
                     LogUtils.d("广告:  ${error?.message}${error?.domain}")
                 })

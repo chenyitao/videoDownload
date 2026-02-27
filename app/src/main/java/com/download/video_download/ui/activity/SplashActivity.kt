@@ -65,12 +65,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                             if (success){
                                 mViewModel.preloadAd(this@SplashActivity)
                             }
-                            if (!AppCache.isSelectLng){
-                                mViewModel.preloadLgAd(this@SplashActivity)
-                            }
-                            if (!AppCache.guideShow){
-                                mViewModel.preloadGuideAd( this@SplashActivity)
-                            }
+                            mViewModel.preloadBatchAds(this@SplashActivity)
                         },
                         onAdDismissed = { position, adType ->
                             route()
@@ -97,12 +92,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
     override fun onResume() {
         super.onResume()
-        if (!AppCache.isSelectLng){
-            mViewModel.preloadLgAd(this)
-        }
-        if (!AppCache.guideShow){
-            mViewModel.preloadGuideAd( this)
-        }
+        mViewModel.preloadBatchAds(this)
         mViewModel.preloadAd(this)
         mViewModel.startLoading {
             AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
