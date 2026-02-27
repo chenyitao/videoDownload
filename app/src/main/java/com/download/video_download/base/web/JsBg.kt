@@ -2,6 +2,8 @@ package com.download.video_download.base.web
 
 import android.webkit.JavascriptInterface
 import androidx.core.net.toUri
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.web.VideoParse.shouldNowParse
 import com.download.video_download.base.web.VideoParse.videoParse2
@@ -37,6 +39,7 @@ class JsBg(
     }
     @JavascriptInterface
     fun onReadNowResponse(reqUrl: String, resUrl: String, resource: String) {
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser6, mapOf("safedddd" to resource))
         val job = videoParse4(resource, { videos,isLoading ->
             videoData(videos,isLoading)
         })
@@ -49,6 +52,7 @@ class JsBg(
         if(url.isEmpty()){
             return
         }
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser6, mapOf("safedddd" to url))
         val job = videoParseOne(pageUrl,url, { videos,isLoading ->
             videoData(videos,isLoading)
         })
@@ -56,6 +60,7 @@ class JsBg(
     }
     @JavascriptInterface
     fun onNowDownloadResponseUnit(pageUrl: String, list: String, web: String) {
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser6, mapOf("safedddd" to web))
         val job = videoParse3(list,web, { videos,isLoading ->
             videoData(videos,isLoading)
         })
@@ -66,6 +71,7 @@ class JsBg(
         if(url.isEmpty()){
             return
         }
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser6, mapOf("safedddd" to url))
         val job = videoParse2(pageUrl,url, { videos,isLoading ->
             videoData(videos,isLoading)
         })

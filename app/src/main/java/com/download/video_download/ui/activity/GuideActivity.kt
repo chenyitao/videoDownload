@@ -65,6 +65,13 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         mBind.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                var safeddddA = 0
+                if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                    safeddddA = 1
+                }else{
+                    safeddddA = 2
+                }
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_new1, mapOf("safedddd" to position+1,"safeddddA" to safeddddA))
                 if (position == 2){
                     mBind.skip.visibility = View.INVISIBLE
                     if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
@@ -107,6 +114,12 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
 
     override fun initListeners() {
         mBind.skip.setOnClickListener {
+            val safeddddA = if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                1
+            }else{
+                2
+            }
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_new3, mapOf("safedddd" to  mBind.viewPager.currentItem+1,"safeddddA" to safeddddA))
             if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
                 val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED
                 if (hascache){
@@ -127,6 +140,12 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             finish()
         }
         mBind.next.setOnClickListener {
+            val safeddddA = if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                1
+            }else{
+                2
+            }
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_new2, mapOf("safedddd" to  mBind.viewPager.currentItem+1,"safeddddA" to safeddddA))
             if (mBind.viewPager.currentItem == guideList.size - 1){
                 if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
                     val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED

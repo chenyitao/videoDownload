@@ -81,6 +81,8 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
         if (task2Str.isNotEmpty()) {
             task2 = DESUtil.decryptCBC(task2Str)
         }
+        var startTime = 0L
+        var endTime = 0L
         binding.webview.apply {
             settings.domStorageEnabled = true
             settings.javaScriptEnabled = true
@@ -102,6 +104,9 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             addJavascriptInterface(
                 JsBg(
                 videoData = { videos, isLoading ->
+                    if (!isLoading){
+                        startTime = System.currentTimeMillis()
+                    }
                     updateVideoList(videos)
                     Log.d("VideoEngine", "videoData: $videos")
                     val currentHost =
@@ -118,6 +123,10 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                         }
                         searchViewModel.isLoading(isLoading)
                         searchViewModel.saveVideos(videoList)
+                        if (isLoading && videoList.isNotEmpty()){
+                            endTime = System.currentTimeMillis()
+                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser7, mapOf("safedddd1" to curUrl,"safedddd2" to (endTime - startTime).toString()))
+                        }
                     }
                 },
                 jobs = parseJobList,
@@ -142,6 +151,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             if (url.isNotEmpty() && (URLUtil.isNetworkUrl(url) || url.contains("www.") || url.contains(".com"))){
                 val host = url.toUri().host
                 if (binding.webview.url == null || binding.webview.url?.contains(host.toString()) == false){
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser3, mapOf("safedddd" to url))
                     binding.webview.loadUrl(url)
                 }
             }else{

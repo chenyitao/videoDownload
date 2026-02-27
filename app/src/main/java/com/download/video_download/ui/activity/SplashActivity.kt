@@ -40,6 +40,12 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     override fun initViews(savedInstanceState: Bundle?) {
         updateProgressText(0)
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
+        if (intent?.extras?.getString("from") != "Background"){
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
+        }else{
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_af)
+        }
     }
 
     override fun initListeners() {

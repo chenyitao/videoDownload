@@ -57,6 +57,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
                     requireContext().showToast(requireContext().getString(R.string.file_valide))
                     return@PlayerAdapter
                 }
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_play1)
                 playVideoWithSystemPlayer(data = it)
             },
             {
@@ -82,6 +83,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
     override fun onResume() {
         super.onResume()
         playerViewModel.initVideoData()
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main4)
     }
 
     override fun onPause() {

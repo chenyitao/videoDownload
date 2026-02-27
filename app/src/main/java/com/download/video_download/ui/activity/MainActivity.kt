@@ -21,6 +21,8 @@ import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.ui.fragment.DownloadFragment
@@ -30,12 +32,16 @@ import com.download.video_download.ui.fragment.WebChromeFragment
 import com.download.video_download.ui.fragment.WebFragment
 import com.download.video_download.ui.fragment.WebGuideFragment
 import com.download.video_download.ui.fragment.WebHistoryFragment
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     val viewModel: MainViewModel by viewModels()
     private val fragmentCache = HashMap<Int, Fragment>()
     private var currentFragment: Fragment? = null
+    private var trackJob: kotlinx.coroutines.Job? = null
+
     override fun createViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -47,6 +53,17 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         loadFragment(R.id.nav_home)
         mBind.navBottom.itemIconTintList = null
         setStatusBarMode(true)
+        trackJob?.cancel()
+        trackJob = lifecycleScope.launch {
+            while (isActive) { // isActive
+                TrackMgr.instance.trackEvent(
+                    TrackEventType.safedddd_ac,
+                    mutableMapOf("safedddd" to "2")
+                )
+                delay(60 * 60 * 1000L)
+            }
+        }
+        trackJob?.start()
     }
 
     override fun initListeners() {
@@ -125,6 +142,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopTrack()
     }
 
     override fun handleBackPressed(): Boolean {
@@ -136,5 +154,9 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             super.onAppEnterForeground()
         }
         viewModel.isFromPermissionBack = false
+    }
+    private fun stopTrack() {
+        trackJob?.cancel()
+        trackJob = null
     }
 }

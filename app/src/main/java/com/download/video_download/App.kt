@@ -63,6 +63,7 @@ class App : MultiDexApplication() {
             TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN,mutableMapOf())
             AppCache.firstOpen = false
         }
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_ac,mutableMapOf("safedddd" to "1"))
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"

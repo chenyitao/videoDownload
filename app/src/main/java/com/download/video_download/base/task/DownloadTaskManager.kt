@@ -3,6 +3,7 @@ package com.download.video_download.base.task
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import androidx.core.net.toUri
 import androidx.lifecycle.MutableLiveData
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.download.DownloadTaskListener
@@ -10,6 +11,8 @@ import com.arialyy.aria.core.download.m3u8.M3U8VodOption
 import com.arialyy.aria.core.inf.IEntity
 import com.arialyy.aria.core.task.DownloadTask
 import com.download.video_download.App
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.room.entity.getSequentialNumber
 import com.download.video_download.base.utils.AppCache
@@ -69,7 +72,14 @@ class DownloadTaskManager() : DownloadTaskListener {
         updateVideoLiveData(newVideos)
         newVideos.sortByDescending { it.createTime }
         newVideos.forEach { item ->
-            if (videoItem.isEmpty()) add(item) else create(item)
+            val currentHost =
+                item.url.toUri().host
+            if (videoItem.isEmpty()){
+                add(item)
+            }  else {
+                create(item)
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_down2, mapOf("safedddd" to currentHost.toString()))
+            }
         }
 
         saveDownloadTaskCache()
@@ -313,9 +323,28 @@ class DownloadTaskManager() : DownloadTaskListener {
     override fun onTaskPre(task: DownloadTask?) = updatateVideoItem(task)
     override fun onTaskResume(task: DownloadTask?) = updatateVideoItem(task)
     override fun onTaskStart(task: DownloadTask?) = updatateVideoItem(task)
-    override fun onTaskStop(task: DownloadTask?) = updatateVideoItem(task)
-    override fun onTaskCancel(task: DownloadTask?) = updatateVideoItem(task)
-    override fun onTaskFail(task: DownloadTask?, e: Exception?) = updatateVideoItem(task)
+    override fun onTaskStop(task: DownloadTask?){
+        updatateVideoItem(task)
+        val currentHost =
+            task?.entity?.url?.toUri()?.host
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_down5,
+            mapOf("safedddd" to currentHost.toString()))
+    }
+    override fun onTaskCancel(task: DownloadTask?){
+        updatateVideoItem(task)
+        val item = _videoItems.value?.find { it.id == task?.entity?.id }
+        val currentHost =
+            item?.url?.toUri()?.host
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_down6,
+            mapOf("safedddd" to currentHost.toString()))
+    }
+    override fun onTaskFail(task: DownloadTask?, e: Exception?){
+        updatateVideoItem(task)
+        val currentHost =
+            task?.entity?.url?.toUri()?.host
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_down4,
+            mapOf("safedddd" to currentHost.toString(),"safedddd3" to e?.message.toString() ,"safeddddurl" to task?.entity?.url.toString()))
+    }
     override fun onTaskComplete(task: DownloadTask?) = updatateVideoItem(task)
     override fun onTaskRunning(task: DownloadTask?) = updatateVideoItem(task)
     override fun onNoSupportBreakPoint(task: DownloadTask?) = Unit
@@ -330,7 +359,6 @@ class DownloadTaskManager() : DownloadTaskListener {
             if (index != -1) {
                 val newList = currentList.toMutableList()
                 val videoItem = newList[index]
-
                 if (entity.state == IEntity.STATE_RUNNING && entity.m3U8Entity != null) {
                     handleM3u8FileSize(task, entity.id.toString())
                 }
@@ -347,6 +375,7 @@ class DownloadTaskManager() : DownloadTaskListener {
                 )
 
                if (entity.state == IEntity.STATE_COMPLETE) {
+                   TrackMgr.instance.trackEvent(TrackEventType.safedddd_down3, mapOf("safedddd" to updatedItem.url))
                     val mimeType = if (updatedItem.mimeTypes.contains("vnd.apple") == true) "video/mp4" else updatedItem.mimeTypes
                     var duration = updatedItem.duration
                     if (updatedItem.duration == 0L){

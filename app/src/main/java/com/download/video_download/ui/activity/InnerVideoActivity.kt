@@ -25,6 +25,7 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
     override fun createViewModel(): InnerVideoViewModel =viewModel
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_play2)
         val path = intent.getStringExtra("path")
         val fileName = intent.getStringExtra("fileName")
         player = InnerPlayer(this, playClick = {

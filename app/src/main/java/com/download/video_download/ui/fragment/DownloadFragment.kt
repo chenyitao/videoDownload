@@ -100,6 +100,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
 
     override fun onResume() {
         super.onResume()
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main3)
     }
 
     override fun onPause() {

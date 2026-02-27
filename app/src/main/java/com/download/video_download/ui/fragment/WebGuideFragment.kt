@@ -31,6 +31,7 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         player = Player(requireContext(), playClick = {
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_search1)
             searchViewModel.showGuide()
             addVideo()
         })

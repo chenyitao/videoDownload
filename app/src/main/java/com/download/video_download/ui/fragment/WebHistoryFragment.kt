@@ -41,6 +41,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
 
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
         adapter = HistoryAdapter(onItemDelClick = {
             viewModel.deleteHistory(it)
         }, onItemClick ={

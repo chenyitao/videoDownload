@@ -43,6 +43,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         adapter = HomeSiteAdapter{
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_home2, mapOf("safedddd1" to it.url))
             val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.HOME, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (hasCache){
                 lifecycleScope.launch {
@@ -75,10 +76,12 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     override fun initListeners() {
         binding.ivGuideHelp.setOnClickListener {
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_home3)
             requireActivity().startActivity<GuideActivity>()
         }
         binding.rlSearch.setOnClickListener {
             mainViewModel.navigate(NavigationItem("", NavState.HOME, NavState.SEARCH))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_home1)
         }
         viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
             if (!isLoaded) return@Observer
@@ -98,6 +101,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         homeViewModel.preloadNAd(requireContext())
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main1)
     }
 
     override fun onPause() {
