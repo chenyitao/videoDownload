@@ -81,7 +81,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
                         if (success){
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 mBind.adFrameLayout.visibility = View.VISIBLE
-                                mBind.adFrameLayout.setNativeAd(it)
+                                mBind.adFrameLayout.setNativeAd(it,this@LanguageActivity)
                             }
                         }
                     })

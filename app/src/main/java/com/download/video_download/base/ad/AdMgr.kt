@@ -375,6 +375,9 @@ class AdMgr private constructor() {
         if (!keepCache) {
             loadedAdCache.remove(key)
             loadStateCache[key] = AdLoadState.UNLOADED
+            if (adType.type == AdType.NATIVE.type){
+                unmarkAdShowing(position, adType)
+            }
         }
     }
     private suspend fun awaitAdLoaded(

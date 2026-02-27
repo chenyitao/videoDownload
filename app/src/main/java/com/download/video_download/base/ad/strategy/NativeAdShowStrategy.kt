@@ -27,7 +27,7 @@ class NativeAdShowStrategy : AdShowStrategy {
         adCount?.todayShowCount += 1
         AppCache.adLimitC =  activity.jsonParser().encodeToString(adCount)
         showCallback(position, adType, true, null)
-        if (!keepCache) destroy(adInstance)
+//        if (!keepCache) destroy(adInstance)
     }
 
     override fun destroy(adInstance: Any) {

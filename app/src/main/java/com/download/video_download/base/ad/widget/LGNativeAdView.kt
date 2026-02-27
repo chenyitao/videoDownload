@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import com.download.video_download.R
+import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 
@@ -21,7 +22,7 @@ class LGNativeAdView @JvmOverloads constructor(
     private var currentNativeAd: NativeAd? = null
 
     init {
-        initAdView()
+//        initAdView()
     }
     private fun initAdView() {
         val inflater = LayoutInflater.from(context)
@@ -37,37 +38,46 @@ class LGNativeAdView @JvmOverloads constructor(
         addView(nativeAdView)
     }
 
-    fun setNativeAd(nativeAd: NativeAd) {
+    fun setNativeAd(nativeAd: NativeAd,context: Context) {
         currentNativeAd?.destroy()
         currentNativeAd = nativeAd
 
-        bindNativeAdToView(nativeAd, nativeAdView)
+        bindNativeAdToView(nativeAd,context)
     }
 
-    private fun bindNativeAdToView(nativeAd: NativeAd, nativeAdView: NativeAdView) {
-        (nativeAdView.headlineView as? TextView)?.text = nativeAd.headline
+    private fun bindNativeAdToView(nativeAd: NativeAd,context: Context) {
+        val inflater = LayoutInflater.from(context)
+        val nativeAdView = inflater.inflate(R.layout.lg_native_ad_layout, null) as NativeAdView
+        val headlineView = nativeAdView.findViewById<TextView>(R.id.ad_headline)
+        val bodyView = nativeAdView.findViewById<TextView>(R.id.ad_body)
+        val callToActionView = nativeAdView.findViewById<AppCompatButton>(R.id.ad_call_to_action)
+        val iconView = nativeAdView.findViewById<AppCompatImageView>(R.id.ad_app_icon)
+        val mediaView = nativeAdView.findViewById<MediaView>(R.id.ad_media_view)
 
-        (nativeAdView.bodyView as? TextView)?.text = nativeAd.body
-
-        (nativeAdView.callToActionView as? AppCompatButton)?.text = nativeAd.callToAction
-
+        headlineView.text = nativeAd.headline
+        nativeAdView.headlineView = headlineView
+        bodyView.text = nativeAd.body
+        nativeAdView.bodyView = bodyView
+        callToActionView.text = nativeAd.callToAction
+        nativeAdView.callToActionView = callToActionView
         nativeAd.icon?.let { icon ->
-            (nativeAdView.iconView as? AppCompatImageView)?.setImageDrawable(icon.drawable)
+            iconView.setImageDrawable(icon.drawable)
+            nativeAdView.iconView = iconView
             nativeAdView.iconView?.visibility = VISIBLE
         } ?: run {
             nativeAdView.iconView?.visibility = GONE
         }
 
         nativeAd.mediaContent?.let { mediaContent ->
-            nativeAdView.mediaView?.mediaContent = mediaContent
+            mediaView.mediaContent = mediaContent
+            nativeAdView.mediaView = mediaView
             nativeAdView.mediaView?.visibility = VISIBLE
         } ?: run {
             nativeAdView.mediaView?.visibility = GONE
         }
         nativeAdView.setNativeAd(nativeAd)
-    }
-    override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        return false
+        removeAllViews()
+        addView(nativeAdView)
     }
     fun releaseAd() {
         currentNativeAd?.destroy()
