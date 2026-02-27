@@ -28,9 +28,14 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseFragment
+import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.ext.showToast
 import com.download.video_download.base.model.DetectState
 import com.download.video_download.base.model.History
@@ -44,6 +49,7 @@ import com.download.video_download.base.utils.AnimaUtils.initRotateAnimation
 import com.download.video_download.base.utils.AnimaUtils.startRotateAnimation
 import com.download.video_download.base.utils.AnimaUtils.stopRotateAnimation
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.base.utils.PUtils
 import com.download.video_download.base.utils.RawResourceUtils
 import com.download.video_download.databinding.FragmentSearchBinding
@@ -52,6 +58,7 @@ import com.download.video_download.ui.dialog.DownloadStatusDialog
 import com.download.video_download.ui.dialog.isFragmentShowing
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.SearchViewModel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URLEncoder
@@ -148,6 +155,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 AnimaUtils.startRippleAnimation(requireContext(),binding.ivFloatingAnim)
                 binding.ivFloatingNum.visibility = View.VISIBLE
                 binding.ivFloatingNum.text = it.size.toString()
+                viewModel.preloadSdAd(requireContext())
             } else {
                 binding.ivFloatingAnim.visibility = View.GONE
                 binding.ivFloatingNum.visibility = View.GONE
@@ -513,25 +521,47 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             val downloadDialog = DownloadDialog()
             downloadDialog.updateData(video)
             downloadDialog.setOnCancelListener {
-                if (PUtils.hasStoragePermission(requireContext())) {
-                    val vf = video.filter { fv-> fv.isSelect }
-                    showTaskCreate(vf.toMutableList())
-                    if (video.size == 1 && video[0].url.contains("android.resource:")){
-                        return@setOnCancelListener
+                val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL) == AdLoadState.LOADED
+                if (hasCache){
+                    lifecycleScope.launch {
+                        AdMgr.INSTANCE.showAd(
+                            AdPosition.START_DOWNLOAD,
+                            AdType.INTERSTITIAL,
+                            requireActivity(),
+                            onShowResult={ position, adType, success, error->
+                                LogUtils.d("广告: ${error?.message}${error?.domain}")
+                            },
+                            onAdDismissed = { position, adType ->
+                                viewModel.preloadSdAd(requireContext())
+                                handleStartDownload(video)
+                            })
                     }
-                    DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
-                } else {
-                    if (permissionDenied){
-                        mainViewModel.isFromPermissionBack = true
-                        goToPermissionSetting()
-                        return@setOnCancelListener
-                    }
-                    requestPermissionLauncher.launch(arrayOf(
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ))
+                    return@setOnCancelListener
                 }
+                viewModel.preloadSdAd(requireContext())
+                handleStartDownload(video)
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
+            viewModel.preloadSdAd(requireContext())
+        }
+    }
+    private fun handleStartDownload(video:MutableList<Video>){
+        if (PUtils.hasStoragePermission(requireContext())) {
+            val vf = video.filter { fv-> fv.isSelect }
+            showTaskCreate(vf.toMutableList())
+            if (video.size == 1 && video[0].url.contains("android.resource:")){
+                return
+            }
+            DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
+        } else {
+            if (permissionDenied){
+                mainViewModel.isFromPermissionBack = true
+                goToPermissionSetting()
+                return
+            }
+            requestPermissionLauncher.launch(arrayOf(
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ))
         }
     }
     private fun showTaskCreate(video: MutableList<Video>){

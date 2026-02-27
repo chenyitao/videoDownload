@@ -2,7 +2,6 @@ package com.download.video_download.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -11,11 +10,9 @@ import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.base.ad.AdMgr
-import com.download.video_download.base.ad.block.AdLoadCallback
 import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
-import com.download.video_download.base.ad.model.LoadAdError
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -23,7 +20,6 @@ import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.databinding.ActivitySplashBinding
 import com.download.video_download.ui.viewmodel.SplashViewModel
 import com.google.android.gms.ads.AdActivity
-import com.google.android.gms.ads.AdError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -163,4 +163,16 @@ class SearchViewModel: BaseViewModel() {
                 })
         }
     }
+    fun preloadSdAd(context: Context) {
+        val isAdLoaded = AdMgr.INSTANCE.getAdLoadState(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL) == AdLoadState.LOADED
+        if (isAdLoaded){
+            return
+        }
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
 }
