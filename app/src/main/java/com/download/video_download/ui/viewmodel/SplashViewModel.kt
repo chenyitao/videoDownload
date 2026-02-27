@@ -152,6 +152,7 @@ class SplashViewModel : BaseViewModel() {
             adPairs.add(AdPosition.GUIDE to AdType.INTERSTITIAL)
         }
         adPairs.add(AdPosition.HOME to AdType.INTERSTITIAL)
+        adPairs.add(AdPosition.HOME to AdType.NATIVE)
         viewModelScope.launch {
             AdMgr.INSTANCE.batchPreloadAds(adPairs, context,
                 onLoadStateChanged = { position, adType, loadState,error ->

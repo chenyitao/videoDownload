@@ -18,6 +18,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel: BaseViewModel() {
     private val _videoList = MutableLiveData<MutableList<WebsiteData>>()
     val videoList: LiveData<MutableList<WebsiteData>> get() = _videoList
+    private val _isAdLoaded = MutableLiveData<Boolean>(false)
+
+    val isAdLoaded: MutableLiveData<Boolean> = _isAdLoaded
     init {
         initWebSiteData()
     }
@@ -55,6 +58,20 @@ class HomeViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
+                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                })
+        }
+    }
+    fun preloadNAd(context: Context) {
+        val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.HOME, AdType.NATIVE) == AdLoadState.LOADED
+        if (hasCache){
+            _isAdLoaded.postValue(true)
+            return
+        }
+        viewModelScope.launch {
+            AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.NATIVE, context,
+                onLoadStateChanged = { position, adType, loadState,error ->
+                    _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
                     LogUtils.d("广告:  ${error?.message}${error?.domain}")
                 })
         }

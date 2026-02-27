@@ -2,8 +2,10 @@ package com.download.video_download.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.download.video_download.base.BaseFragment
 import com.download.video_download.base.ad.AdMgr
@@ -72,13 +74,32 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         binding.rlSearch.setOnClickListener {
             mainViewModel.navigate(NavigationItem("", NavState.HOME, NavState.SEARCH))
         }
+        viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
+            if (!isLoaded) return@Observer
+            lifecycleScope.launch {
+                AdMgr.INSTANCE.showAd(AdPosition.HOME, AdType.NATIVE,requireActivity(),
+                    onShowResult = { position, adType, success, error->
+                        if (success){
+                            AdMgr.INSTANCE.getNativeAd( position)?.let {
+                                binding.homeAd.visibility = View.VISIBLE
+                                binding.homeAd.setNativeAd(it,requireActivity())
+                            }
+                        }
+                    })
+            }
+        })
     }
     override fun onResume() {
         super.onResume()
+        homeViewModel.preloadNAd(requireContext())
     }
 
     override fun onPause() {
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.homeAd.releaseAd()
+    }
 }
