@@ -22,6 +22,7 @@ import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdLoadState
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.ext.startActivity
@@ -103,12 +104,42 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
 
     override fun initListeners() {
         mBind.skip.setOnClickListener {
+            if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED
+                if (hascache){
+                    lifecycleScope.launch {
+                        AdMgr.INSTANCE.showAd(AdPosition.GUIDE , AdType.INTERSTITIAL,this@GuideActivity,
+                            onShowResult = { position, adType, success, error->
+                            }, onAdDismissed = { position, adType ->
+                                startActivity<MainActivity>()
+                                AppCache.guideShow = true
+                                finish()
+                            })
+                    }
+                    return@setOnClickListener
+                }
+            }
             startActivity<MainActivity>()
             AppCache.guideShow = true
             finish()
         }
         mBind.next.setOnClickListener {
             if (mBind.viewPager.currentItem == guideList.size - 1){
+                if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
+                    val hascache = AdMgr.INSTANCE.getAdLoadState(AdPosition.GUIDE, AdType.INTERSTITIAL) == AdLoadState.LOADED
+                    if (hascache){
+                        lifecycleScope.launch {
+                            AdMgr.INSTANCE.showAd(AdPosition.GUIDE , AdType.INTERSTITIAL,this@GuideActivity,
+                                onShowResult = { position, adType, success, error->
+                                }, onAdDismissed = { position, adType ->
+                                    startActivity<MainActivity>()
+                                    AppCache.guideShow = true
+                                    finish()
+                                })
+                        }
+                        return@setOnClickListener
+                    }
+                }
                 startActivity<MainActivity>()
                 AppCache.guideShow = true
                 finish()
