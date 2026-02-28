@@ -104,6 +104,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 binding.downFloatingGuide.visibility = View.VISIBLE
                 createUpFingerAnimation(false)
                 startAnimations()
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_search2)
             }
         }
         searchViewModel.setSearchInput.observe(this) {
@@ -120,11 +121,20 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             }
             TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+
             if (cache) {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
                         onShowResult = { position, adType, success, error->
-
+                            if (error?.code == -2){
+                                viewModel.preloadBkAd(requireActivity())
+                                if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
+                                    curPage = SearchState.HISTORY
+                                } else {
+                                    curPage = SearchState.GUIDE
+                                }
+                                switchPage()
+                            }
                         }, onAdDismissed =  {position, adType->
                             viewModel.preloadBkAd(requireActivity())
                             if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
@@ -330,11 +340,16 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
 
                 val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+
                 if (cache) {
                     lifecycleScope.launch {
                         AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
                             onShowResult = { position, adType, success, error->
-
+                                if (error?.code == -2){
+                                    viewModel.preloadBkAd(requireActivity())
+                                    binding.etSearch.text?.clear()
+                                    mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
+                                }
                             }, onAdDismissed =  {position, adType->
                                 viewModel.preloadBkAd(requireActivity())
                                 binding.etSearch.text?.clear()
@@ -396,6 +411,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
 
                 val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+
                 if (cache) {
                     lifecycleScope.launch {
                         AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
@@ -604,6 +620,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 TrackMgr.instance.trackAdEvent(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
 
                 val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL) == AdLoadState.LOADED
+
                 if (hasCache){
                     lifecycleScope.launch {
                         AdMgr.INSTANCE.showAd(
@@ -612,6 +629,10 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                             requireActivity(),
                             onShowResult={ position, adType, success, error->
                                 LogUtils.d("广告: ${error?.message}${error?.domain}")
+                                if (error?.code == -2){
+                                    viewModel.preloadSdAd(requireContext())
+                                    handleStartDownload(video)
+                                }
                             },
                             onAdDismissed = { position, adType ->
                                 viewModel.preloadSdAd(requireContext())

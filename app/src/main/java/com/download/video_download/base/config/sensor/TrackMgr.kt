@@ -5,10 +5,12 @@ import android.util.Log
 import com.appsflyer.AFAdRevenueData
 import com.appsflyer.AppsFlyerLib
 import com.download.video_download.App
+import com.download.video_download.base.ad.AdMgr
 import com.download.video_download.base.ad.model.AdPosition
 import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.utils.CfUtils
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LogUtils
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.ads.LoadAdError
 import java.math.BigDecimal
@@ -26,6 +28,7 @@ class TrackMgr private constructor() {
     private val facebookStrategy by lazy { FacebookTrackStrategy() }
     private val batchManager by lazy { BTrackMgr.instance }
     private var appsflyer: AppsFlyerLib? = null
+    private var TAG = "TrackMgr"
     fun init(context: Context) {
         appsflyer = AppsFlyerLib.getInstance()
         tbaCP = TrackParamBuilder.createCommonParams()
@@ -48,17 +51,20 @@ class TrackMgr private constructor() {
     }
     fun trackEvent(eventType: TrackEventType, params: Map<String, Any> = emptyMap()) {
         val finalParams = buildFinalParams(eventType, params)
-
+        LogUtils.d(TAG, "trackEvent: ${eventType.tn} trackParams: $finalParams")
         serverStrategy.reportEvent(eventType.tn, finalParams)
 
         if (shouldReportToFirebase(eventType)) {
-            firebaseStrategy.reportEvent(eventType.tn, finalParams)
+            LogUtils.d(TAG, "trackEvent-firebase: ${eventType.tn} trackParams: $params")
+            firebaseStrategy.reportEvent(eventType.tn, params)
         }
     }
     fun trackFireBaseEvent(eventName: String, params: Map<String, Any>) {
+        LogUtils.d(TAG, "trackEvent-firebase: $eventName trackParams: $params")
         firebaseStrategy.reportEvent(eventName, params)
     }
     fun trackFbPurchaseEvent(eventType:TrackEventType ,currency: Currency, amount: BigDecimal, params: MutableMap<String, Any> = mutableMapOf()) {
+        LogUtils.d(TAG, "trackEvent-facebook: ${eventType.tn} trackParams: amount-$amount,currency-$currency params-$params")
         if (eventType == TrackEventType.FB_PURCHASE){
             facebookStrategy.reportPurchaseEvent(currency, amount)
             return
@@ -67,6 +73,7 @@ class TrackMgr private constructor() {
     }
 
     fun trackAppflyEvent(adRevenueData: AFAdRevenueData, params: Map<String, Any> = emptyMap()) {
+        LogUtils.d(TAG, "trackEvent-appflyer  trackParams: ${adRevenueData.toString()} $params")
         appsflyer?.logAdRevenue(adRevenueData, params)
     }
     fun trackAdEvent(adLoc: AdPosition, type: AdType, event: TrackEventType, error: com.download.video_download.base.ad.model.LoadAdError?= null){
@@ -124,7 +131,13 @@ class TrackMgr private constructor() {
             val message:String =  error?.message.toString()
             trackEvent(event, mutableMapOf("safedddd" to safedddd,"safedddd4" to code.toString(),"safedddd5" to message))
         }else{
-            trackEvent(event, mapOf("safedddd" to safedddd))
+            if (event == TrackEventType.safedddd_bg){
+                val safedddd1 = if (AdMgr.INSTANCE.hasCachedAd(adLoc, type)) 1 else 2
+                val safedddd2 = if (AdMgr.INSTANCE.isDailyLimitReached()) if (AdMgr.INSTANCE.isClickLimitReached()) 1 else 2 else 3
+                trackEvent(event, mutableMapOf("safedddd" to safedddd,"safedddd1" to safedddd1,"safedddd2" to safedddd2))
+            }else{
+                trackEvent(event, mutableMapOf("safedddd" to safedddd))
+            }
         }
     }
     private fun buildFinalParams(
@@ -132,13 +145,6 @@ class TrackMgr private constructor() {
         customParams: Map<String, Any>
     ): Map<String, Any> {
         val map = mutableMapOf<String, Any>()
-        if (shouldReportToFirebase(eventType)) {
-            val firebaseMap = mutableMapOf<String, Any>()
-            customParams.forEach { (key, value) ->
-                firebaseMap[key] = value
-            }
-            return firebaseMap
-        }
         map.putAll(tbaCP)
         map["ambulant"] = UUID.randomUUID().toString()
         map["mcdowell"] = System.currentTimeMillis()

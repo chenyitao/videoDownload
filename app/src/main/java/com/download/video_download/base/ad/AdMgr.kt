@@ -125,15 +125,29 @@ class AdMgr private constructor() {
     fun getNativeAd(position: AdPosition): NativeAd? {
         return loadedAdCache[Pair(position, AdType.NATIVE)]?.adInstance as? NativeAd
     }
+    fun hasCachedAd(position: AdPosition, adType: AdType): Boolean {
+        return loadedAdCache.containsKey(Pair(position, adType))
+    }
+    fun isClickLimitReached(): Boolean {
+        val config = adConfig ?: return true
+        val curTodayClickCount = adCount?.todayClickCount ?:0
+        return curTodayClickCount >= config.tcc
+    }
+    fun isShowLimitReached(): Boolean {
+        val config = adConfig ?: return true
+        val curTodayShowCount = adCount?.todayShowCount ?:0
+        return  curTodayShowCount >= config.tsc
+    }
     private fun getLoadLock(position: AdPosition, adType: AdType): Mutex {
         val key = Pair(position, adType)
         return loadLocks.getOrPut(key) { Mutex() }
     }
-    private fun isDailyLimitReached(): Boolean {
+    fun isDailyLimitReached(): Boolean {
         val config = adConfig ?: return true
         val curTodayShowCount = adCount?.todayShowCount ?:0
         val curTodayClickCount = adCount?.todayClickCount ?:0
-        return curTodayShowCount >= config.tsc || curTodayClickCount >= config.tcc
+        val limit = curTodayShowCount >= config.tsc || curTodayClickCount >= config.tcc
+        return limit
     }
     fun isAdExpired(cacheMeta: AdCacheMeta?): Boolean {
         if (cacheMeta?.cacheTime == 0L) return true

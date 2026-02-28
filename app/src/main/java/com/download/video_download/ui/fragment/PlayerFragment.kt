@@ -168,6 +168,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
             TrackMgr.instance.trackAdEvent(AdPosition.BACK, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
 
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.BACK, AdType.INTERSTITIAL) == AdLoadState.LOADED
+
             if (cache) {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),

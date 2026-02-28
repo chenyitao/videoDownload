@@ -60,6 +60,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
             }
             downloadDialog.show(this.childFragmentManager, "DownloadDialog")
         },{
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser13, mapOf("safedddd" to it.url))
             if (adapter?.getData()?.any { video ->
                     video.id == it.id && video.url == it.url
                 } == true) {
@@ -71,6 +72,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
             downloadDialog = DownloadStatusDialog().apply {
                 setIsComplete(true)
                 setOnConfirmListener {
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser14, mapOf("safedddd" to it.url))
                     mainViewModel.navigate(NavigationItem("", NavState.DOWNLOAD, NavState.PLAYER))
                 }
             }

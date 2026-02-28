@@ -87,13 +87,14 @@ class TrackParamBuilder private constructor() {
             val builder = TrackParamBuilder()
             val loadedAdapterResponseInfo = response?.loadedAdapterResponseInfo
             val adSourceName = loadedAdapterResponseInfo?.adSourceName ?: ""
-
+            val currencyCode = adValue.currencyCode
             with(builder.params) {
                 put("scruple", adValue.valueMicros)
                 put("piteous", adSourceName)
                 put("carlton", adUnitId)
                 put("ancestor", type)
                 put("load", adType.toString())
+                put("campus",currencyCode)
             }
             return builder
         }

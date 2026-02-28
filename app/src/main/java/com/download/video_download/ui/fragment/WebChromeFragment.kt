@@ -340,5 +340,33 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             it.cancel()
         }
         parseJobList.clear()
+        muteAllMedia()
+    }
+    fun muteAllMedia() {
+        val muteJs = """
+            (function() {
+                var audios = document.getElementsByTagName('audio');
+                var videos = document.getElementsByTagName('video');
+                for (var i = 0; i < audios.length; i++) {
+                    audios[i].muted = true;
+                    audios[i].pause(); // 可选：直接暂停播放
+                }
+                for (var i = 0; i < videos.length; i++) {
+                    videos[i].muted = true;
+                    videos[i].pause(); // 可选：直接暂停播放
+                }
+                document.addEventListener('DOMNodeInserted', function(e) {
+                    if (e.target.tagName === 'AUDIO' || e.target.tagName === 'VIDEO') {
+                        e.target.muted = true;
+                    }
+                });
+            })();
+        """.trimIndent()
+
+        // 执行JS代码
+        binding.webview.evaluateJavascript(muteJs) { result ->
+            // JS执行结果回调（可选）
+            android.util.Log.d("MuteWebView", "静音JS执行结果：$result")
+        }
     }
 }

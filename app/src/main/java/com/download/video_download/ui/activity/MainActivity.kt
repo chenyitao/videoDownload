@@ -42,7 +42,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     private var currentFragment: Fragment? = null
     private var trackJob: kotlinx.coroutines.Job? = null
     private var isTabClick = true
-
+    private var sessionTime: Long = 0
     override fun createViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -57,11 +57,11 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         trackJob?.cancel()
         trackJob = lifecycleScope.launch {
             while (isActive) { // isActive
+                delay(60 * 60 * 1000L)
                 TrackMgr.instance.trackEvent(
                     TrackEventType.safedddd_ac,
                     mutableMapOf("safedddd" to "2")
                 )
-                delay(60 * 60 * 1000L)
             }
         }
         trackJob?.start()
@@ -72,13 +72,13 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             if (item.itemId == mBind.navBottom.selectedItemId){
                 return@setOnItemSelectedListener  true
             }
-            TrackMgr.instance.trackAdEvent(AdPosition.TAB, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
 
             if (!isTabClick){
                 isTabClick = true
                 loadFragment(item.itemId)
                 return@setOnItemSelectedListener  true
             }
+            TrackMgr.instance.trackAdEvent(AdPosition.TAB, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
             val cache = AdMgr.INSTANCE.getAdLoadState(AdPosition.TAB, AdType.INTERSTITIAL) == AdLoadState.LOADED
             if (cache) {
                 lifecycleScope.launch {
@@ -167,5 +167,14 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     private fun stopTrack() {
         trackJob?.cancel()
         trackJob = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val curTime = System.currentTimeMillis()
+        if (curTime - sessionTime > 30 * 1000) {
+            sessionTime = curTime
+            TrackMgr.instance.trackEvent(TrackEventType.SESSION)
+        }
     }
 }

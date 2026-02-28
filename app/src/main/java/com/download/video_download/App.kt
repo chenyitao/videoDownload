@@ -51,6 +51,7 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         AppCache.init(this)
+        TrackMgr.instance.init(this)
         if (AppCache.gr.isEmpty()){
             GoogleRef.getInstance().init(this, {
                 if (AppCache.gr.isNotEmpty()){
@@ -64,10 +65,9 @@ class App : MultiDexApplication() {
                 }
             })
         }
-        TrackMgr.instance.init(this)
         RemoteConfig.instance.getConfig()
         if (AppCache.firstOpen){
-            TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN,mutableMapOf())
+            TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN)
             AppCache.firstOpen = false
         }
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ac,mutableMapOf("safedddd" to "1"))

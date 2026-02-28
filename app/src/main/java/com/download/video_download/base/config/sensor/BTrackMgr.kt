@@ -1,6 +1,7 @@
 package com.download.video_download.base.config.sensor
 
 import android.content.Context
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.base.utils.MermLruCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class BTrackMgr  private constructor() {
         periodicReportJob = coroutineScope.launch {
             while (isActive) {
                 try {
+                    LogUtils.d("Track","批量上报轮训...")
                     performBatchReport(context.applicationContext)
                     delay(TrackConfig.REPORT_INTERVAL_MS)
                 } catch (e: Exception) {
