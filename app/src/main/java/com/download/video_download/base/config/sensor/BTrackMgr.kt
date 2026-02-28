@@ -23,7 +23,7 @@ class BTrackMgr  private constructor() {
         periodicReportJob = coroutineScope.launch {
             while (isActive) {
                 try {
-                    LogUtils.d("Track","批量上报轮训...")
+                    LogUtils.d("TrackMgr","tab batch report start...")
                     performBatchReport(context.applicationContext)
                     delay(TrackConfig.REPORT_INTERVAL_MS)
                 } catch (e: Exception) {

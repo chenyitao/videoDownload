@@ -383,12 +383,20 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             showDownloadDialog()
         }
         viewModel.adjustGuideView.observe(this){
-            if (binding.upFloatingGuide.isVisible && it){
+            if (binding.upFloatingGuide.isVisible ){
                 val bgLayoutParams   = binding.upFloatingGuideBg.layoutParams as ConstraintLayout.LayoutParams
-                bgLayoutParams.topMargin = DpUtils.dp2px(requireContext(),356f)
-                binding.upFloatingGuideBg.layoutParams = bgLayoutParams
                 val llupParams   = binding.llFingerUp.layoutParams as ConstraintLayout.LayoutParams
-                llupParams.topMargin = DpUtils.dp2px(requireContext(),278f)
+
+                if (it){
+                    bgLayoutParams.topMargin = DpUtils.dp2px(requireContext(),356f)
+                    binding.upFloatingGuideBg.layoutParams = bgLayoutParams
+                    llupParams.topMargin = DpUtils.dp2px(requireContext(),278f)
+                    binding.llFingerUp.layoutParams = llupParams
+                    return@observe
+                }
+                bgLayoutParams.topMargin = DpUtils.dp2px(requireContext(),230f)
+                binding.upFloatingGuideBg.layoutParams = bgLayoutParams
+                llupParams.topMargin = DpUtils.dp2px(requireContext(),112f)
                 binding.llFingerUp.layoutParams = llupParams
             }
         }
@@ -628,7 +636,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                             AdType.INTERSTITIAL,
                             requireActivity(),
                             onShowResult={ position, adType, success, error->
-                                LogUtils.d("广告: ${error?.message}${error?.domain}")
+                                LogUtils.d("ad: ${error?.message}${error?.domain}")
                                 if (error?.code == -2){
                                     viewModel.preloadSdAd(requireContext())
                                     handleStartDownload(video)

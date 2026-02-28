@@ -48,8 +48,7 @@ object AsyncPostRequest {
             var inputStream: InputStream? = null
 
             try {
-                LogUtils.d(TAG, "请求URL：$url")
-                LogUtils.d(TAG, "请求超时时间：${TIMEOUT_MS / 1000}秒")
+                LogUtils.d(TAG, "REQUEST URL：$url")
                 val requestUrl = URL(url)
                 connection = requestUrl.openConnection() as HttpURLConnection
 
@@ -64,12 +63,8 @@ object AsyncPostRequest {
                     setRequestProperty("Connection", "Keep-Alive")
                     setRequestProperty("Charset", "UTF-8")
                 }
-                LogUtils.d(TAG, "===== 请求头信息 =====")
-                connection.requestProperties?.forEach { (key, values) ->
-                    LogUtils.d(TAG, "$key: ${values.joinToString(", ")}")
-                }
 
-                LogUtils.d(TAG, "===== 请求体参数 =====")
+                LogUtils.d(TAG, "===== REQUEST PARAMS =====")
                 LogUtils.d(TAG, bodyParams)
                 BufferedOutputStream(connection.outputStream).use { outputStream ->
                     val paramsBytes = bodyParams.toByteArray(StandardCharsets.UTF_8)
@@ -81,18 +76,18 @@ object AsyncPostRequest {
                 val responseMessage = connection.responseMessage
 
                 // 打印响应基础信息
-                LogUtils.d(TAG, "===== 响应结果 [状态码：$responseCode] =====")
-                LogUtils.d(TAG, "响应消息：$responseMessage")
+                LogUtils.d(TAG, "===== RESPONSE RESULT [CODE：$responseCode] =====")
+                LogUtils.d(TAG, "RESPONSE MSG：$responseMessage")
                 when {
                     responseCode in 200..299 -> {
                         inputStream = connection.inputStream
                         val response = inputStream.readToString()
-                        LogUtils.d(TAG, "响应体：$response")
+                        LogUtils.d(TAG, "RESPONSE BODY：$response")
                         postToMainThread {onSuccess.invoke (response) }
                     }
                     else -> {
-                        val errorResponse = connection.errorStream?.readToString() ?: "无错误响应体"
-                        LogUtils.e(TAG, "服务器响应错误，错误响应体：$errorResponse")
+                        val errorResponse = connection.errorStream?.readToString() ?: "NO ERROR RESPONSE"
+                        LogUtils.e(TAG, "SERVER RESPONSE ERROR, ERROR RESPONSE：$errorResponse")
                         val errorMsg = "$responseCode"
                         postToMainThread { onFailure.invoke(errorMsg) }
                     }
@@ -104,7 +99,7 @@ object AsyncPostRequest {
                     is java.net.UnknownHostException -> "parse error"
                     else -> "exception：${e.message ?: "unkown"}"
                 }
-                LogUtils.e(TAG, "请求异常：$errorMsg", e)
+                LogUtils.e(TAG, "REQUEST ERROR：$errorMsg", e)
                 postToMainThread { onFailure.invoke(errorMsg) }
             } finally {
                 inputStream?.close()

@@ -50,7 +50,7 @@ class PlayerViewModel : BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.BACK, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }

@@ -41,7 +41,6 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
 
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
         adapter = HistoryAdapter(onItemDelClick = {
             viewModel.deleteHistory(it)
         }, onItemClick ={
@@ -83,6 +82,11 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
                                     viewModel.preloadNAd(requireContext())
                                 }
                             }
+                        }else{
+                            if (error?.code == -2){
+                                binding.sId.visibility = View.GONE
+                                binding.sId.releaseAd()
+                            }
                         }
                     })
             }
@@ -102,6 +106,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         super.onResume()
         viewModel.checkNAd(requireContext())
         viewModel.preloadBkAd(requireContext())
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
         TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
     }
 

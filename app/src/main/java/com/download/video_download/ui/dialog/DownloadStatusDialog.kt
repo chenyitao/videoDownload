@@ -19,6 +19,7 @@ import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.databinding.DialogDownloadTaskBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -64,6 +65,7 @@ class DownloadStatusDialog : DialogFragment() {
             AdMgr.INSTANCE.showAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE,requireActivity(),
                 onShowResult = { position, adType, success, error->
                     if (success){
+                        LogUtils.d("ad:"+error?.domain+ error?.message)
                         AdMgr.INSTANCE.getNativeAd( position)?.let {
                             binding.taskAdView.visibility = View.VISIBLE
                             binding.taskAdView.setNativeAd(it,requireActivity())
@@ -96,7 +98,10 @@ class DownloadStatusDialog : DialogFragment() {
 
     private fun initAd(){
         lifecycleScope.launch {
-           AdMgr.INSTANCE.preloadAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE, requireActivity())
+           AdMgr.INSTANCE.preloadAd(AdPosition.DOWNLOAD_TASK_DIALOG, AdType.NATIVE, requireActivity()
+               ,onLoadStateChanged = { position, adType, state,error ->
+                   LogUtils.d("ad:"+error?.domain+ error?.message)
+           })
         }
     }
     

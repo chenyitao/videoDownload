@@ -24,6 +24,7 @@ import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
+import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
 import com.download.video_download.ui.fragment.DownloadFragment
 import com.download.video_download.ui.fragment.HomeFragment
@@ -57,7 +58,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         trackJob?.cancel()
         trackJob = lifecycleScope.launch {
             while (isActive) { // isActive
-                delay(60 * 60 * 1000L)
+                delay( 60 * 1000L)
                 TrackMgr.instance.trackEvent(
                     TrackEventType.safedddd_ac,
                     mutableMapOf("safedddd" to "2")
@@ -84,7 +85,9 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(AdPosition.TAB, AdType.INTERSTITIAL,this@MainActivity,
                         onShowResult = { position, adType, success, error->
-
+                            if (error?.code == -2){
+                                loadFragment(item.itemId)
+                            }
                         }, onAdDismissed =  {position, adType->
                             viewModel.preloadTabAd(this@MainActivity)
                             loadFragment(item.itemId)

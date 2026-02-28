@@ -42,17 +42,17 @@ class RemoteConfig private constructor(){
         periodicReportJob = coroutineScope.launch(Dispatchers.IO) {
             while (isActive) {
                 try {
-                    LogUtils.d("Remote","获取远程配置...")
+                    LogUtils.d("Remote","get admin config...")
                     TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 2))
                     if (!AppCache.isFirstGetConfig){
-                        delay(50*60 * 1000)
+                        delay(5*60 * 1000)
                         getAdminConfig()
                     }else{
                         getAdminConfig()
-                        delay(50*60 * 1000)
+                        delay(5*60 * 1000)
                     }
                 } catch (e: Exception) {
-                    delay(50*60 * 1000)
+                    delay(5*60 * 1000)
                 }
             }
         }
@@ -108,6 +108,8 @@ class RemoteConfig private constructor(){
     }
     private fun handleConfigSuccess(data: String) {
         val config = Crypt.paramsDecrypt (data)
+        LogUtils.d("Config",config.toString())
+
         AppCache.adcf = config.toString()
         AppCache.isFirstGetConfig =  false
         val fc = config.optJSONObject("fc")

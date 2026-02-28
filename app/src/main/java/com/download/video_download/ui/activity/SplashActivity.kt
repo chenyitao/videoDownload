@@ -66,8 +66,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                         AdType.APP_OPEN,
                         this@SplashActivity,
                         onShowResult={ position, adType, success, error->
-                            val suc = if (success) "成功" else "失败"
-                            LogUtils.d("广告: 展示$suc ${error?.message}${error?.domain}")
+                            val suc = if (success) "sucess" else "fail"
+                            LogUtils.d("ad: show $suc ${error?.message}${error?.domain}")
                             if (success){
                                 mViewModel.preloadAd(this@SplashActivity)
                             }

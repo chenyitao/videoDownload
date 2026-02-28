@@ -150,7 +150,7 @@ class TrackMgr private constructor() {
         map["mcdowell"] = System.currentTimeMillis()
         when (eventType) {
             TrackEventType.SESSION -> {
-                map[TrackEventType.SESSION.tn] = TrackParamBuilder.createSessionParams().build()
+                map[TrackEventType.SESSION.tn] = "vine"
             }
             TrackEventType.INSTALL ->{
                 map[TrackEventType.INSTALL.tn] = customParams

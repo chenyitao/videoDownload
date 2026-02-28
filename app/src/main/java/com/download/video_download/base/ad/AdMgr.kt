@@ -183,18 +183,18 @@ class AdMgr private constructor() {
         onLoadStateChanged: AdLoadCallback = emptyLoadCallback
     ) {
         if (!isPrivacyConsentGiven) {
-            val error = LoadAdError(-1, "隐私未同意", "UMP隐私政策未同意，无法加载广告")
+            val error = LoadAdError(-1, "PRIVACY NOT AGREE", "UMP NO PERMIT，NOT LOADING AD")
             onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             return
         }
         if (isDailyLimitReached()) {
-            val error = LoadAdError(-2, "每日限制", "已达到每日广告展示/点击上限")
+            val error = LoadAdError(-2, "Daily Limit", "The daily ad impressions/clicks limit has been reached")
             onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             return
         }
         val adUnitList = adManageData?.advert?.get(position)?.filter { it.at == adType.type } ?: emptyList()
         if (adUnitList.isEmpty()) {
-            val error = LoadAdError(-3, "无广告数据", "未找到${position.name}-${adType.name}类型的广告单元")
+            val error = LoadAdError(-3, "No advertising data", "no found ${position.name}-${adType.name} ad unit")
             onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             return
         }
@@ -211,8 +211,8 @@ class AdMgr private constructor() {
         if (currentState == AdLoadState.LOADED || currentState == AdLoadState.LOADING) {
             val key = Pair(position, adType)
             val cachedMeta = loadedAdCache[key]
-            val message = if (currentState == AdLoadState.LOADED) "已存在广告数据" else "广告正在缓存中"
-            val domain = if (currentState == AdLoadState.LOADED) "找到${position.name}-${adType.name}类型的广告单元,广告数据:${cachedMeta?.adInstance}" else "正在加载${position.name}-${adType.name}类型的广告单元"
+            val message = if (currentState == AdLoadState.LOADED) "Advertising data already exists" else "The advertisement is currently cached"
+            val domain = if (currentState == AdLoadState.LOADED) "found ${position.name}-${adType.name} ad unit ,ad data :${cachedMeta?.adInstance}" else "loading ${position.name}-${adType.name} ad unit"
             val error = LoadAdError(-4,  message,domain)
             onLoadStateChanged(position, adType, currentState, error)
             return
@@ -227,8 +227,8 @@ class AdMgr private constructor() {
             TrackMgr.instance.trackAdEvent(position,adType, TrackEventType.safedddd_bf)
 
             loadStateCache[key] = AdLoadState.LOADING
-            val message = "广告正在缓存中"
-            val domain = "正在加载${position.name}-${adType.name}类型的广告单元"
+            val message = "The advertisement is currently cached"
+            val domain = "Loading ${position.name}-${adType.name}ad unit"
             val error = LoadAdError(-4,  message,domain)
             onLoadStateChanged(position, adType, AdLoadState.LOADING, error)
             var loadSuccess = false
@@ -257,13 +257,13 @@ class AdMgr private constructor() {
 
             if (loadSuccess) {
                 loadStateCache[key] = AdLoadState.LOADED
-                val message ="广告数据加载成功"
-                val domain = "${position.name}-${adType.name}类型的广告单元,广告数据:${loadedMeta?.adInstance}"
+                val message ="Advertising data loaded successfully"
+                val domain = "${position.name}-${adType.name} ad unit ,advertising data:${loadedMeta?.adInstance}"
                 val error = LoadAdError(-4,  message,domain)
                 onLoadStateChanged(position, adType, AdLoadState.LOADED, error)
             } else {
                 loadStateCache[key] = AdLoadState.FAILED
-                val error = LoadAdError(adError?.code?:-1, adError?.message?:"", "${position.name}-${adType.name}广告单元加载失败")
+                val error = LoadAdError(adError?.code?:-1, adError?.message?:"", "${position.name}-${adType.name} Ad unit loading failed")
                 onLoadStateChanged(position, adType, AdLoadState.FAILED, error)
             }
         }
@@ -292,18 +292,18 @@ class AdMgr private constructor() {
         onAdDismissed: AdInteractionCallback = emptyDismissCallback
     ) {
         if (isAdShowing(position, adType)) {
-            val error = AdError(-7, "广告展示中", "${position.name}-${adType.name}广告正在展示，无法重复调用")
+            val error = AdError(-7, "Advertising Display", "${position.name}-${adType.name}The advertisement is currently being displayed and cannot be called repeatedly")
             onShowResult(position, adType, false, error)
             return
         }
         // 前置检查
         if (!isPrivacyConsentGiven) {
-            val error = AdError(-1, "隐私未同意", "UMP隐私政策未同意，无法展示广告")
+            val error = AdError(-1, "PRIVACY NOT AGREE", "UMP NO PERMIT，NOT LOADING AD")
             onShowResult(position, adType, false, error)
             return
         }
         if (isDailyLimitReached()) {
-            val error = AdError(-2, "每日限制", "已达到每日广告展示/点击上限")
+            val error = AdError(-2, "Daily Limit", "The daily ad impressions/clicks limit has been reached")
             onShowResult(position, adType, false, error)
             return
         }
@@ -321,7 +321,7 @@ class AdMgr private constructor() {
         if (currentState == AdLoadState.UNLOADED || currentState == AdLoadState.FAILED) {
             val loadSuccess = awaitAdLoaded(position, adType, activity, timeoutMs = 10000)
             if (!loadSuccess) {
-                val error = AdError(-3, "广告未就绪", "${position.name}-${adType.name}广告加载未完成/超时")
+                val error = AdError(-3, "Advertisement not ready", "${position.name}-${adType.name}Ad loading incomplete/timeout")
                 onShowResult(position, adType, false, error)
                 return
             }
@@ -331,19 +331,19 @@ class AdMgr private constructor() {
         if (currentState == AdLoadState.LOADING) {
             val loadSuccess = awaitAdLoaded(position, adType, activity, timeoutMs = 10000)
             if (!loadSuccess) {
-                val error = AdError(-4, "加载中", "${position.name}-${adType.name}广告加载超时")
+                val error = AdError(-4, "Loading", "${position.name}-${adType.name}Ad loading timeout")
                 onShowResult(position, adType, false, error)
                 return
             }
             currentState = getAdLoadState(position, adType)
         }
         val adMeta = loadedAdCache[key] ?: run {
-            val error = AdError(-5, "无缓存", "${position.name}-${adType.name}广告实例缓存不存在")
+            val error = AdError(-5, "No cache", "${position.name}-${adType.name}Ad instance cache does not exist")
             onShowResult(position, adType, false, error)
             return
         }
         if (isAdExpired(adMeta)) {
-            val error = AdError(-6, "广告过期", "${position.name}-${adType.name}广告已失效，请重新加载")
+            val error = AdError(-6, "Advertisement expires", "${position.name}-${adType.name}The advertisement has expired, please reload")
             onShowResult(position, adType, false, error)
             return
         }
@@ -453,7 +453,7 @@ class AdMgr private constructor() {
                 adCount = adCount
             )
         } catch (e: Exception) {
-            val error = AdError(-8, "展示异常", "${position.name}-${adType.name}广告展示异常：${e.message}")
+            val error = AdError(-8, "Display anomalies", "${position.name}-${adType.name}Abnormal advertising display：${e.message}")
             onShowResult(position, adType, false, error)
             unmarkAdShowing(position, adType)
         }
@@ -505,7 +505,7 @@ class AdMgr private constructor() {
         loadLocks.clear()
     }
     private fun revenueAccumulator(it: AdValue){
-        val singleRevenue = BigDecimal.valueOf(it.valueMicros)
+        val singleRevenue = BigDecimal.valueOf(3000)
             .divide(BigDecimal.valueOf(1_000_000), decimalPlaces, BigDecimal.ROUND_DOWN)
         val saveDecimal = AppCache.totalRv
         if (saveDecimal.isNotEmpty()){

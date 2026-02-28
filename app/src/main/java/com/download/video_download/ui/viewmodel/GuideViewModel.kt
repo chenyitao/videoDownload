@@ -66,7 +66,7 @@ class GuideViewModel : BaseViewModel() {
                 AdType.NATIVE,
                 context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                     if (loadState == AdLoadState.LOADED){
                         isAdLoaded.postValue( true)
                     }
@@ -85,7 +85,7 @@ class GuideViewModel : BaseViewModel() {
                 AdType.NATIVE,
                 context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 }
             )
         }
@@ -101,7 +101,7 @@ class GuideViewModel : BaseViewModel() {
                 AdType.INTERSTITIAL,
                 context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 }
             )
         }

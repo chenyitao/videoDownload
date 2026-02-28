@@ -57,7 +57,10 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         AdType.INTERSTITIAL,
                         requireActivity(),
                         onShowResult={ position, adType, success, error->
-                            LogUtils.d("广告: ${error?.message}${error?.domain}")
+                            LogUtils.d("ad: ${error?.message}${error?.domain}")
+                            if (error?.code == -2){
+                                mainViewModel.navigate(NavigationItem(it.url, NavState.HOME, NavState.SEARCH))
+                            }
                         },
                         onAdDismissed = { position, adType ->
                             homeViewModel.preloadAd( requireContext())
@@ -104,9 +107,14 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                                     delay(200)
                                     AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.NATIVE, requireContext(),
                                         onLoadStateChanged = { position, adType, loadState,error ->
-                                            LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                                            LogUtils.d("ad:  ${error?.message}${error?.domain}")
                                         })
                                 }
+                            }
+                        }else{
+                            if (error?.code == -2){
+                                binding.homeAd.visibility = View.GONE
+                                binding.homeAd.releaseAd()
                             }
                         }
                     })

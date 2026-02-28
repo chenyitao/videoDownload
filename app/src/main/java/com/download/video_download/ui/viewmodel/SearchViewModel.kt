@@ -148,7 +148,7 @@ class SearchViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -162,7 +162,7 @@ class SearchViewModel: BaseViewModel() {
             AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
                     _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -174,7 +174,7 @@ class SearchViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -182,12 +182,12 @@ class SearchViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.BACK, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
 
-    fun adjustGuideView(){
-        _adjustGuideView.postValue( true)
+    fun adjustGuideView(bol: Boolean){
+        _adjustGuideView.postValue( bol)
     }
 }

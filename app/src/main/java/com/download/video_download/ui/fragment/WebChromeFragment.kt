@@ -123,7 +123,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                         }
                         searchViewModel.isLoading(isLoading)
                         searchViewModel.saveVideos(videoList)
-                        if (isLoading && videoList.isNotEmpty()){
+                        if (!isLoading && videoList.isNotEmpty()){
                             endTime = System.currentTimeMillis()
                             TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser7, mapOf("safedddd1" to curUrl,"safedddd2" to (endTime - startTime).toString()))
                         }

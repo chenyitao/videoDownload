@@ -58,7 +58,7 @@ class HomeViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -66,7 +66,7 @@ class HomeViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -74,7 +74,7 @@ class HomeViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.BACK, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -82,7 +82,7 @@ class HomeViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.TAB, AdType.INTERSTITIAL, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }
@@ -96,7 +96,7 @@ class HomeViewModel: BaseViewModel() {
             AdMgr.INSTANCE.preloadAd(AdPosition.HOME, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
                     _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }

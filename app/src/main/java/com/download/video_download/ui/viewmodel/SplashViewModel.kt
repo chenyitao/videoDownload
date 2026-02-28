@@ -137,7 +137,7 @@ class SplashViewModel : BaseViewModel() {
             AdMgr.INSTANCE.preloadAd(AdPosition.LOADING, AdType.APP_OPEN, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
                     _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
             })
         }
     }
@@ -157,7 +157,7 @@ class SplashViewModel : BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.batchPreloadAds(adPairs, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                    LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
     }

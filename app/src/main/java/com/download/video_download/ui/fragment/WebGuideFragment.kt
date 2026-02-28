@@ -59,7 +59,7 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
                     onShowResult = { position, adType, success, error->
                         if (success){
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
-                                viewModel.adjustGuideView()
+                                viewModel.adjustGuideView(true)
                                 binding.adView.visibility = View.VISIBLE
                                 binding.adView.setNativeAd(it,requireContext())
                             }
@@ -68,6 +68,12 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
                                     delay(200)
                                     viewModel.preloadNAd(requireContext())
                                 }
+                            }
+                        }else{
+                            if (error?.code == -2){
+                                viewModel.adjustGuideView(false)
+                                binding.adView.visibility = View.GONE
+                                binding.adView.releaseAd()
                             }
                         }
                     })

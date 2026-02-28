@@ -123,7 +123,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
             if (hasCache){
                 AdMgr.INSTANCE.showAd(AdPosition.LANGUAGE, AdType.INTERSTITIAL,this@LanguageActivity,
                     onShowResult = { position, adType, success, error->
-                        LogUtils.d("广告:  ${error?.message}${error?.domain}")
+                        LogUtils.d("ad:  ${error?.message}${error?.domain}")
                     },onAdDismissed = { position, adType ->
                         jump()
                     })
