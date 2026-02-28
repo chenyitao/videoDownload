@@ -10,6 +10,7 @@ import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.Rf
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.AsyncPostRequest
+import com.download.video_download.base.utils.LogUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,6 +42,7 @@ class RemoteConfig private constructor(){
         periodicReportJob = coroutineScope.launch(Dispatchers.IO) {
             while (isActive) {
                 try {
+                    LogUtils.d("Remote","获取远程配置...")
                     TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 2))
                     if (!AppCache.isFirstGetConfig){
                         delay(50*60 * 1000)

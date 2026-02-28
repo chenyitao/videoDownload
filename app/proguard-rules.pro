@@ -57,3 +57,44 @@
 -keepclassmembers class * {
     @androidx.lifecycle.OnLifecycleEvent *;
 }
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keepattributes Signature
+-keep class com.appsflyer.** { *; }
+-keep class kotlin.jvm.internal.** { *; }
+-keep public class com.android.installreferrer.** { *; }
+-keep class com.download.video_download.base.config.cg.** { *; }
+-keep class com.download.video_download.base.config.sensor.** { *; }
+-keep class com.facebook.** { *; }
+-keep interface com.facebook.** { *; }
+-keep enum com.facebook.** { *; }
+-keepclassmembers class com.facebook.** {
+  *;
+}
+
+-keepnames class com.facebook.** { *; }
+-keepclasseswithmembers class com.facebook.** { *; }
+-keep class com.appsflyer.** { *; }
+-keep interface com.appsflyer.** { *; }
+-keep enum com.appsflyer.** { *; }
+-keepclassmembers class com.appsflyer.** {
+    static final ** Companion;
+    static <fields>;
+    static <methods>;
+}
+-keepattributes KotlinMetadata, InnerClasses, EnclosingMethod, Signature, RuntimeVisibleAnnotations
+-keep class kotlin.Metadata { *; }
+-keep class com.appsflyer.internal.** { *; }
+-keepclassmembers class com.appsflyer.internal.** {
+    <init>(...);
+    *;
+}
+-keepclasseswithmembers class com.appsflyer.** {
+    native <methods>;
+    public <init>(android.content.Context);
+}
+-keep class com.appsflyer.internal.AFj1cSDK { *; }
+-dontwarn com.appsflyer.**
+-dontwarn kotlin.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
