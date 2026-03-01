@@ -126,7 +126,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
                         onShowResult = { position, adType, success, error->
-                            if (error?.code == -2){
+                            if (error?.code == -2 || error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
                                 viewModel.preloadBkAd(requireActivity())
                                 if (AppCache.history.isNotEmpty() && AppCache.history != "[]" && AppCache.history != "{}") {
                                     curPage = SearchState.HISTORY
@@ -345,7 +345,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                     lifecycleScope.launch {
                         AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
                             onShowResult = { position, adType, success, error->
-                                if (error?.code == -2){
+                                if (error?.code == -2 || error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
                                     viewModel.preloadBkAd(requireActivity())
                                     binding.etSearch.text?.clear()
                                     mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
@@ -424,7 +424,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                     lifecycleScope.launch {
                         AdMgr.INSTANCE.showAd(AdPosition.BACK, AdType.INTERSTITIAL,requireActivity(),
                             onShowResult = { position, adType, success, error->
-
+                                if (error?.code == -2 || error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
+                                    viewModel.preloadBkAd(requireActivity())
+                                    binding.etSearch.text?.clear()
+                                    mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.HOME))
+                                }
                             }, onAdDismissed =  {position, adType->
                                 viewModel.preloadBkAd(requireActivity())
                                 binding.etSearch.text?.clear()
@@ -637,7 +641,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                             requireActivity(),
                             onShowResult={ position, adType, success, error->
                                 LogUtils.d("ad: ${error?.message}${error?.domain}")
-                                if (error?.code == -2){
+                                if (error?.code == -2|| error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
                                     viewModel.preloadSdAd(requireContext())
                                     handleStartDownload(video)
                                 }

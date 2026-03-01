@@ -169,6 +169,7 @@ class SearchViewModel: BaseViewModel() {
     fun preloadSdAd(context: Context) {
         val isAdLoaded = AdMgr.INSTANCE.getAdLoadState(AdPosition.START_DOWNLOAD, AdType.INTERSTITIAL) == AdLoadState.LOADED
         if (isAdLoaded){
+            LogUtils.d("ad:  Advertising data already existsfound START_DOWNLOAD-INTERSTITIAL ad unit")
             return
         }
         viewModelScope.launch {

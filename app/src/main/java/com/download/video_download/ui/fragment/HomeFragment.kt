@@ -58,7 +58,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         requireActivity(),
                         onShowResult={ position, adType, success, error->
                             LogUtils.d("ad: ${error?.message}${error?.domain}")
-                            if (error?.code == -2){
+                            if (error?.code == -2 || error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
                                 mainViewModel.navigate(NavigationItem(it.url, NavState.HOME, NavState.SEARCH))
                             }
                         },

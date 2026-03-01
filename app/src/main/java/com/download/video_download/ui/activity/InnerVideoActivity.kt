@@ -2,7 +2,6 @@ package com.download.video_download.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment.DIRECTORY_DOWNLOADS
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import com.download.video_download.base.BaseActivity
@@ -39,6 +38,10 @@ class InnerVideoActivity : BaseActivity<InnerVideoViewModel, ActivityInnerPlayer
         })
         player.setVideoUri("$path/$fileName")
         mBind.flVideoContainer.addView(player)
+        if (hasNavigationBar()){
+            val h = getNavigationBarHeight()
+            mBind.container.setPadding(0,0,0,h)
+        }
     }
 
     override fun initListeners() {

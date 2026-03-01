@@ -75,7 +75,7 @@ class App : MultiDexApplication() {
             context = this,
             fileName = "cache.txt"
         )
-        if (cacheStr.isNotEmpty()) {
+        if (cacheStr.isNotEmpty() && AppCache.adcf.isEmpty() ) {
             AppCache.adcf = DESUtil.decryptCBC(cacheStr)
         }
         LanguageUtils.initLocale(this)

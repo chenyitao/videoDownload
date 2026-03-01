@@ -85,7 +85,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 lifecycleScope.launch {
                     AdMgr.INSTANCE.showAd(AdPosition.TAB, AdType.INTERSTITIAL,this@MainActivity,
                         onShowResult = { position, adType, success, error->
-                            if (error?.code == -2){
+                            if (error?.code == -2 || error?.code == -1 || error?.code == -5 || error?.code == -6 || error?.code == -3 || error?.code == -8){
                                 loadFragment(item.itemId)
                             }
                         }, onAdDismissed =  {position, adType->
