@@ -1,18 +1,25 @@
 package com.download.video_download.base.config.cg
 
+import android.content.Context
+import androidx.lifecycle.viewModelScope
 import com.download.video_download.App
 import com.download.video_download.R
 import com.download.video_download.base.ad.AdMgr
+import com.download.video_download.base.ad.model.AdPosition
+import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.config.utils.CfUtils
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.Rf
+import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.AsyncPostRequest
 import com.download.video_download.base.utils.LogUtils
+import com.download.video_download.ui.activity.SplashActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -21,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.UUID
 import kotlin.coroutines.resume
@@ -121,6 +129,11 @@ class RemoteConfig private constructor(){
         adConfig?.let {
             AdMgr.INSTANCE.initAdData()
             val advert = it.getJSONObject("at")
+            if (advert.has("lg")
+                && ActivityManager.currentActivity() is SplashActivity
+                && App.isAppInForeground && !AppCache.isSelectLng){
+                preloadLGAds()
+            }
             var safedddd = ""
             if (advert.has("lg")){
                 safedddd = "1"
@@ -201,5 +214,20 @@ class RemoteConfig private constructor(){
             put("bb", UUID.randomUUID().toString())
         }
         return Crypt.paramsEncrypt(json)
+    }
+    private fun preloadLGAds() {
+        val adPairs = mutableListOf<Pair<AdPosition, AdType>>()
+        if (!AppCache.isSelectLng){
+            adPairs.add(AdPosition.LANGUAGE to AdType.NATIVE)
+            adPairs.add(AdPosition.LANGUAGE to AdType.INTERSTITIAL)
+        }
+        coroutineScope.launch {
+            withContext(Dispatchers.Main){
+                AdMgr.INSTANCE.batchPreloadAds(adPairs, App.getAppContext(),
+                    onLoadStateChanged = { position, adType, loadState,error ->
+                        LogUtils.d("ad getRemoteConfig:  ${error?.message}${error?.domain}")
+                    })
+            }
+        }
     }
 }
