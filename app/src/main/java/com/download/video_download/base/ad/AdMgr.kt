@@ -166,6 +166,7 @@ class AdMgr private constructor() {
 
     private suspend fun markAdShowing(position: AdPosition, adType: AdType) {
         showingAdLock.withLock {
+            showingAdCache.removeIf { it == Pair(position, adType) }
             showingAdCache.add(Pair(position, adType))
         }
     }
@@ -174,6 +175,9 @@ class AdMgr private constructor() {
         showingAdLock.withLock {
             showingAdCache.remove(Pair(position, adType))
         }
+    }
+    fun clearAllAdShowCache() {
+        showingAdCache.clear()
     }
 
     suspend fun preloadAd(

@@ -18,6 +18,49 @@ data class GuideData(
 )
 
 @Serializable
+data class Nt(
+    @SerialName("og")
+    val og: String,
+    @SerialName("sNTime")
+    val sNTime: Int,
+    @SerialName("lockN")
+    val lockN: String,
+    @SerialName("lockNTime")
+    val lockNTime: Int,
+    @SerialName("lockNInstallTime")
+    val lockNInstallTime: Int,
+    @SerialName("rhN")
+    val rhN: String,
+    @SerialName("rhNTime")
+    val rhNTime: Int,
+    @SerialName("fNTime")
+    val fNTime: Int,
+    @SerialName("oAdB")
+    val oAdB: String,
+    @SerialName("hB")
+    val hB: String,
+    @SerialName("oB")
+    val oB: String,
+    @SerialName("mediaN")
+    val mediaN: String,
+    @SerialName("mediaNT")
+    val mediaNT: Int,
+)
+@Serializable
+data class Fuc(
+    @SerialName("bBarHide")
+    val bBarHide: String,
+    @SerialName("unInsShow")
+    val unInsShow: String,
+)
+@Serializable
+data class RWeb(
+    @SerialName("show")
+    val show: String,
+    @SerialName("content")
+    val content: MutableList<WebsiteData> = mutableListOf(),
+)
+@Serializable
 data class WebsiteData(
     @SerialName("title")
     val title: String,
@@ -26,7 +69,9 @@ data class WebsiteData(
     @SerialName("color")
     val color: String = "",
     @SerialName("url")
-    val url: String
+    val url: String,
+    @SerialName("sort")
+    val sort: Int = -1,
 )
 @Serializable
 data class History(

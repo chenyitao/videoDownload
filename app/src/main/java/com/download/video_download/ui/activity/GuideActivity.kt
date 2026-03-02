@@ -1,16 +1,12 @@
 package com.download.video_download.ui.activity
 
-import android.R.attr.startX
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
@@ -29,19 +25,17 @@ import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.model.GuideData
-import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.DpUtils
 import com.download.video_download.base.utils.DpUtils.dp2px
 import com.download.video_download.base.utils.StringUtils.boldTargetSubStr
 import com.download.video_download.databinding.ActivityGuideBinding
 import com.download.video_download.ui.viewmodel.GuideViewModel
-import com.google.android.gms.ads.AdActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.abs
 
 class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     val viewModel: GuideViewModel by viewModels()
@@ -110,8 +104,17 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 super.onPageScrollStateChanged(state)
             }
         })
+        var paramsLayout = mBind.viewPager.layoutParams
         if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
             viewModel.handInvestAd(this)
+            paramsLayout.height = DpUtils.dp2px(this,320f)
+        }else{
+            paramsLayout.height = DpUtils.dp2px(this,360f)
+        }
+        mBind.viewPager.layoutParams = paramsLayout
+        if (hasNavigationBar()){
+            val h = getNavigationBarHeight()
+            mBind.container.setPadding(0,0,0,h)
         }
     }
 
@@ -226,6 +229,13 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
             holder.tvIntro.text = pageTitles[position].title
             holder.tvTitle.text = pageTitles[position].description
             holder.tvTitle.visibility = if (pageTitles[position].description.isNotEmpty()) View.VISIBLE else View.GONE
+            var paramsLayout = holder.tvImage.layoutParams
+            if (pageTitles.size ==2){
+                paramsLayout.height = dp2px(App.getAppContext(), 270f)
+            }else{
+                paramsLayout.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            holder.tvImage.layoutParams = paramsLayout
             holder.tvImage.setImageResource(pageTitles[position].image)
             if (position == 2){
                 val boldText = boldTargetSubStr( pageTitles[position].title, App.getAppContext().getString(R.string.guide3_bold))

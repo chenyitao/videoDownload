@@ -4,7 +4,7 @@ import android.util.Log
 import com.download.video_download.BuildConfig
 object LogUtils {
     private const val TAG = "SafeApp"
-    private val LOG_ENABLE = !BuildConfig.DEBUG_MODE
+    private val LOG_ENABLE = BuildConfig.DEBUG_MODE
 
     fun d(tag: String, msg: String) {
         if (LOG_ENABLE) Log.d(tag, msg)

@@ -133,4 +133,29 @@ object AppCache {
             saveValue("totalRv", value)
         }
         get() = getValue("totalRv", "")
+    var nt: String
+        set(value) {
+            saveValue("nt", value)
+        }
+        get() = getValue("nt", "")
+    var fuc : String
+        set(value) {
+            saveValue("fuc", value)
+        }
+        get() = getValue("fuc", "")
+    var rWeb : String
+        set(value) {
+            saveValue("rWeb", value)
+        }
+        get() = getValue("rWeb", "")
+    var og: String
+        set(value) {
+            saveValue("og", value)
+        }
+        get() = getValue("og", "y")
+    var fNTime: Int
+        set(value) {
+            saveValue("fNTime", value)
+        }
+        get() = getValue("fNTime", 65)
 }

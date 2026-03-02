@@ -29,7 +29,7 @@ class HomeViewModel: BaseViewModel() {
         val fb = WebsiteData(
             title = "Facebook",
             image = R.mipmap.ic_fb,
-            url = "https://www.facebook.com"
+            url = "https://www.facebook.com",
         )
         val x = WebsiteData(
             title = "X",

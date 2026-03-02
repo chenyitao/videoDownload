@@ -32,6 +32,7 @@ import org.json.JSONObject
 import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.math.max
+import kotlin.toString
 
 class RemoteConfig private constructor(){
     private var periodicReportJob: Job? = null
@@ -119,6 +120,22 @@ class RemoteConfig private constructor(){
 
         AppCache.adcf = config.toString()
         AppCache.isFirstGetConfig =  false
+        val func = config.optJSONObject("fuc")
+        func?.let {
+            AppCache.fuc = it.toString()
+        }
+        val nt = config.optJSONObject("nt")
+        nt?.let {
+            AppCache.nt = it.toString()
+            val og = it.optString("og","y")
+            AppCache.og = og
+            val fNTime = it.optInt("fNTime",65)
+            AppCache.fNTime = fNTime
+        }
+        val rWeb = config.optJSONObject("rWeb")
+        rWeb?.let {
+            AppCache.rWeb = it.toString()
+        }
         val fc = config.optJSONObject("fc")
         fc?.let {
             App.initFB(fc)

@@ -73,8 +73,28 @@ class App : MultiDexApplication() {
             context = this,
             fileName = "cache.txt"
         )
-        if (cacheStr.isNotEmpty() && AppCache.adcf.isEmpty() ) {
-            AppCache.adcf = DESUtil.decryptCBC(cacheStr)
+        if (cacheStr.isNotEmpty()) {
+            val cacheJson = DESUtil.decryptCBC(cacheStr)
+            if (AppCache.adcf.isEmpty()){
+                AppCache.adcf = cacheJson
+            }
+            val config = JSONObject(cacheJson)
+            if (AppCache.fuc.isEmpty()){
+                val func = config.optJSONObject("fuc")
+                func?.let {
+                    AppCache.fuc = it.toString()
+                }
+            }
+            if (AppCache.nt.isEmpty()){
+                val nt = config.optJSONObject("nt")
+                nt?.let {
+                    AppCache.nt = it.toString()
+                    val og = it.optString("og","y")
+                    AppCache.og = og
+                    val fNTime = it.optInt("fNTime",65)
+                    AppCache.fNTime = fNTime
+                }
+            }
         }
         LanguageUtils.initLocale(this)
         initSdk()
@@ -107,6 +127,7 @@ class App : MultiDexApplication() {
                         val topActivity = ActivityManager.currentActivity()
                         if (topActivity is AdActivity) {
                             topActivity.finish()
+                            AdMgr.INSTANCE.clearAllAdShowCache()
                         }
                     }, 200)
                 }
