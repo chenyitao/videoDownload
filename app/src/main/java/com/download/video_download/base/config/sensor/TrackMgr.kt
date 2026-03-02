@@ -177,16 +177,12 @@ class TrackMgr private constructor() {
         }
     }
 
-    /**
-     * 销毁埋点管理器
-     */
     fun destroy() {
         batchManager.stopTimedReport()
         TrackApiService.instance.cancelAllRequests()
     }
 
     companion object {
-        // 单例实现
         val instance: TrackMgr by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             TrackMgr()
         }

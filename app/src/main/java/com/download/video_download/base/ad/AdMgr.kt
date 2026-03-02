@@ -505,7 +505,7 @@ class AdMgr private constructor() {
         loadLocks.clear()
     }
     private fun revenueAccumulator(it: AdValue){
-        val singleRevenue = BigDecimal.valueOf(3000)
+        val singleRevenue = BigDecimal.valueOf(it.valueMicros)
             .divide(BigDecimal.valueOf(1_000_000), decimalPlaces, BigDecimal.ROUND_DOWN)
         val saveDecimal = AppCache.totalRv
         if (saveDecimal.isNotEmpty()){

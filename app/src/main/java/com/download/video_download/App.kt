@@ -37,9 +37,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.lang.ref.WeakReference
 import java.util.Locale
@@ -205,10 +203,7 @@ class App : MultiDexApplication() {
 
                 override fun onConversionDataFail(errorMessage: String?) {
                     errorMessage?.let {
-                        Log.d(
-                            "appsflyer",
-                            "appsflyer: deeplink fail: $errorMessage"
-                        )
+
                     }
                 }
 
@@ -219,10 +214,7 @@ class App : MultiDexApplication() {
 
                 override fun onAttributionFailure(errorMessage: String?) {
                     errorMessage?.let {
-                        Log.d(
-                            "appsflyer",
-                            "appsflyer: deeplink fail: $errorMessage"
-                        )
+
                     }
                 }
             }
@@ -235,9 +227,7 @@ class App : MultiDexApplication() {
                 }
 
                 override fun onError(p0: Int, p1: String) {
-                    Log.d("appfly", "Launch failed to be sent:\n" +
-                            "Error code: " + p0 + "\n"
-                            + "Error description: " + p1)
+
                 }
             })
             AppsFlyerLib.getInstance().setDebugLog(BuildConfig.DEBUG_MODE)

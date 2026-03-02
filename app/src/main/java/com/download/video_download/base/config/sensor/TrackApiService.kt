@@ -9,9 +9,6 @@ import org.json.JSONObject
 import kotlin.coroutines.resume
 
 
-/**
- * 埋点API服务
- */
 class TrackApiService private constructor() {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

@@ -33,18 +33,12 @@ class BTrackMgr  private constructor() {
         }
     }
 
-    /**
-     * 停止定时上报
-     */
     fun stopTimedReport() {
         periodicReportJob?.cancel()
         periodicReportJob = null
         MermLruCache.instance.clear()
     }
 
-    /**
-     * 执行批量上报
-     */
     private suspend fun performBatchReport(context: Context) {
         try {
             val memoryCache = MermLruCache.instance.getTrackMemoryCache()

@@ -58,7 +58,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         trackJob?.cancel()
         trackJob = lifecycleScope.launch {
             while (isActive) { // isActive
-                delay( 60 * 1000L)
+                delay( 60 *60 * 1000L)
                 TrackMgr.instance.trackEvent(
                     TrackEventType.safedddd_ac,
                     mutableMapOf("safedddd" to "2")

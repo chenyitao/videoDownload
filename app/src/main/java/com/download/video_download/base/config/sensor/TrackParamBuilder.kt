@@ -21,9 +21,6 @@ class TrackParamBuilder private constructor() {
     private val params = mutableMapOf<String, Any>()
 
     companion object {
-        /**
-         * 创建通用参数构建器
-         */
         fun createCommonParams(): TrackParamBuilder {
             val builder = TrackParamBuilder()
             with(builder.params) {
@@ -44,16 +41,10 @@ class TrackParamBuilder private constructor() {
             return builder
         }
 
-        /**
-         * 创建会话参数构建器
-         */
         fun createSessionParams(): TrackParamBuilder {
             return TrackParamBuilder()
         }
 
-        /**
-         * 创建安装参数构建器
-         */
         fun createInstallParams(): TrackParamBuilder {
             val rf = AppCache.gr
             val refer =  App.getAppContext().jsonParser().decodeFromString<Rf>(rf)
@@ -69,14 +60,10 @@ class TrackParamBuilder private constructor() {
                 put("hookworm", refer.installBeginTimestampServerSeconds)
                 put("afraid", refer.firstInstallTime)
                 put("moses", refer.lastUpdateTime)
-//                put("noblemen", refer.googlePlayInstantParam)
             }
             return builder
         }
 
-        /**
-         * 创建广告曝光参数构建器
-         */
         fun createAdImpressionParams(
             adValue: com.google.android.gms.ads.AdValue,
             response: com.google.android.gms.ads.ResponseInfo?,
@@ -124,26 +111,17 @@ class TrackParamBuilder private constructor() {
         }
     }
 
-    /**
-     * 添加自定义参数
-     */
     fun addParam(key: String, value: Any): TrackParamBuilder {
         params[key] = value
         return this
     }
 
-    /**
-     * 添加多个自定义参数
-     */
     fun addParams(newParams: Map<String, Any>): TrackParamBuilder {
         params.putAll(newParams)
         return this
     }
 
-    /**
-     * 构建最终参数Map
-     */
     fun build(): Map<String, Any> {
-        return HashMap(params) // 返回不可变副本，保证线程安全
+        return HashMap(params)
     }
 }

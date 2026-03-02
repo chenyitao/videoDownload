@@ -19,7 +19,6 @@ import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.activity.SplashActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -53,14 +52,14 @@ class RemoteConfig private constructor(){
                     LogUtils.d("Remote","get admin config...")
                     TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 2))
                     if (!AppCache.isFirstGetConfig){
-                        delay(5*60 * 1000)
+                        delay(50*60 * 1000)
                         getAdminConfig()
                     }else{
                         getAdminConfig()
-                        delay(5*60 * 1000)
+                        delay(50*60 * 1000)
                     }
                 } catch (e: Exception) {
-                    delay(5*60 * 1000)
+                    delay(50*60 * 1000)
                 }
             }
         }

@@ -39,7 +39,6 @@ class GoogleRef  private constructor(){
     private var currentRetryCount = 0
     fun init(context: Context,success:()->Unit) {
         if (AppCache.gr.isNotEmpty()) {
-            Log.d(TAG, "Referrer已获取成功，无需重复获取")
             return
         }
         currentRetryCount = 0
@@ -53,10 +52,8 @@ class GoogleRef  private constructor(){
                     doFetchReferrer(context,success)
                 }
             } catch (e: TimeoutCancellationException) {
-                Log.e(TAG, "Referrer获取超时(${FETCH_TIMEOUT_MS}ms)，当前重试次数：$currentRetryCount")
                 handleFetchFailure(context,success)
             } catch (e: Exception) {
-                Log.e(TAG, "Referrer获取异常，当前重试次数：$currentRetryCount", e)
                 handleFetchFailure(context,success)
             }
         }
@@ -85,10 +82,6 @@ class GoogleRef  private constructor(){
                 lastUpdateTime = lastUpdateTime,
                 installVersion = installVersion
             )
-            Log.d(
-                "InstallRefer",
-                "InstallRefer: InstallRefer request success  ,referdata: ${context.jsonParser().encodeToString(referrer)}"
-            )
             AppCache.gr = context.jsonParser().encodeToString(referrer)
         }.onSuccess {
         }.onFailure {
@@ -107,7 +100,6 @@ class GoogleRef  private constructor(){
                         referrerClient?.endConnection()
                     }
                     else -> {
-                        Log.d(TAG, "Referrer获取失败，响应码：$responseCode")
                         handleFetchFailure(context,success)
                     }
                 }
