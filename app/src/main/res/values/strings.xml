@@ -60,4 +60,7 @@
     <string name="Share">Share</string>
     <string name="delete_successfully">Delete successfully</string>
     <string name="file_valide">The video link appears to be invalid or broken.</string>
+    <string name="short_download">Download</string>
+    <string name="short_video_play">Video Play</string>
+    <string name="short_uninstall">Uninstall</string>
 </resources>

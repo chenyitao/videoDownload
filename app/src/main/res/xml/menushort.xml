@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="long_press_dl"
+        android:enabled="true"
+        android:icon="@drawable/ic_short_download"
+        android:shortcutShortLabel="@string/short_download">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.download.video_download"
+            android:targetClass="com.download.video_download.ui.activity.MainActivity">
+            <extra android:name="param" android:value="dl" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="long_press_vp"
+        android:enabled="true"
+        android:icon="@drawable/ic_short_video_play"
+        android:shortcutShortLabel="@string/short_video_play">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.download.video_download"
+            android:targetClass="com.download.video_download.ui.activity.MainActivity">
+            <extra android:name="param" android:value="vp" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

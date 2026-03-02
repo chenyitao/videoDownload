@@ -115,7 +115,7 @@ class RemoteConfig private constructor(){
     }
     private fun handleConfigSuccess(data: String) {
         val config = Crypt.paramsDecrypt (data)
-        LogUtils.d("Config",config.toString())
+        LogUtils.d("Config：${config.toString()}")
 
         AppCache.adcf = config.toString()
         AppCache.isFirstGetConfig =  false
@@ -197,7 +197,7 @@ class RemoteConfig private constructor(){
         var refer: Rf? = null
         referStr.takeIf { it.isNotEmpty() }?.let {
             refer = App.getAppContext().jsonParser().decodeFromString<Rf>(referStr)
-            rfUrl = refer.referrerUrl
+            rfUrl = "utm_content=tiktokglobal_E_C_P_C"
         }
 
         val json = JSONObject().apply {
