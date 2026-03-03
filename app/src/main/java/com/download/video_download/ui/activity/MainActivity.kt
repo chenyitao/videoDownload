@@ -1,9 +1,13 @@
 package com.download.video_download.ui.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.ViewTreeObserver
+import android.view.WindowInsets
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.databinding.ActivityMainBinding
@@ -66,6 +70,26 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             }
         }
         trackJob?.start()
+        if (hasNavigationBar()){
+            if (isNavigationBarHidden){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    mBind.navBottom.setOnApplyWindowInsetsListener { v, insets ->
+                        WindowInsets.CONSUMED
+                    }
+                } else {
+                    mBind.navBottom.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            mBind.navBottom.setPadding(0, 0, 0, 0)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                mBind.navBottom.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            } else {
+                                mBind.navBottom.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                            }
+                        }
+                    })
+                }
+            }
+        }
     }
 
     override fun initListeners() {

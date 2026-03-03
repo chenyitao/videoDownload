@@ -67,8 +67,12 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
         mBind.lottieIcon.playAnimation()
         updateText()
         if (hasNavigationBar()){
-            val h = getNavigationBarHeight()
-            mBind.container.setPadding(0,0,0,h)
+            if (isNavigationBarHidden){
+                mBind.container.setPadding(0,0,0,0)
+            }else{
+                val h = getNavigationBarHeight()
+                mBind.container.setPadding(0,0,0,h)
+            }
         }
         viewModel.handInvestAd(this)
     }

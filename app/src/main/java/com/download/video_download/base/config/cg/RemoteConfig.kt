@@ -14,8 +14,10 @@ import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.Rf
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.AppIconMenu
 import com.download.video_download.base.utils.AsyncPostRequest
 import com.download.video_download.base.utils.LogUtils
+import com.download.video_download.base.utils.NavigationBarUtils
 import com.download.video_download.ui.activity.SplashActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -123,6 +125,20 @@ class RemoteConfig private constructor(){
         val func = config.optJSONObject("fuc")
         func?.let {
             AppCache.fuc = it.toString()
+            val bBarHide = func.optString("bBarHide","n")
+            val unInsShow = func.optString("unInsShow","n")
+            ActivityManager.currentActivity()?.let {ac->
+                if (bBarHide == "y") {
+                    NavigationBarUtils.hideNavigationBar(ac)
+                }else{
+                    NavigationBarUtils.showNavigationBar(ac)
+                }
+                if (unInsShow == "y") {
+                    AppIconMenu.addAppIconMenuItem(ac)
+                }else{
+                    AppIconMenu.removeAppIconMenuItem(ac)
+                }
+            }
         }
         val nt = config.optJSONObject("nt")
         nt?.let {

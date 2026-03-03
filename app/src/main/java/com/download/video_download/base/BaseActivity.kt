@@ -25,6 +25,7 @@ import com.download.video_download.base.ext.startActivityWithExtras
 import com.download.video_download.base.utils.NavigationBarUtils.setNavigationBarColor
 import com.download.video_download.ui.activity.MainActivity
 import com.download.video_download.ui.activity.SplashActivity
+import org.json.JSONObject
 import java.util.Locale
 
 abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatActivity(), App.AppStatusChangeListener {
@@ -38,12 +39,26 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
 
     lateinit var mViewModel: VM
     var myApp: App? = null
+    public var isNavigationBarHidden = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LanguageUtils.applyLanguageConfiguration(this)
         mBind = createViewBinding()
         setContentView(mBind.root)
         mViewModel = createViewModel()
+        AppCache.fuc.takeIf { it.isNotEmpty() }?.let {fc->
+            val fuc = JSONObject(fc)
+            val bBarHide = fuc.optString("bBarHide","n")
+            ActivityManager.currentActivity()?.let {ac->
+                if (bBarHide == "y") {
+                    isNavigationBarHidden = true
+                    NavigationBarUtils.hideNavigationBar(ac)
+                }else{
+                    isNavigationBarHidden = false
+                    NavigationBarUtils.showNavigationBar(ac)
+                }
+            }
+        }
         initImmersiveUI()
         initViews(savedInstanceState)
         initData()
@@ -84,16 +99,6 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
             true
-//        ViewCompat.setOnApplyWindowInsetsListener(mBind.root) { view, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            view.updatePadding(
-//                left = 0,
-//                top = 0,
-//                right = 0,
-//                bottom = systemBars.bottom
-//            )
-//            insets
-//        }
     }
 
     private fun restoreImmersiveState() {

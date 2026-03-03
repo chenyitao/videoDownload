@@ -113,8 +113,12 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         }
         mBind.viewPager.layoutParams = paramsLayout
         if (hasNavigationBar()){
-            val h = getNavigationBarHeight()
-            mBind.container.setPadding(0,0,0,h)
+            if (isNavigationBarHidden){
+                mBind.container.setPadding(0,0,0,0)
+            }else{
+                val h = getNavigationBarHeight()
+                mBind.container.setPadding(0,0,0,h)
+            }
         }
     }
 

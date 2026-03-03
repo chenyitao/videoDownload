@@ -5,7 +5,9 @@ import android.graphics.Rect
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
+import androidx.core.view.WindowCompat
 
 object NavigationBarUtils {
     fun hasNavigationBar(activity: Activity): Boolean {
@@ -72,19 +74,39 @@ object NavigationBarUtils {
     }
 
     fun hideNavigationBar(activity: Activity) {
-        activity.window.decorView.systemUiVisibility = (
-            activity.window.decorView.systemUiVisibility
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            )
+        val window = activity.window
+        val decorView = window.decorView
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val controller = decorView.windowInsetsController
+            controller?.let {
+                it.hide(WindowInsets.Type.navigationBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    )
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
     }
 
     fun showNavigationBar(activity: Activity) {
-        activity.window.decorView.systemUiVisibility = (
-            activity.window.decorView.systemUiVisibility
-                and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
-                and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
-            )
+        val window = activity.window
+        val decorView = window.decorView
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            decorView.windowInsetsController?.show(WindowInsets.Type.navigationBars())
+            window.setDecorFitsSystemWindows(true)
+        } else {
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
     }
 
     fun isNavigationBarVisible(activity: Activity): Boolean {
