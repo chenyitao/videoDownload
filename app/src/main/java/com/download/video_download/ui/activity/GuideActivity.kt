@@ -45,6 +45,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     private var param = ""
     private var currentPage = 0
     private var isForbidRightScroll = true
+    private var from = ""
     override fun createViewBinding(): ActivityGuideBinding {
         return ActivityGuideBinding.inflate(layoutInflater)
     }
@@ -53,7 +54,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
 
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
-        val from = intent.getStringExtra("from")
+        from = intent.getStringExtra("from")?:""
         param = intent?.extras?.getString("param") ?: ""
         LogUtils.d("type111113", param)
         guideList = viewModel.getGuideList(from?:"")
@@ -292,5 +293,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent( intent)
+        from = intent.getStringExtra("from")?:""
+        param = intent?.extras?.getString("param") ?: ""
     }
 }

@@ -157,5 +157,6 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent( intent)
+        param = intent?.extras?.getString("param") ?: ""
     }
 }

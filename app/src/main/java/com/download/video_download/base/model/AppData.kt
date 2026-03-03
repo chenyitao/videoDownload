@@ -112,3 +112,7 @@ data class Rf(
     @SerialName("installVersion")
     val installVersion: String?
 )
+data class TagData(
+    val title: String,
+    var isSelected: Boolean = false,
+)

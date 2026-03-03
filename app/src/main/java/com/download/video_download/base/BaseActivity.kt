@@ -90,12 +90,12 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     private fun initImmersiveUI() {
         if (enableImmersiveStatusBar) {
             StatusBarUtils.setTransparentStatusBar(this)
-            StatusBarUtils.setStatusBarLightMode(this) // 默认浅色文字
+            StatusBarUtils.setStatusBarLightMode(this)
         }
         if (enableImmersiveNavigationBar) {
             setNavigationBarColor(this, android.graphics.Color.TRANSPARENT)
             NavigationBarUtils.setImmersiveNavigationBar(this)
-            NavigationBarUtils.setNavigationBarLightMode(this) // 默认浅色文字
+            NavigationBarUtils.setNavigationBarLightMode(this)
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
             true
@@ -188,20 +188,17 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     }
 
     override fun onAppEnterForeground() {
-        if (ActivityManager.currentActivity() is SplashActivity){
-            return
-        }
-        if (App.isJumpingToSystemSetting){
-            App.isJumpingToSystemSetting = false
-            return
-        }
-        startActivity<SplashActivity>{
-            putExtra("from", "Background")
-            addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                        or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-            )
-        }
+//        if (ActivityManager.currentActivity() is SplashActivity){
+//            return
+//        }
+//        if (App.isJumpingToSystemSetting){
+//            App.isJumpingToSystemSetting = false
+//            return
+//        }
+//        LogUtils.d("onAppEnterForeground")
+//        startActivity<SplashActivity>{
+//            putExtra("from", "Background")
+//        }
     }
 
     override fun onAppEnterBackground() {

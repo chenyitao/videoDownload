@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Loading… %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Loading… %d%%</string>
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>
     <string name="nav_download">Download</string>
@@ -57,4 +60,15 @@
     <string name="Share">Share</string>
     <string name="delete_successfully">Delete successfully</string>
     <string name="file_valide">The video link appears to be invalid or broken.</string>
+    <string name="short_download">Download</string>
+    <string name="short_video_play">Video Play</string>
+    <string name="short_uninstall">Uninstall</string>
+    <string name="short_uninstall_title">You’re on the right track. Shall we try again\?</string>
+    <string name="short_feedback_title">We’d love to hear your feedback</string>
+    <string name="short_uninstall_dl">Having trouble downloading the video\?</string>
+    <string name="short_uninstall_vp">Having trouble playing the video\?</string>
+    <string name="short_uninstall_dl_bt">Learn More</string>
+    <string name="short_uninstall_vp_bt">Watch Now</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">Still uninstall</string>
 </resources>

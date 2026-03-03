@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="loading_progress">جار التحميل… %d%%</string>
+    <string name="loading_progress" translatable="false">جار التحميل… %d%%</string>
     <string name="nav_home">المنزل</string>
     <string name="nav_search">البحث</string>
     <string name="nav_download">تحميل</string>
@@ -57,4 +57,15 @@
     <string name="Share">شارك</string>
     <string name="delete_successfully">حذف بنجاح</string>
     <string name="file_valide">يبدو أن رابط الفيديو غير صالح أو معطل.</string>
+    <string name="short_download">تحميل</string>
+    <string name="short_video_play">الفيديو بلاي</string>
+    <string name="short_uninstall">إلغاء التثبيت</string>
+    <string name="short_uninstall_title">أنت على الطريق الصحيح. هل نجرب مرة أخرى؟</string>
+    <string name="short_feedback_title">نود سماع آرائكم</string>
+    <string name="short_uninstall_dl">هل تواجه مشكلة في تحميل الفيديو؟</string>
+    <string name="short_uninstall_vp">هل تواجه صعوبة في تشغيل الفيديو؟</string>
+    <string name="short_uninstall_dl_bt">تعرف على المزيد</string>
+    <string name="short_uninstall_vp_bt">شاهد الآن</string>
+    <string name="keep_app">تطبيق Keep</string>
+    <string name="still_uninstall">ما زلت أقوم بإلغاء التثبيت</string>
 </resources>

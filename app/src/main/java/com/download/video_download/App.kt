@@ -3,6 +3,7 @@ package com.download.video_download
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.config.sensor.TrackParamBuilder
 import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.model.Rf
 import com.download.video_download.base.task.HlsMerger
 import com.download.video_download.base.utils.ActivityManager
@@ -29,6 +31,8 @@ import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DESUtil
 import com.download.video_download.base.utils.GoogleRef
 import com.download.video_download.base.utils.LanguageUtils
+import com.download.video_download.base.utils.LogUtils
+import com.download.video_download.ui.activity.SplashActivity
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.gms.ads.AdActivity
@@ -48,6 +52,7 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         weakApp = WeakReference(this)
+        isColdStart = true
         AppCache.init(this)
         TrackMgr.instance.init(this)
         if (AppCache.gr.isEmpty()){
@@ -106,9 +111,25 @@ class App : MultiDexApplication() {
 
             override fun onActivityStarted(activity: Activity) {
                 foregroundActivityCount++
+                Log.d("1111111111112","onAppEnterForeground + $foregroundActivityCount")
                 if (foregroundActivityCount == 1 && !isAppInForeground) {
                     isAppInForeground = true
+                    Log.d("1111111111112","onAppEnterForeground + 热启动")
                     statusChangeListeners.forEach { it.onAppEnterForeground() }
+                    if (activity is SplashActivity){
+                        return
+                    }
+                    if (isJumpingToSystemSetting){
+                        isJumpingToSystemSetting = false
+                        return
+                    }
+                    Log.d("111111111111","onAppEnterForeground")
+                    startActivity<SplashActivity>(){
+                        addFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK
+                                    or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                        )
+                    }
                 }
             }
 
@@ -120,6 +141,7 @@ class App : MultiDexApplication() {
 
             override fun onActivityStopped(activity: Activity) {
                 foregroundActivityCount--
+                Log.d("1111111111113","onAppEnterForeground + $foregroundActivityCount")
                 if (foregroundActivityCount == 0 && isAppInForeground) {
                     isAppInForeground = false
                     statusChangeListeners.forEach { it.onAppEnterBackground() }
@@ -144,6 +166,7 @@ class App : MultiDexApplication() {
         private var weakApp: WeakReference<Application>? = null
         var isAppInForeground = false
         var isJumpingToSystemSetting = false
+        var isColdStart = false
         fun initFB(fbobj: JSONObject?){
             if(!FacebookSdk.isInitialized()){
                 val fbcg = AppCache.fb

@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Загрузка... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Загрузка… %d%%</string>
     <string name="nav_home">Дом</string>
     <string name="nav_search">Поиск</string>
     <string name="nav_download">Скачать</string>
@@ -57,4 +60,15 @@
     <string name="Share">Поделиться</string>
     <string name="delete_successfully">Удалять успешно</string>
     <string name="file_valide">Ссылка на видео, похоже, некорректна или сломана.</string>
+    <string name="short_download">Скачать</string>
+    <string name="short_video_play">Воспроизведение видео</string>
+    <string name="short_uninstall">Удалить</string>
+    <string name="short_uninstall_title">Ты на правильном пути. Попробуем ещё раз\?</string>
+    <string name="short_feedback_title">Нам будет интересно услышать ваши отзывы</string>
+    <string name="short_uninstall_dl">Проблемы с загрузкой видео\?</string>
+    <string name="short_uninstall_vp">Проблемы с воспроизведением видео\?</string>
+    <string name="short_uninstall_dl_bt">Узнать больше</string>
+    <string name="short_uninstall_vp_bt">Смотрите сейчас</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">Всё равно удаляю</string>
 </resources>

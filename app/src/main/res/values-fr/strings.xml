@@ -1,6 +1,6 @@
 <resources>
     
-    <string name="loading_progress">Chargement... %d%%</string>
+    <string name="loading_progress" translatable="false">Chargement… %d%%</string>
     <string name="nav_home">Accueil</string>
     <string name="nav_search">Recherche</string>
     <string name="nav_download">Télécharger</string>
@@ -57,4 +57,15 @@
     <string name="Share">Partager</string>
     <string name="delete_successfully">Supprimer avec succès</string>
     <string name="file_valide">Le lien vidéo semble invalide ou cassé.</string>
+    <string name="short_download">Télécharger</string>
+    <string name="short_video_play">Lecture vidéo</string>
+    <string name="short_uninstall">Désinstaller</string>
+    <string name="short_uninstall_title">Tu es sur la bonne voie. On réessaie \?</string>
+    <string name="short_feedback_title">Nous serions ravis d’avoir vos retours</string>
+    <string name="short_uninstall_dl">Vous avez du mal à télécharger la vidéo \?</string>
+    <string name="short_uninstall_vp">Vous avez du mal à lire la vidéo \?</string>
+    <string name="short_uninstall_dl_bt">En savoir plus</string>
+    <string name="short_uninstall_vp_bt">Regardez maintenant</string>
+    <string name="keep_app">Garder l’application</string>
+    <string name="still_uninstall">Toujours désinstallé</string>
 </resources>

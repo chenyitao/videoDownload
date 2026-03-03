@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Cargando... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Cargando… %d%%</string>
     <string name="nav_home">Inicio</string>
     <string name="nav_search">Búsqueda</string>
     <string name="nav_download">Descargar</string>
@@ -57,4 +60,15 @@
     <string name="Share">Compartir</string>
     <string name="delete_successfully">Eliminar con éxito</string>
     <string name="file_valide">El enlace del vídeo parece ser inválido o estar roto.</string>
+    <string name="short_download">Descargar</string>
+    <string name="short_video_play">Reproducirse en vídeo</string>
+    <string name="short_uninstall">Desinstalar</string>
+    <string name="short_uninstall_title">Vas por buen camino. ¿Lo intentamos de nuevo\?</string>
+    <string name="short_feedback_title">Nos encantaría conocer vuestros comentarios</string>
+    <string name="short_uninstall_dl">¿Tienes problemas para descargar el vídeo\?</string>
+    <string name="short_uninstall_vp">¿Tienes problemas para reproducir el vídeo\?</string>
+    <string name="short_uninstall_dl_bt">Más información</string>
+    <string name="short_uninstall_vp_bt">Mira ahora</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">Sigo desinstalando</string>
 </resources>

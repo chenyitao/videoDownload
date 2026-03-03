@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">กําลังโหลด... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">กําลังโหลด… %d%%</string>
     <string name="nav_home">หน้าแรก</string>
     <string name="nav_search">ค้นหา</string>
     <string name="nav_download">ดาวน์โหลด</string>
@@ -57,4 +60,15 @@
     <string name="Share">ใช้ร่วมกัน</string>
     <string name="delete_successfully">ลบสําเร็จ</string>
     <string name="file_valide">ลิงก์วิดีโอดูเหมือนจะไม่ถูกต้องหรือใช้งานไม่ได้</string>
+    <string name="short_download">ดาวน์โหลด</string>
+    <string name="short_video_play">การเล่นวิดีโอ</string>
+    <string name="short_uninstall">ถอนการติดตั้ง</string>
+    <string name="short_uninstall_title">คุณมาถูกทางแล้ว เราจะลองอีกครั้งไหม\?</string>
+    <string name="short_feedback_title">เราชอบรับฟังความคิดเห็นของคุณ</string>
+    <string name="short_uninstall_dl">มีปัญหาในการดาวน์โหลดวิดีโอใช่ไหม</string>
+    <string name="short_uninstall_vp">มีปัญหาในการเล่นวิดีโอใช่ไหม</string>
+    <string name="short_uninstall_dl_bt">เรียนรู้เพิ่มเติม</string>
+    <string name="short_uninstall_vp_bt">ดูตอนนี้</string>
+    <string name="keep_app">เก็บแอป</string>
+    <string name="still_uninstall">ยังคงถอนการติดตั้ง</string>
 </resources>

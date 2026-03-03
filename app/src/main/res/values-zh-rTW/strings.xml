@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">載入中... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">載入中… %d%%</string>
     <string name="nav_home">首頁</string>
     <string name="nav_search">搜尋</string>
     <string name="nav_download">下載</string>
@@ -57,4 +60,15 @@
     <string name="Share">分享</string>
     <string name="delete_successfully">成功刪除</string>
     <string name="file_valide">影片連結似乎無效或斷裂。</string>
+    <string name="short_download">下載</string>
+    <string name="short_video_play">影片播放</string>
+    <string name="short_uninstall">卸載</string>
+    <string name="short_uninstall_title">你走在正確的路上。我們再試一次嗎？</string>
+    <string name="short_feedback_title">我們很想聽聽你的回饋</string>
+    <string name="short_uninstall_dl">下載影片遇到困難嗎？</string>
+    <string name="short_uninstall_vp">播放影片有困難嗎？</string>
+    <string name="short_uninstall_dl_bt">了解更多</string>
+    <string name="short_uninstall_vp_bt">立即觀看</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">還是要卸載</string>
 </resources>

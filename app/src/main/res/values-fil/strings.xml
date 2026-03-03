@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Naglo-load... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Naglo-load… %d%%</string>
     <string name="nav_home">Tahanan</string>
     <string name="nav_search">Paghahanap</string>
     <string name="nav_download">I-download</string>
@@ -57,4 +60,15 @@
     <string name="Share">Ibahagi</string>
     <string name="delete_successfully">Matagumpay na tanggalin</string>
     <string name="file_valide">Tila hindi wasto o nasira ang link ng video.</string>
+    <string name="short_download">I-download</string>
+    <string name="short_video_play">Pag-play ng Video</string>
+    <string name="short_uninstall">I-uninstall</string>
+    <string name="short_uninstall_title">Nasa tamang landas ka. Dapat ba nating subukang muli\?</string>
+    <string name="short_feedback_title">Gustung-gusto naming marinig ang iyong feedback</string>
+    <string name="short_uninstall_dl">Nahihirapan ka bang i-download ang video\?</string>
+    <string name="short_uninstall_vp">Nahihirapan ka bang i-play ang video\?</string>
+    <string name="short_uninstall_dl_bt">Matuto nang higit pa</string>
+    <string name="short_uninstall_vp_bt">Panoorin Ngayon</string>
+    <string name="keep_app">Panatilihin ang App</string>
+    <string name="still_uninstall">I-uninstall pa rin</string>
 </resources>

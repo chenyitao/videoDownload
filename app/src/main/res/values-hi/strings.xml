@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">लोड हो रहा है... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">लोड हो रहा है… %d%%</string>
     <string name="nav_home">घर</string>
     <string name="nav_search">खोज</string>
     <string name="nav_download">डाउनलोड</string>
@@ -57,4 +60,15 @@
     <string name="Share">पत्ती</string>
     <string name="delete_successfully">सफलतापूर्वक हटाएं</string>
     <string name="file_valide">वीडियो लिंक अमान्य या टूटा हुआ प्रतीत होता है।</string>
+    <string name="short_download">डाउनलोड</string>
+    <string name="short_video_play">वीडियो चलाना</string>
+    <string name="short_uninstall">स्थापना रद्द करें</string>
+    <string name="short_uninstall_title">आप सही रास्ते पर हैं। क्या हम फिर से कोशिश करेंगे\?</string>
+    <string name="short_feedback_title">हमें आपकी प्रतिक्रिया सुनना अच्छा लगेगा</string>
+    <string name="short_uninstall_dl">वीडियो डाउनलोड करने में परेशानी हो रही है\?</string>
+    <string name="short_uninstall_vp">वीडियो चलाने में परेशानी हो रही है\?</string>
+    <string name="short_uninstall_dl_bt">और जानो</string>
+    <string name="short_uninstall_vp_bt">अभी देखें</string>
+    <string name="keep_app">ऐप रखें</string>
+    <string name="still_uninstall">अभी भी स्थापना रद्द करें</string>
 </resources>

@@ -2,11 +2,13 @@ package com.download.video_download.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
+import com.download.video_download.App.Companion.isColdStart
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.base.ad.AdMgr
@@ -42,8 +44,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
         param = intent?.extras?.getString("param") ?: ""
+        Log.d("1111111111112","ac1123123 + ${ActivityManager.getActivityCount()}")
         LogUtils.d("type11111", param)
-        if (intent?.extras?.getString("from") != "Background"){
+        if (isColdStart){
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
         }else{
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_af)
@@ -85,7 +88,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         })
     }
     private fun route(){
-        if (intent?.extras?.getString("from") != "Background") {
+        Log.d("1111111111112","ac1123123111111 + ${ActivityManager.getActivityCount()}")
+        if (isColdStart || param.isNotEmpty()) {
             if (param == "us"){
                 startActivity<UninsActivity>()
                 finish()
@@ -117,14 +121,19 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        mViewModel.resetAfterAdClosed()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        mViewModel.resetAfterAdClosed()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        param = intent.extras?.getString("param") ?: ""
     }
 
     override fun onAppEnterForeground() {

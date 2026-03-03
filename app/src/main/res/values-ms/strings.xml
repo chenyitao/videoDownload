@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Memuatkan... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Memuatkan… %d%%</string>
     <string name="nav_home">Laman Utama</string>
     <string name="nav_search">Carian</string>
     <string name="nav_download">Muat turun</string>
@@ -57,4 +60,15 @@
     <string name="Share">Kongsi</string>
     <string name="delete_successfully">Berjaya dipadamkan</string>
     <string name="file_valide">Pautan video nampaknya tidak sah atau rosak.</string>
+    <string name="short_download">Muat turun</string>
+    <string name="short_video_play">Main Video</string>
+    <string name="short_uninstall">Nyahpasang</string>
+    <string name="short_uninstall_title">Anda berada di landasan yang betul. Adakah kita akan cuba lagi\?</string>
+    <string name="short_feedback_title">Kami ingin mendengar maklum balas anda</string>
+    <string name="short_uninstall_dl">Menghadapi masalah memuat turun video\?</string>
+    <string name="short_uninstall_vp">Menghadapi masalah memainkan video\?</string>
+    <string name="short_uninstall_dl_bt">Ketahui lebih lanjut</string>
+    <string name="short_uninstall_vp_bt">Tonton Sekarang</string>
+    <string name="keep_app">Kekalkan Apl</string>
+    <string name="still_uninstall">Masih nyahpasang</string>
 </resources>

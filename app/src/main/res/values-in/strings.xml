@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Memuat... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Memuat… %d%%</string>
     <string name="nav_home">Beranda</string>
     <string name="nav_search">Pencarian</string>
     <string name="nav_download">Unduh</string>
@@ -57,4 +60,15 @@
     <string name="Share">Bagikan</string>
     <string name="delete_successfully">Berhasil menghapus</string>
     <string name="file_valide">Tautan video tampaknya tidak valid atau rusak.</string>
+    <string name="short_download">Unduh</string>
+    <string name="short_video_play">Putar Video</string>
+    <string name="short_uninstall">Copot pemasangan</string>
+    <string name="short_uninstall_title">Anda berada di jalur yang benar. Haruskah kita mencoba lagi\?</string>
+    <string name="short_feedback_title">Kami akan senang mendengar umpan balik Anda</string>
+    <string name="short_uninstall_dl">Mengalami masalah saat mengunduh video\?</string>
+    <string name="short_uninstall_vp">Kesulitan memutar video\?</string>
+    <string name="short_uninstall_dl_bt">Pelajari Lebih Lanjut</string>
+    <string name="short_uninstall_vp_bt">Tonton sekarang</string>
+    <string name="keep_app">Tetap Aplikasi</string>
+    <string name="still_uninstall">Masih menghapus instalan</string>
 </resources>

@@ -1,6 +1,6 @@
 <resources>
-    
-    <string name="loading_progress">Lädt... %d%%</string>
+
+    <string name="loading_progress" translatable="false">Lädt… %d%%</string>
     <string name="nav_home">Zuhause</string>
     <string name="nav_search">Suche</string>
     <string name="nav_download">Download</string>
@@ -57,4 +57,15 @@
     <string name="Share">Teilen</string>
     <string name="delete_successfully">Löschen erfolgreich</string>
     <string name="file_valide">Der Videolink scheint ungültig oder defekt zu sein.</string>
+    <string name="short_download">Download</string>
+    <string name="short_video_play">Videowiedergabe</string>
+    <string name="short_uninstall">Deinstallieren</string>
+    <string name="short_uninstall_title">Du bist auf dem richtigen Weg. Sollen wir es nochmal versuchen\?</string>
+    <string name="short_feedback_title">Wir würden uns sehr über euer Feedback freuen</string>
+    <string name="short_uninstall_dl">Probleme beim Herunterladen des Videos\?</string>
+    <string name="short_uninstall_vp">Hast du Schwierigkeiten, das Video abzuspielen\?</string>
+    <string name="short_uninstall_dl_bt">Mehr erfahren</string>
+    <string name="short_uninstall_vp_bt">Jetzt ansehen</string>
+    <string name="keep_app">Die App behalten</string>
+    <string name="still_uninstall">Trotzdem deinstalliert</string>
 </resources>

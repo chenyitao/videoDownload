@@ -3,7 +3,7 @@
     <string name="ad_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admin_host_test" translatable="false">https://test.safedownloadersavevideo.com/xyn/mijw/</string>
     <string name="tba_host_test" translatable="false">https://test-real.safedownloadersavevideo.com</string>
-    <string name="loading_progress">Loading… %d%%</string>
+    <string name="loading_progress" translatable="false">Loading… %d%%</string>
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>
     <string name="nav_download">Download</string>
@@ -63,4 +63,20 @@
     <string name="short_download">Download</string>
     <string name="short_video_play">Video Play</string>
     <string name="short_uninstall">Uninstall</string>
+    <string name="short_uninstall_title">You’re on the right track. Shall we try again?</string>
+    <string name="short_feedback_title">We’d love to hear your feedback</string>
+    <string name="short_uninstall_dl">Having trouble downloading the video?</string>
+    <string name="short_uninstall_vp">Having trouble playing the video?</string>
+    <string name="short_uninstall_dl_bt">Learn More</string>
+    <string name="short_uninstall_vp_bt">Watch Now</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">Still uninstall</string>
+    <string name="fd_ed_hint">Grateful for your thoughts</string>
+    <string name="not_user_friendly">Not user-friendly</string>
+    <string name="ads_are_over">Ads are overwhelming</string>
+    <string name="too_many_notifications">Too many notifications</string>
+    <string name="unable_save_videos">Unable to save videos</string>
+    <string name="hd_download_not_working">HD download not working</string>
+    <string name="saved_videos_won_open">Saved videos won\’t open</string>
+    <string name="other_problem">Other problem</string>
 </resources>

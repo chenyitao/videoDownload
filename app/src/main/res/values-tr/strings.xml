@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">Yükleniyor... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">Yükleniyor… %d%%</string>
     <string name="nav_home">Ana Sayfa</string>
     <string name="nav_search">Arama</string>
     <string name="nav_download">İndir</string>
@@ -57,4 +60,15 @@
     <string name="Share">Paylaş</string>
     <string name="delete_successfully">Başarıyla sil</string>
     <string name="file_valide">Video bağlantısı geçersiz veya bozuk görünüyor.</string>
+    <string name="short_download">İndir</string>
+    <string name="short_video_play">Video Oynatma</string>
+    <string name="short_uninstall">Kaldır</string>
+    <string name="short_uninstall_title">Doğru yoldasın. Tekrar deneyelim mi\?</string>
+    <string name="short_feedback_title">Geri bildiriminizi duymak isteriz</string>
+    <string name="short_uninstall_dl">Videoyu indirmekte zorlanıyor musunuz\?</string>
+    <string name="short_uninstall_vp">Videoyu oynatmakta zorlanıyor musunuz\?</string>
+    <string name="short_uninstall_dl_bt">Daha Fazla Bilgi Edinin</string>
+    <string name="short_uninstall_vp_bt">Şimdi İzle</string>
+    <string name="keep_app">Keep App</string>
+    <string name="still_uninstall">Yine de kaldır</string>
 </resources>

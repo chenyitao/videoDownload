@@ -1,6 +1,9 @@
 <resources>
     
-    <string name="loading_progress">読み込み中... %d%%</string>
+    
+    
+    
+    <string name="loading_progress" translatable="false">読み込み中… %d%%</string>
     <string name="nav_home">ホーム</string>
     <string name="nav_search">検索</string>
     <string name="nav_download">ダウンロード</string>
@@ -57,4 +60,15 @@
     <string name="Share">シェア</string>
     <string name="delete_successfully">削除成功</string>
     <string name="file_valide">ビデオリンクは無効または壊れているようです。</string>
+    <string name="short_download">ダウンロード</string>
+    <string name="short_video_play">ビデオ再生</string>
+    <string name="short_uninstall">アンインストール</string>
+    <string name="short_uninstall_title">あなたは正しい道を歩んでいます。もう一度やってみようか\?</string>
+    <string name="short_feedback_title">皆さんのご意見をぜひお聞かせください</string>
+    <string name="short_uninstall_dl">動画のダウンロードに困っていますか\?</string>
+    <string name="short_uninstall_vp">動画再生に問題がありますか\?</string>
+    <string name="short_uninstall_dl_bt">詳細はこちら</string>
+    <string name="short_uninstall_vp_bt">今すぐ視聴</string>
+    <string name="keep_app">Keep Appを続けてください</string>
+    <string name="still_uninstall">それでもアンインストールしてください</string>
 </resources>
