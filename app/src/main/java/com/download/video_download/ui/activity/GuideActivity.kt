@@ -1,5 +1,6 @@
 package com.download.video_download.ui.activity
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
@@ -28,6 +29,7 @@ import com.download.video_download.base.model.GuideData
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.DpUtils
 import com.download.video_download.base.utils.DpUtils.dp2px
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.base.utils.StringUtils.boldTargetSubStr
 import com.download.video_download.databinding.ActivityGuideBinding
 import com.download.video_download.ui.viewmodel.GuideViewModel
@@ -40,6 +42,7 @@ import kotlinx.coroutines.withContext
 class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     val viewModel: GuideViewModel by viewModels()
     var guideList: MutableList<GuideData> = mutableListOf()
+    private var param = ""
     private var currentPage = 0
     private var isForbidRightScroll = true
     override fun createViewBinding(): ActivityGuideBinding {
@@ -51,6 +54,8 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         val from = intent.getStringExtra("from")
+        param = intent?.extras?.getString("param") ?: ""
+        LogUtils.d("type111113", param)
         guideList = viewModel.getGuideList(from?:"")
         mBind.viewPager.adapter = ViewPager2Adapter(guideList)
         TabLayoutMediator(mBind.tabLayout, mBind.viewPager) { tab, position ->
@@ -138,7 +143,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                         AdMgr.INSTANCE.showAd(AdPosition.GUIDE , AdType.INTERSTITIAL,this@GuideActivity,
                             onShowResult = { position, adType, success, error->
                             }, onAdDismissed = { position, adType ->
-                                startActivity<MainActivity>()
+                                startActivity<MainActivity>(){
+                                    putExtra("param", param)
+                                }
                                 AppCache.guideShow = true
                                 finish()
                             })
@@ -146,7 +153,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                     return@setOnClickListener
                 }
             }
-            startActivity<MainActivity>()
+            startActivity<MainActivity>(){
+                putExtra("param", param)
+            }
             AppCache.guideShow = true
             finish()
         }
@@ -166,7 +175,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                             AdMgr.INSTANCE.showAd(AdPosition.GUIDE , AdType.INTERSTITIAL,this@GuideActivity,
                                 onShowResult = { position, adType, success, error->
                                 }, onAdDismissed = { position, adType ->
-                                    startActivity<MainActivity>()
+                                    startActivity<MainActivity>(){
+                                        putExtra("param", param)
+                                    }
                                     AppCache.guideShow = true
                                     finish()
                                 })
@@ -174,7 +185,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                         return@setOnClickListener
                     }
                 }
-                startActivity<MainActivity>()
+                startActivity<MainActivity>(){
+                    putExtra("param", param)
+                }
                 AppCache.guideShow = true
                 finish()
                 return@setOnClickListener
@@ -275,5 +288,9 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
             mBind.adFrameLayout.releaseAd()
         }
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent( intent)
     }
 }

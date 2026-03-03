@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
-
+    private var param = ""
     override fun createViewBinding(): ActivitySplashBinding {
         return ActivitySplashBinding.inflate(layoutInflater)
     }
@@ -41,6 +41,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         updateProgressText(0)
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
+        param = intent?.extras?.getString("param") ?: ""
+        LogUtils.d("type11111", param)
         if (intent?.extras?.getString("from") != "Background"){
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
         }else{
@@ -84,14 +86,24 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
     private fun route(){
         if (intent?.extras?.getString("from") != "Background") {
+            if (param == "us"){
+                startActivity<UninsActivity>()
+                finish()
+                return
+            }
             if (!AppCache.isSelectLng) {
-                startActivity<LanguageActivity>()
+                startActivity<LanguageActivity>{
+                    putExtra("param",param)
+                }
             } else if (!AppCache.guideShow) {
                 startActivity<GuideActivity> {
                     putExtra("from", "splash")
+                    putExtra("param",param)
                 }
             } else {
-                startActivity<MainActivity>()
+                startActivity<MainActivity>{
+                    putExtra("param",param)
+                }
             }
         }
         finish()
@@ -146,6 +158,6 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
 
     override fun handleBackPressed(): Boolean {
-        return true // 拦截返回事件
+        return true
     }
 }

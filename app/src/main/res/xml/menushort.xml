@@ -7,8 +7,8 @@
         android:shortcutShortLabel="@string/short_download">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.download.video_download"
-            android:targetClass="com.download.video_download.ui.activity.MainActivity">
+            android:targetPackage="com.t.a"
+            android:targetClass="com.download.video_download.ui.activity.SplashActivity">
             <extra android:name="param" android:value="dl" />
             <category android:name="android.intent.category.DEFAULT" />
         </intent>
@@ -22,8 +22,8 @@
         android:shortcutShortLabel="@string/short_video_play">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.download.video_download"
-            android:targetClass="com.download.video_download.ui.activity.MainActivity">
+            android:targetPackage="com.t.a"
+            android:targetClass="com.download.video_download.ui.activity.SplashActivity">
             <extra android:name="param" android:value="vp" />
             <category android:name="android.intent.category.DEFAULT" />
         </intent>

@@ -7,6 +7,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.download.video_download.R
 import com.download.video_download.ui.activity.MainActivity
+import com.download.video_download.ui.activity.SplashActivity
 
 object AppIconMenu {
     fun addAppIconMenuItem(
@@ -20,9 +21,8 @@ object AppIconMenu {
         val unInstallMenu = ShortcutInfoCompat.Builder(context, APP_ICON_MENU_ID)
             .setShortLabel(context.getString(R.string.short_uninstall))
             .setIcon(IconCompat.createWithResource(context, R.drawable.ic_short_uninstall))
-            .setIntent(Intent(context, MainActivity::class.java).apply {
+            .setIntent(Intent(context, SplashActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 putExtra("param", "us")
                 addCategory(Intent.CATEGORY_DEFAULT)
             })

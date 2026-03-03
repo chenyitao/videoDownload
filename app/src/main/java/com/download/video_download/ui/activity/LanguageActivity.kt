@@ -1,6 +1,7 @@
 package com.download.video_download.ui.activity
 
 import LanguageViewModel
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -35,6 +36,7 @@ import java.util.Locale
 class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding>() {
     lateinit var adapter :LanguageAdapter
     val viewModel: LanguageViewModel by viewModels()
+    private var param = ""
     override fun createViewBinding(): ActivityLanguageBinding {
         return ActivityLanguageBinding.inflate(layoutInflater)
     }
@@ -44,6 +46,8 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     override fun initViews(savedInstanceState: Bundle?) {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_yx)
+        param = intent?.extras?.getString("param") ?: ""
+        LogUtils.d("type111112", param)
         mBind.rvLanguage.layoutManager = LinearLayoutManager(this)
         adapter = LanguageAdapter {
             if (it.language == "Use system language"){
@@ -140,10 +144,18 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
         if (!AppCache.guideShow) {
             startActivity<GuideActivity>(){
                 putExtra("from", "language")
+                putExtra("param", param)
             }
         }else{
-            startActivity<MainActivity>()
+            startActivity<MainActivity>(){
+                putExtra("param", param)
+            }
         }
         finish()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent( intent)
     }
 }

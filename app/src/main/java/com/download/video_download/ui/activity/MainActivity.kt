@@ -1,5 +1,6 @@
 package com.download.video_download.ui.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,7 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.fragment.DownloadFragment
 import com.download.video_download.ui.fragment.HomeFragment
 import com.download.video_download.ui.fragment.PlayerFragment
@@ -48,6 +50,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     private var trackJob: kotlinx.coroutines.Job? = null
     private var isTabClick = true
     private var sessionTime: Long = 0
+    private var param = ""
     override fun createViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -55,8 +58,22 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun createViewModel(): MainViewModel  = viewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
-        mBind.navBottom.selectedItemId = R.id.nav_home
-        loadFragment(R.id.nav_home)
+        param = intent?.extras?.getString("param") ?: ""
+        LogUtils.d("type111114", param)
+        when(param){
+            "dl" -> {
+                mBind.navBottom.selectedItemId = R.id.nav_download
+                loadFragment(R.id.nav_download)
+            }
+            "vp" -> {
+                mBind.navBottom.selectedItemId = R.id.nav_player
+                loadFragment(R.id.nav_player)
+            }
+            else->{
+                mBind.navBottom.selectedItemId = R.id.nav_home
+                loadFragment(R.id.nav_home)
+            }
+        }
         mBind.navBottom.itemIconTintList = null
         setStatusBarMode(true)
         trackJob?.cancel()
@@ -203,5 +220,9 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             sessionTime = curTime
             TrackMgr.instance.trackEvent(TrackEventType.SESSION)
         }
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent( intent)
     }
 }
