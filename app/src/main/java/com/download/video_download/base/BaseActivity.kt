@@ -40,10 +40,12 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     lateinit var mViewModel: VM
     var myApp: App? = null
     public var isNavigationBarHidden = false
+    lateinit var permissionHelper: PermissionHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LanguageUtils.applyLanguageConfiguration(this)
         mBind = createViewBinding()
+        permissionHelper = PermissionHelper.with(this)
         setContentView(mBind.root)
         mViewModel = createViewModel()
         AppCache.fuc.takeIf { it.isNotEmpty() }?.let {fc->
@@ -67,6 +69,11 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         myApp = application as App
         myApp?.addAppStatusChangeListener(this)
     }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
     protected abstract fun createViewBinding(): VB
 
     protected abstract fun createViewModel(): VM

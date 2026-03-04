@@ -1,6 +1,8 @@
 package com.download.video_download.ui.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import com.download.video_download.R
 import com.download.video_download.base.BaseActivity
 import com.download.video_download.databinding.ActivityMainBinding
@@ -31,6 +34,7 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.fragment.DownloadFragment
 import com.download.video_download.ui.fragment.HomeFragment
@@ -39,9 +43,12 @@ import com.download.video_download.ui.fragment.WebChromeFragment
 import com.download.video_download.ui.fragment.WebFragment
 import com.download.video_download.ui.fragment.WebGuideFragment
 import com.download.video_download.ui.fragment.WebHistoryFragment
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     val viewModel: MainViewModel by viewModels()
@@ -58,6 +65,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun createViewModel(): MainViewModel  = viewModel
 
     override fun initViews(savedInstanceState: Bundle?) {
+        initFCM()
         param = intent?.extras?.getString("param") ?: ""
         LogUtils.d("type111114", param)
         when(param){
@@ -107,8 +115,19 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 }
             }
         }
+        if (!AppCache.isHomePerNtShow){
+            val checkP = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED
+            if (!checkP){
+                requestNotifyPer()
+            }
+            AppCache.isHomePerNtShow = true
+        }
     }
-
+    private fun requestNotifyPer(){
+        permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
+        }
+    }
     override fun initListeners() {
         mBind.navBottom.setOnItemSelectedListener { item ->
             if (item.itemId == mBind.navBottom.selectedItemId){
@@ -224,5 +243,13 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent( intent)
+    }
+    private fun initFCM() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val token = task.result ?: ""
+        }
     }
 }

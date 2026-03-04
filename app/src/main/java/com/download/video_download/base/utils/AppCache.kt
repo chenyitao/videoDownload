@@ -158,4 +158,24 @@ object AppCache {
             saveValue("fNTime", value)
         }
         get() = getValue("fNTime", 65)
+    var curCountry: String
+        set(value) {
+            saveValue("curCountry", value)
+        }
+        get() = getValue("curCountry", "")
+    var isShowUmp: Boolean
+        set(value) {
+            saveValue("isShowUmp", value)
+        }
+        get() = getValue("isShowUmp", false)
+    var isPerNtShow: Boolean
+        set(value) {
+            saveValue("isPerNtShow", value)
+        }
+        get() = getValue("isPerNtShow", false)
+    var isHomePerNtShow: Boolean
+        set(value) {
+            saveValue("isHomePerNtShow", value)
+        }
+        get() = getValue("isHomePerNtShow", false)
 }

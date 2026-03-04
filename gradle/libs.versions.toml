@@ -9,6 +9,7 @@ material = "1.13.0"
 appcompat = "1.7.1"
 kotlin = "2.3.0"
 room = "2.6.1"
+work="2.9.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -40,12 +41,15 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics"}
 firebase-perf = { module = "com.google.firebase:firebase-perf"}
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics"}
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk",version = "latest.release"}
+firebase-messaging = { module = "com.google.firebase:firebase-messaging"}
+user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version = "4.0.0"}
 installreferrer = { module = "com.android.installreferrer:installreferrer", version = "2.2"}
 af-android-sdk = { module = "com.appsflyer:af-android-sdk", version = "6.17.5"}
 multidex = { module = "androidx.multidex:multidex", version = "2.0.1" }
 transformer = { module = "androidx.media3:media3-transformer", version = "1.9.0"}
 exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version = "1.9.0"}
 flexbox = { module = "com.google.android.flexbox:flexbox", version = "3.0.0"}
+work={ group = "androidx.work", name = "work-runtime-ktx",version.ref = "work" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

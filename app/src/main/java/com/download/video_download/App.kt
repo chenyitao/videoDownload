@@ -102,6 +102,13 @@ class App : MultiDexApplication() {
             }
         }
         LanguageUtils.initLocale(this)
+        val curCountry = AppCache.curCountry
+        if (curCountry.isEmpty()) {
+            val country = Locale.getDefault().country
+            if (country.isNotEmpty()) {
+                AppCache.curCountry = country
+            }
+        }
         initSdk()
         HlsMerger.init()
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
@@ -111,10 +118,8 @@ class App : MultiDexApplication() {
 
             override fun onActivityStarted(activity: Activity) {
                 foregroundActivityCount++
-                Log.d("1111111111112","onAppEnterForeground + $foregroundActivityCount")
                 if (foregroundActivityCount == 1 && !isAppInForeground) {
                     isAppInForeground = true
-                    Log.d("1111111111112","onAppEnterForeground + 热启动")
                     statusChangeListeners.forEach { it.onAppEnterForeground() }
                     if (activity is SplashActivity){
                         return
@@ -123,13 +128,13 @@ class App : MultiDexApplication() {
                         isJumpingToSystemSetting = false
                         return
                     }
-                    Log.d("111111111111","onAppEnterForeground")
                     startActivity<SplashActivity>(){
                         addFlags(
                             Intent.FLAG_ACTIVITY_NEW_TASK
                                     or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                         )
                     }
+                    isColdStart = false
                 }
             }
 
@@ -141,7 +146,6 @@ class App : MultiDexApplication() {
 
             override fun onActivityStopped(activity: Activity) {
                 foregroundActivityCount--
-                Log.d("1111111111113","onAppEnterForeground + $foregroundActivityCount")
                 if (foregroundActivityCount == 0 && isAppInForeground) {
                     isAppInForeground = false
                     statusChangeListeners.forEach { it.onAppEnterBackground() }

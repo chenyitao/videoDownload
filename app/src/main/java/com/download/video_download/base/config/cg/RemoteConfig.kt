@@ -16,6 +16,7 @@ import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.AppIconMenu
 import com.download.video_download.base.utils.AsyncPostRequest
+import com.download.video_download.base.utils.GoogleAdsConsentManager
 import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.base.utils.NavigationBarUtils
 import com.download.video_download.ui.activity.SplashActivity
@@ -161,9 +162,10 @@ class RemoteConfig private constructor(){
         adConfig?.let {
             AdMgr.INSTANCE.initAdData()
             val advert = it.getJSONObject("at")
+            val ifNeedUmp = GoogleAdsConsentManager.checkIfNeedShowConsent()
             if (advert.has("lg")
                 && ActivityManager.currentActivity() is SplashActivity
-                && App.isAppInForeground && !AppCache.isSelectLng){
+                && App.isAppInForeground && !AppCache.isSelectLng && !ifNeedUmp){
                 preloadLGAds()
             }
             var safedddd = ""

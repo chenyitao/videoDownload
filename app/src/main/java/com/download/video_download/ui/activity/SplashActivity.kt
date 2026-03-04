@@ -1,5 +1,6 @@
 package com.download.video_download.ui.activity
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -20,10 +21,13 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.GoogleAdsConsentManager
 import com.download.video_download.base.utils.LogUtils
+import com.download.video_download.base.utils.PermissionHelper
 import com.download.video_download.databinding.ActivitySplashBinding
 import com.download.video_download.ui.viewmodel.SplashViewModel
 import com.google.android.gms.ads.AdActivity
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,6 +35,7 @@ import kotlinx.coroutines.withContext
 
 class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     private var param = ""
+    private var isUmpFlowState = false
     override fun createViewBinding(): ActivitySplashBinding {
         return ActivitySplashBinding.inflate(layoutInflater)
     }
@@ -44,13 +49,12 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
         param = intent?.extras?.getString("param") ?: ""
-        Log.d("1111111111112","ac1123123 + ${ActivityManager.getActivityCount()}")
-        LogUtils.d("type11111", param)
         if (isColdStart){
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
         }else{
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_af)
         }
+        initFCM()
     }
 
     override fun initListeners() {
@@ -88,8 +92,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         })
     }
     private fun route(){
-        Log.d("1111111111112","ac1123123111111 + ${ActivityManager.getActivityCount()}")
         if (isColdStart || param.isNotEmpty()) {
+            if (isColdStart){
+                isColdStart = false
+            }
             if (param == "us"){
                 startActivity<UninsActivity>()
                 finish()
@@ -114,10 +120,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
     override fun onResume() {
         super.onResume()
-        mViewModel.preloadBatchAds(this)
-        mViewModel.preloadAd(this)
-        mViewModel.startLoading {
-            AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                initFlow()
+            }
         }
     }
 
@@ -168,5 +174,76 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     override fun handleBackPressed(): Boolean {
         return true
+    }
+
+    private suspend fun initFlow(){
+        if (isUmpFlowState){
+            return
+        }
+        val checkP = permissionHelper.checkNtPermission()
+        val ifNeedUmp = GoogleAdsConsentManager.checkIfNeedShowConsent()
+        val isPerNtShow = AppCache.isPerNtShow
+        if (ifNeedUmp && isColdStart){
+            isUmpFlowState = true
+            if (!isPerNtShow && !checkP){
+                requestNotifyPer(true)
+                return
+            }
+            processUmp()
+            return
+        }
+        mViewModel.preloadBatchAds(this)
+        mViewModel.preloadAd(this)
+        AdMgr.INSTANCE.setPrivacyConsent(GoogleAdsConsentManager.isConsentProcessCompleted())
+        if (!isPerNtShow && !checkP){
+            requestNotifyPer(false)
+            return
+        }
+        mViewModel.startLoading {
+            AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
+        }
+    }
+
+    private fun requestNotifyPer(ifNeedUmp: Boolean){
+        permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
+                AppCache.isPerNtShow = true
+                if (!ifNeedUmp){
+                    mViewModel.startLoading {
+                        AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
+                    }
+                    return@requestPermissions
+                }
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Main){
+                        processUmp()
+                    }
+                }
+            }
+    }
+
+    private suspend fun processUmp(){
+        if (GoogleAdsConsentManager.isLoadingConsent){
+            return
+        }
+        val umpResult = GoogleAdsConsentManager.requestConsentInfo(this)
+        if (umpResult){
+            GoogleAdsConsentManager.isLoadingConsent = true
+            val isConsentCompleted =  GoogleAdsConsentManager.showConsentForm( this)
+        }
+        AdMgr.INSTANCE.setPrivacyConsent(GoogleAdsConsentManager.isConsentProcessCompleted())
+        mViewModel.preloadBatchAds(this)
+        mViewModel.preloadAd(this)
+        mViewModel.startLoading {
+            AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
+        }
+        isUmpFlowState = false
+    }
+    private fun initFCM() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val token = task.result ?: ""
+        }
     }
 }
