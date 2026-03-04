@@ -79,4 +79,5 @@
     <string name="hd_download_not_working">HD download not working</string>
     <string name="saved_videos_won_open">Saved videos won\’t open</string>
     <string name="other_problem">Other problem</string>
+    <string name="d_fd_title">We would appreciate \nanother chance</string>
 </resources>

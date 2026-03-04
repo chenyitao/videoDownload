@@ -49,6 +49,18 @@ object ActivityManager {
         }
         activityStack.clear()
     }
+    fun finishAllActivityExcept(cls: Class<*>) {
+        val iterator = activityStack.iterator()
+        while (iterator.hasNext()) {
+            val activity = iterator.next()
+            if (activity.javaClass != cls) {
+                iterator.remove()
+                if (!activity.isFinishing) {
+                    activity.finish()
+                }
+            }
+        }
+    }
 
     fun getActivityCount(): Int {
         return activityStack.size

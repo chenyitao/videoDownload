@@ -23,23 +23,23 @@ class UninsActivity:BaseActivity<UninsViewModel, ActivityUninsBinding>() {
 
     override fun initListeners() {
         mBind.ivBack.setOnClickListener {
-            ActivityManager.finishAllActivity()
+            ActivityManager.finishAllActivityExcept(this.javaClass)
             startActivity<MainActivity>()
+            finish()
         }
         mBind.d.setOnClickListener {
             startActivity<GuideActivity>()
             finish()
         }
         mBind.v.setOnClickListener {
-            ActivityManager.finishAllActivity()
+            ActivityManager.finishAllActivityExcept(this.javaClass)
             startActivity<MainActivity>(){
                 putExtra("param", "vp")
             }
         }
         mBind.keep.setOnClickListener {
-            startActivity<MainActivity>(){
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            ActivityManager.finishAllActivityExcept(this.javaClass)
+            startActivity<MainActivity>()
             finish()
         }
         mBind.still.setOnClickListener {
@@ -48,9 +48,8 @@ class UninsActivity:BaseActivity<UninsViewModel, ActivityUninsBinding>() {
         }
     }
     override fun handleBackPressed(): Boolean {
-        startActivity<MainActivity>{
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
+        ActivityManager.finishAllActivityExcept(this.javaClass)
+        startActivity<MainActivity>()
         return super.handleBackPressed()
     }
 }

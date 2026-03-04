@@ -56,7 +56,6 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         from = intent.getStringExtra("from")?:""
         param = intent?.extras?.getString("param") ?: ""
-        LogUtils.d("type111113", param)
         guideList = viewModel.getGuideList(from?:"")
         mBind.viewPager.adapter = ViewPager2Adapter(guideList)
         TabLayoutMediator(mBind.tabLayout, mBind.viewPager) { tab, position ->
