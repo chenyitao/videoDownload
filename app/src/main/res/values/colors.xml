@@ -14,4 +14,9 @@
     <color name="color_19C81C">#19C81C</color>
     <color name="color_FF951B">#FF951B</color>
     <color name="color_ccffffff">#ccffffff</color>
+
+    <color name="nt_title">#1F2937</color>
+    <color name="nt_sch_title">#000000</color>
+    <color name="nt_r_title">#272E30</color>
+    <color name="nt_r_s_title">#3B3B47</color>
 </resources>

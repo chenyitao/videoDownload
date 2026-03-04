@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Memuatkan… %d%%</string>
+    <string name="loading_progress" >Memuatkan… %d%%</string>
     <string name="nav_home">Laman Utama</string>
     <string name="nav_search">Carian</string>
     <string name="nav_download">Muat turun</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Tonton Sekarang</string>
     <string name="keep_app">Kekalkan Apl</string>
     <string name="still_uninstall">Masih nyahpasang</string>
+    <string name="fd_ed_hint">Terima kasih atas fikiran anda</string>
+    <string name="not_user_friendly">Tidak mesra pengguna</string>
+    <string name="ads_are_over">Iklan sangat menggembirakan</string>
+    <string name="too_many_notifications">Terlalu banyak pemberitahuan</string>
+    <string name="unable_save_videos">Tidak dapat menyimpan video</string>
+    <string name="hd_download_not_working">Muat turun HD tidak berfungsi</string>
+    <string name="saved_videos_won_open">Video yang disimpan tidak akan dibuka</string>
+    <string name="other_problem">Masalah lain</string>
+    <string name="d_fd_title">Kami akan menghargai\ peluang lain</string>
+    <string name="enter_video_url">Masukkan URL Video</string>
+    <string name="nt_1_title">🔥 Pilihan Viral</string>
+    <string name="nt_1_content">Video sohor kini sedia untuk dimuat turun</string>
+    <string name="nt_1_sub_content">Video sohor kini</string>
+    <string name="nt_1_action">Video sohor kini</string>
+    <string name="nt_2_title">⚡️Titisan segar</string>
+    <string name="nt_2_content">Kandungan segar, sedia untuk distrim</string>
+    <string name="nt_2_sub_content">Kandungan segar</string>
+    <string name="nt_2_action">Main Sekarang</string>
+    <string name="nt_3_title">🌟Mesti Dilihat Setiap Hari</string>
+    <string name="nt_3_content">Video #1 hari ini ada di sini</string>
+    <string name="nt_3_sub_content">Video #1</string>
+    <string name="nt_3_action">Tonton Sekarang</string>
+    <string name="nt_4_title">👤Perlawanan anda</string>
+    <string name="nt_4_content">Padanan video sempurna anda telah masuk</string>
+    <string name="nt_4_sub_content">Video yang sempurna</string>
+    <string name="nt_4_action">Cubalah</string>
+    <string name="nt_5_title">🌍Makluman Viral</string>
+    <string name="nt_5_content">Trend sekarang. Jangan berkelip.</string>
+    <string name="nt_5_sub_content">Jangan berkelip</string>
+    <string name="nt_5_action">Terokai</string>
+    <string name="nt_r_1_title">Langkau iklan – kembali kepada sohor kini</string>
+    <string name="nt_r_1_action">Kembali ke Video</string>
+    <string name="nt_r_2_title">Satu langkah terakhir, anda mendapat ini!</string>
+    <string name="nt_r_2_action">Teruskan Sekarang</string>
+    <string name="nt_r_3_title">Bersedia untuk sesuatu yang baharu\? Ketik untuk meneroka</string>
+    <string name="nt_r_3_action">Lihat Perkara Baharu</string>
 </resources>

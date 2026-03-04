@@ -1,5 +1,6 @@
 package com.download.video_download.base.model
 
+import android.text.SpannableString
 import androidx.room.PrimaryKey
 import com.download.video_download.base.room.entity.Video
 import kotlinx.serialization.SerialName
@@ -116,3 +117,10 @@ data class TagData(
     val title: String,
     var isSelected: Boolean = false,
 )
+data class NotifyData( val id: Int,
+                   var iconSR: Int,
+                   var iconBR: Int,
+                   val notifyTitle: String,
+                   val notifyContent: SpannableString,
+                   val action: String,
+                   val params: Int)

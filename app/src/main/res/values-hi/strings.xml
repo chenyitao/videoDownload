@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">लोड हो रहा है… %d%%</string>
+    <string name="loading_progress" >लोड हो रहा है… %d%%</string>
     <string name="nav_home">घर</string>
     <string name="nav_search">खोज</string>
     <string name="nav_download">डाउनलोड</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">अभी देखें</string>
     <string name="keep_app">ऐप रखें</string>
     <string name="still_uninstall">अभी भी स्थापना रद्द करें</string>
+    <string name="fd_ed_hint">आपके विचारों के लिए आभारी हूं</string>
+    <string name="not_user_friendly">उपयोगकर्ता के अनुकूल नहीं</string>
+    <string name="ads_are_over">विज्ञापन भारी हैं</string>
+    <string name="too_many_notifications">बहुत अधिक सूचनाएं</string>
+    <string name="unable_save_videos">वीडियो सहेजने में असमर्थ</string>
+    <string name="hd_download_not_working">एचडी डाउनलोड काम नहीं कर रहा है</string>
+    <string name="saved_videos_won_open">सेव किए गए वीडियो नहीं खुलेंगे</string>
+    <string name="other_problem">अन्य समस्या</string>
+    <string name="d_fd_title">हम एक और मौके \की सराहना करेंगे</string>
+    <string name="enter_video_url">वीडियो URL दर्ज करें</string>
+    <string name="nt_1_title">🔥 वायरल पिक्स</string>
+    <string name="nt_1_content">ट्रेंडिंग वीडियो डाउनलोड करने के लिए तैयार</string>
+    <string name="nt_1_sub_content">ट्रेंडिंग वीडियो</string>
+    <string name="nt_1_action">ट्रेंडिंग वीडियो</string>
+    <string name="nt_2_title">⚡️ताजी बूँदें</string>
+    <string name="nt_2_content">ताज़ा सामग्री, स्ट्रीम करने के लिए तैयार</string>
+    <string name="nt_2_sub_content">ताज़ा सामग्री</string>
+    <string name="nt_2_action">अब खेलते हैं</string>
+    <string name="nt_3_title">🌟दैनिक अवश्य देखें</string>
+    <string name="nt_3_content">दिन का # 1 वीडियो यहाँ है</string>
+    <string name="nt_3_sub_content">#1 वीडियो</string>
+    <string name="nt_3_action">अभी देखें</string>
+    <string name="nt_4_title">👤आपका मैच</string>
+    <string name="nt_4_content">आपका संपूर्ण वीडियो मैच है</string>
+    <string name="nt_4_sub_content">बिल्कुल सही वीडियो</string>
+    <string name="nt_4_action">इसे अजमाएं</string>
+    <string name="nt_5_title">🌍वायरल अलर्ट</string>
+    <string name="nt_5_content">अभी रुझान में। पलक मत झपकाओ।</string>
+    <string name="nt_5_sub_content">पलक मत झपकाओ</string>
+    <string name="nt_5_action">पता लगाना</string>
+    <string name="nt_r_1_title">विज्ञापन छोड़ें – ट्रेंडिंग पर वापस जाएं</string>
+    <string name="nt_r_1_action">वीडियो पर वापस जाएं</string>
+    <string name="nt_r_2_title">एक आखिरी कदम, आपको यह मिल गया है!</string>
+    <string name="nt_r_2_action">अब जारी रखें</string>
+    <string name="nt_r_3_title">कुछ नया करने के लिए तैयार हैं\? एक्सप्लोर करने के लिए टैप करें</string>
+    <string name="nt_r_3_action">देखें नया क्या है</string>
 </resources>

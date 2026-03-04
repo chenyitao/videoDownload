@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Loading… %d%%</string>
+    <string name="loading_progress" >Loading… %d%%</string>
     <string name="nav_home">Home</string>
     <string name="nav_search">Search</string>
     <string name="nav_download">Download</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Watch Now</string>
     <string name="keep_app">Keep App</string>
     <string name="still_uninstall">Still uninstall</string>
+    <string name="fd_ed_hint">Grateful for your thoughts</string>
+    <string name="not_user_friendly">Not user-friendly</string>
+    <string name="ads_are_over">Ads are overwhelming</string>
+    <string name="too_many_notifications">Too many notifications</string>
+    <string name="unable_save_videos">Unable to save videos</string>
+    <string name="hd_download_not_working">HD download not working</string>
+    <string name="saved_videos_won_open">Saved videos won’t open</string>
+    <string name="other_problem">Other problem</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
+    <string name="enter_video_url">Enter Video URL</string>
+    <string name="nt_1_title">🔥 Viral Picks</string>
+    <string name="nt_1_content">Trending videos ready to download</string>
+    <string name="nt_1_sub_content">Trending videos</string>
+    <string name="nt_1_action">Trending videos</string>
+    <string name="nt_2_title">⚡️Fresh Drops</string>
+    <string name="nt_2_content">Fresh content, ready to stream</string>
+    <string name="nt_2_sub_content">Fresh content</string>
+    <string name="nt_2_action">Play Now</string>
+    <string name="nt_3_title">🌟Daily Must-See</string>
+    <string name="nt_3_content">The #1 video of the day is here</string>
+    <string name="nt_3_sub_content">#1 video</string>
+    <string name="nt_3_action">Watch Now</string>
+    <string name="nt_4_title">👤Your Match</string>
+    <string name="nt_4_content">Your perfect video match is in</string>
+    <string name="nt_4_sub_content">perfect video</string>
+    <string name="nt_4_action">Try It</string>
+    <string name="nt_5_title">🌍Viral Alert</string>
+    <string name="nt_5_content">Trending now. Don’t blink.</string>
+    <string name="nt_5_sub_content">Don’t blink</string>
+    <string name="nt_5_action">Explore</string>
+    <string name="nt_r_1_title">Skip ad – back to trending</string>
+    <string name="nt_r_1_action">Back to Videos</string>
+    <string name="nt_r_2_title">One last step, you’ve got this!</string>
+    <string name="nt_r_2_action">Continue Now</string>
+    <string name="nt_r_3_title">Ready for something new\? Tap to explore</string>
+    <string name="nt_r_3_action">See What’s New</string>
 </resources>

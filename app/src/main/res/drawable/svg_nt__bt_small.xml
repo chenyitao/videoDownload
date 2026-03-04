@@ -1,0 +1,46 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="90dp"
+    android:height="36dp"
+    android:viewportWidth="90"
+    android:viewportHeight="36">
+    <group
+        android:name="scale"
+        android:pivotX="45"
+        android:pivotY="18">
+        <path
+            android:pathData="M8,0L82,0A8,8 0,0 1,90 8L90,28A8,8 0,0 1,82 36L8,36A8,8 0,0 1,0 28L0,8A8,8 0,0 1,8 0z"
+            android:fillColor="#5A99FF" />
+
+        <path
+            android:pathData="M8,0L82,0A8,8 0,0 1,90 8L90,28A8,8 0,0 1,82 36L8,36A8,8 0,0 1,0 28L0,8A8,8 0,0 1,8 0z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="0"
+                    android:startY="18"
+                    android:endX="90"
+                    android:endY="18"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#AF181E" />
+                    <item android:offset="1" android:color="#AF181E" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <clip-path android:pathData="M0,18C0,8.06 8.06,0 18,0H72C81.94,0 90,8.06 90,18C90,27.94 81.94,36 72,36H18C8.06,36 0,27.94 0,18Z">
+            <group
+                android:name="ripple"
+                android:translateX="0"
+                android:pivotX="45"
+                android:pivotY="18">
+
+                <path
+                    android:name="ripple_inner"
+                    android:pathData="M15,18C15,8.06 23.06,0 33,0H57C66.94,0 75,8.06 75,18C75,27.94 66.94,36 57,36H33C23.06,36 15,27.94 15,18Z"
+                    android:strokeAlpha="0.2"
+                    android:fillColor="#fff"
+                    android:fillAlpha="0.2" />
+            </group>
+        </clip-path>
+    </group>
+</vector>

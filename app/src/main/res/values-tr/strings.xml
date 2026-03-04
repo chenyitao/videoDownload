@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Yükleniyor… %d%%</string>
+    <string name="loading_progress" >Yükleniyor… %d%%</string>
     <string name="nav_home">Ana Sayfa</string>
     <string name="nav_search">Arama</string>
     <string name="nav_download">İndir</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Şimdi İzle</string>
     <string name="keep_app">Keep App</string>
     <string name="still_uninstall">Yine de kaldır</string>
+    <string name="fd_ed_hint">Düşünceleriniz için minnettarım</string>
+    <string name="not_user_friendly">Kullanıcı dostu değil</string>
+    <string name="ads_are_over">Reklamlar bunaltıcı</string>
+    <string name="too_many_notifications">Çok fazla bildirim</string>
+    <string name="unable_save_videos">Video kaydedilememe</string>
+    <string name="hd_download_not_working">HD indirme çalışmıyor</string>
+    <string name="saved_videos_won_open">Kaydedilen videolar açılmıyor</string>
+    <string name="other_problem">Diğer sorun</string>
+    <string name="d_fd_title">Bir şans daha vermeyi\ takdir ederiz</string>
+    <string name="enter_video_url">Video URL\'sini gir</string>
+    <string name="nt_1_title">🔥 Viral Seçimler</string>
+    <string name="nt_1_content">İndirmeye hazır trend videolar</string>
+    <string name="nt_1_sub_content">Trend videolar</string>
+    <string name="nt_1_action">Trend videolar</string>
+    <string name="nt_2_title">⚡️Taze Damlalar</string>
+    <string name="nt_2_content">Taze içerik, yayına hazır</string>
+    <string name="nt_2_sub_content">Taze içerik</string>
+    <string name="nt_2_action">Şimdi Oyna</string>
+    <string name="nt_3_title">🌟Günlük Görülmesi Gereken Yerler</string>
+    <string name="nt_3_content">Günün #1 videosu burada</string>
+    <string name="nt_3_sub_content">#1 video</string>
+    <string name="nt_3_action">Şimdi İzle</string>
+    <string name="nt_4_title">👤Senin Maçın</string>
+    <string name="nt_4_content">Mükemmel video eşleşmeniz geldi</string>
+    <string name="nt_4_sub_content">Mükemmel Video</string>
+    <string name="nt_4_action">Deneyin</string>
+    <string name="nt_5_title">🌍Viral Uyarı</string>
+    <string name="nt_5_content">Şu anda trend. Gözünüzü kırpmayın.</string>
+    <string name="nt_5_sub_content">Gözünü kırpma</string>
+    <string name="nt_5_action">Keşfet</string>
+    <string name="nt_r_1_title">Reklamı atla – trend sayfasına geri dön</string>
+    <string name="nt_r_1_action">Videolara Geri Dön</string>
+    <string name="nt_r_2_title">Son bir adım, başaracaksın!</string>
+    <string name="nt_r_2_action">Devam Et</string>
+    <string name="nt_r_3_title">Yeni bir şeye hazır mısın\? Keşfetmek için dokunun</string>
+    <string name="nt_r_3_action">Yenilikleri Görün</string>
 </resources>

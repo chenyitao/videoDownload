@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">載入中… %d%%</string>
+    <string name="loading_progress" >載入中… %d%%</string>
     <string name="nav_home">首頁</string>
     <string name="nav_search">搜尋</string>
     <string name="nav_download">下載</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">立即觀看</string>
     <string name="keep_app">Keep App</string>
     <string name="still_uninstall">還是要卸載</string>
+    <string name="fd_ed_hint">感謝你的想法</string>
+    <string name="not_user_friendly">不夠友善</string>
+    <string name="ads_are_over">廣告太多了</string>
+    <string name="too_many_notifications">通知太多了</string>
+    <string name="unable_save_videos">無法儲存影片</string>
+    <string name="hd_download_not_working">HD 下載無法使用</string>
+    <string name="saved_videos_won_open">儲存的影片無法開啟</string>
+    <string name="other_problem">另一個問題</string>
+    <string name="d_fd_title">我們很感激\能再給我一次機會</string>
+    <string name="enter_video_url">輸入影片網址</string>
+    <string name="nt_1_title">🔥 病毒推薦</string>
+    <string name="nt_1_content">熱門影片，隨時可下載</string>
+    <string name="nt_1_sub_content">熱門影片</string>
+    <string name="nt_1_action">熱門影片</string>
+    <string name="nt_2_title">⚡️新鮮的滴落</string>
+    <string name="nt_2_content">新鮮內容，準備串流</string>
+    <string name="nt_2_sub_content">新鮮內容</string>
+    <string name="nt_2_action">立即播放</string>
+    <string name="nt_3_title">🌟每日必看</string>
+    <string name="nt_3_content">今天的#1影片來了</string>
+    <string name="nt_3_sub_content">#1 影片</string>
+    <string name="nt_3_action">立即觀看</string>
+    <string name="nt_4_title">👤你的對手</string>
+    <string name="nt_4_content">你完美的影片配對已經到位</string>
+    <string name="nt_4_sub_content">完美的影片</string>
+    <string name="nt_4_action">試試看</string>
+    <string name="nt_5_title">🌍病毒警報</string>
+    <string name="nt_5_content">現在正在熱搜。別眨眼。</string>
+    <string name="nt_5_sub_content">別眨眼</string>
+    <string name="nt_5_action">探索</string>
+    <string name="nt_r_1_title">跳過廣告 – 回到熱門話題</string>
+    <string name="nt_r_1_action">回到影片</string>
+    <string name="nt_r_2_title">最後一步，你一定行的！</string>
+    <string name="nt_r_2_action">立即繼續</string>
+    <string name="nt_r_3_title">準備好迎接新事物了嗎？點擊探索</string>
+    <string name="nt_r_3_action">看看最新動態</string>
 </resources>

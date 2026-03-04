@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">読み込み中… %d%%</string>
+    <string name="loading_progress" >読み込み中… %d%%</string>
     <string name="nav_home">ホーム</string>
     <string name="nav_search">検索</string>
     <string name="nav_download">ダウンロード</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">今すぐ視聴</string>
     <string name="keep_app">Keep Appを続けてください</string>
     <string name="still_uninstall">それでもアンインストールしてください</string>
+    <string name="fd_ed_hint">ご思いをありがとうございます</string>
+    <string name="not_user_friendly">ユーザーフレンドリーではありません</string>
+    <string name="ads_are_over">広告が圧倒的です</string>
+    <string name="too_many_notifications">通知が多すぎる</string>
+    <string name="unable_save_videos">動画を保存できない</string>
+    <string name="hd_download_not_working">HDダウンロードがうまくいかない</string>
+    <string name="saved_videos_won_open">保存動画が開きません</string>
+    <string name="other_problem">その他の問題</string>
+    <string name="d_fd_title">もう一度チャンス\をいただきたいです</string>
+    <string name="enter_video_url">ビデオURLを入力してください</string>
+    <string name="nt_1_title">🔥 バイラルピック</string>
+    <string name="nt_1_content">トレンド動画をダウンロード準備完了</string>
+    <string name="nt_1_sub_content">トレンド動画</string>
+    <string name="nt_1_action">トレンド動画</string>
+    <string name="nt_2_title">⚡️フレッシュ・ドロップス</string>
+    <string name="nt_2_content">新鮮なコンテンツ、ストリーミング準備完了</string>
+    <string name="nt_2_sub_content">新鮮なコンテンツ</string>
+    <string name="nt_2_action">今すぐプレイ</string>
+    <string name="nt_3_title">🌟毎日必見の記事</string>
+    <string name="nt_3_content">本日の#1動画はこちらです</string>
+    <string name="nt_3_sub_content">#1ビデオ</string>
+    <string name="nt_3_action">今すぐ視聴</string>
+    <string name="nt_4_title">👤あなたのマッチ</string>
+    <string name="nt_4_content">あなたの理想のビデオマッチが決まりました</string>
+    <string name="nt_4_sub_content">完璧なビデオ</string>
+    <string name="nt_4_action">試してみて</string>
+    <string name="nt_5_title">🌍ウイルスアラート</string>
+    <string name="nt_5_content">現在トレンド中。まばたきしないで。</string>
+    <string name="nt_5_sub_content">まばたきするな</string>
+    <string name="nt_5_action">探索</string>
+    <string name="nt_r_1_title">広告をスキップ – トレンドに戻る</string>
+    <string name="nt_r_1_action">動画に戻る</string>
+    <string name="nt_r_2_title">最後の一歩、あなたならできます!</string>
+    <string name="nt_r_2_action">今すぐ続ける</string>
+    <string name="nt_r_3_title">新しいものに挑戦する準備はできていますか\?タップして探索</string>
+    <string name="nt_r_3_action">最新情報をチェック</string>
 </resources>

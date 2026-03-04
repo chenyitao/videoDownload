@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Naglo-load… %d%%</string>
+    <string name="loading_progress" >Naglo-load… %d%%</string>
     <string name="nav_home">Tahanan</string>
     <string name="nav_search">Paghahanap</string>
     <string name="nav_download">I-download</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Panoorin Ngayon</string>
     <string name="keep_app">Panatilihin ang App</string>
     <string name="still_uninstall">I-uninstall pa rin</string>
+    <string name="fd_ed_hint">Nagpapasalamat sa iyong mga saloobin</string>
+    <string name="not_user_friendly">Hindi user-friendly</string>
+    <string name="ads_are_over">Napakalaki ng mga ad</string>
+    <string name="too_many_notifications">Masyadong maraming mga abiso</string>
+    <string name="unable_save_videos">Hindi mai-save ang mga video</string>
+    <string name="hd_download_not_working">Hindi gumagana ang pag-download ng HD</string>
+    <string name="saved_videos_won_open">Hindi magbubukas ang mga naka-save na video</string>
+    <string name="other_problem">Iba pang problema</string>
+    <string name="d_fd_title">Pinahahalagahan namin \ang isa pang pagkakataon</string>
+    <string name="enter_video_url">Ipasok ang URL ng Video</string>
+    <string name="nt_1_title">🔥 Mga Viral Pick</string>
+    <string name="nt_1_content">Trending videos handa nang i-download</string>
+    <string name="nt_1_sub_content">Mga Trending na Video</string>
+    <string name="nt_1_action">Mga Trending na Video</string>
+    <string name="nt_2_title">⚡️Mga Sariwang Patak</string>
+    <string name="nt_2_content">Sariwang nilalaman, handa nang mag-stream</string>
+    <string name="nt_2_sub_content">Sariwang nilalaman</string>
+    <string name="nt_2_action">Maglaro Ngayon</string>
+    <string name="nt_3_title">🌟Pang-araw-araw na Dapat Makita</string>
+    <string name="nt_3_content">Ang # 1 Video ng Araw na ito ay narito</string>
+    <string name="nt_3_sub_content"># 1 video</string>
+    <string name="nt_3_action">Panoorin Ngayon</string>
+    <string name="nt_4_title">👤Ang Iyong Tugma</string>
+    <string name="nt_4_content">Ang iyong perpektong video match ay nasa</string>
+    <string name="nt_4_sub_content">perpektong video</string>
+    <string name="nt_4_action">Subukan ito</string>
+    <string name="nt_5_title">🌍Alerto sa Viral</string>
+    <string name="nt_5_content">Trending na ngayon. Huwag dumilat ka.</string>
+    <string name="nt_5_sub_content">Huwag dumilat</string>
+    <string name="nt_5_action">Galugarin</string>
+    <string name="nt_r_1_title">Laktawan ang ad – bumalik sa trending</string>
+    <string name="nt_r_1_action">Bumalik sa Mga Video</string>
+    <string name="nt_r_2_title">Isang huling hakbang, nakuha mo na ito!</string>
+    <string name="nt_r_2_action">Magpatuloy Ngayon</string>
+    <string name="nt_r_3_title">Handa na para sa isang bagong bagay\? I-tap upang galugarin</string>
+    <string name="nt_r_3_action">Tingnan kung ano ang bago</string>
 </resources>

@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">로딩 중… %d%%</string>
+    <string name="loading_progress" >로딩 중… %d%%</string>
     <string name="nav_home">홈</string>
     <string name="nav_search">검색</string>
     <string name="nav_download">다운로드</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">지금 시청</string>
     <string name="keep_app">Keep App</string>
     <string name="still_uninstall">그래도 삭제하세요</string>
+    <string name="fd_ed_hint">당신의 생각에 감사드립니다</string>
+    <string name="not_user_friendly">사용자 친화적이지 않아</string>
+    <string name="ads_are_over">광고가 너무 많아요</string>
+    <string name="too_many_notifications">알림이 너무 많아</string>
+    <string name="unable_save_videos">동영상을 저장할 수 없습니다</string>
+    <string name="hd_download_not_working">HD 다운로드 불가</string>
+    <string name="saved_videos_won_open">저장된 영상이 열리지 않습니다</string>
+    <string name="other_problem">다른 문제</string>
+    <string name="d_fd_title">다시 한 번 기회를\ 주시면 감사하겠습니다</string>
+    <string name="enter_video_url">비디오 URL 입력</string>
+    <string name="nt_1_title">🔥 바이럴 픽</string>
+    <string name="nt_1_content">다운로드 가능한 인기 동영상</string>
+    <string name="nt_1_sub_content">인기 동영상</string>
+    <string name="nt_1_action">인기 동영상</string>
+    <string name="nt_2_title">⚡️신선한 드롭스</string>
+    <string name="nt_2_content">신선한 콘텐츠, 스트리밍 준비 완료</string>
+    <string name="nt_2_sub_content">신선한 콘텐츠</string>
+    <string name="nt_2_action">지금 재생하기</string>
+    <string name="nt_3_title">🌟매일 꼭 봐야 할 곳</string>
+    <string name="nt_3_content">오늘의 #1 영상은 여기 있습니다</string>
+    <string name="nt_3_sub_content">#1 비디오</string>
+    <string name="nt_3_action">지금 시청</string>
+    <string name="nt_4_title">👤당신의 매치입니다</string>
+    <string name="nt_4_content">당신의 완벽한 영상 매치가 도착했습니다</string>
+    <string name="nt_4_sub_content">완벽한 영상</string>
+    <string name="nt_4_action">한번 해봐</string>
+    <string name="nt_5_title">🌍바이러스 경고</string>
+    <string name="nt_5_content">지금 트렌드입니다. 눈 깜빡이지 마.</string>
+    <string name="nt_5_sub_content">눈 깜빡이지 마</string>
+    <string name="nt_5_action">탐험해 보세요</string>
+    <string name="nt_r_1_title">광고 건너뛰기 – 다시 트렌드로 돌아가기</string>
+    <string name="nt_r_1_action">영상으로 돌아가기</string>
+    <string name="nt_r_2_title">마지막 한 걸음, 넌 할 수 있어!</string>
+    <string name="nt_r_2_action">지금 계속</string>
+    <string name="nt_r_3_title">새로운 것을 기대할 준비가 되셨나요\? 탭하여 탐색하세요</string>
+    <string name="nt_r_3_action">새로운 소식을 확인해 보세요</string>
 </resources>

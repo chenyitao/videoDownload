@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Carregando… %d%%</string>
+    <string name="loading_progress">Carregando… %d%%</string>
     <string name="nav_home">Casa</string>
     <string name="nav_search">Busca</string>
     <string name="nav_download">Baixar</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Assista agora</string>
     <string name="keep_app">Manter o Aplicativo</string>
     <string name="still_uninstall">Ainda desinstalo</string>
+    <string name="fd_ed_hint">Grato pelos seus pensamentos</string>
+    <string name="not_user_friendly">Não é fácil de usar</string>
+    <string name="ads_are_over">Os anúncios são demais</string>
+    <string name="too_many_notifications">Notificações demais</string>
+    <string name="unable_save_videos">Não é possível salvar vídeos</string>
+    <string name="hd_download_not_working">O download HD não está funcionando</string>
+    <string name="saved_videos_won_open">Vídeos salvos não abrem</string>
+    <string name="other_problem">Outro problema</string>
+    <string name="d_fd_title">Agradeceríamos outra \chance</string>
+    <string name="enter_video_url">Insira URL de vídeo</string>
+    <string name="nt_1_title">🔥 Escolhas virais</string>
+    <string name="nt_1_content">Vídeos em alta prontos para download</string>
+    <string name="nt_1_sub_content">Vídeos em alta</string>
+    <string name="nt_1_action">Vídeos em alta</string>
+    <string name="nt_2_title">⚡️Gotas Frescas</string>
+    <string name="nt_2_content">Conteúdo novo, pronto para streaming</string>
+    <string name="nt_2_sub_content">Conteúdo novo</string>
+    <string name="nt_2_action">Toque agora</string>
+    <string name="nt_3_title">🌟Imperdível Diário</string>
+    <string name="nt_3_content">O vídeo #1 do dia está aqui</string>
+    <string name="nt_3_sub_content">Vídeo #1</string>
+    <string name="nt_3_action">Assista agora</string>
+    <string name="nt_4_title">👤Sua Partida</string>
+    <string name="nt_4_content">Sua partida perfeita em vídeo está disponível</string>
+    <string name="nt_4_sub_content">Vídeo perfeito</string>
+    <string name="nt_4_action">Tente</string>
+    <string name="nt_5_title">🌍Alerta Viral</string>
+    <string name="nt_5_content">Em alta agora. Não pisce.</string>
+    <string name="nt_5_sub_content">Não pisce</string>
+    <string name="nt_5_action">Explore</string>
+    <string name="nt_r_1_title">Pular anúncio – voltar às tendências</string>
+    <string name="nt_r_1_action">Voltar aos Vídeos</string>
+    <string name="nt_r_2_title">Um último passo, você consegue!</string>
+    <string name="nt_r_2_action">Continue agora</string>
+    <string name="nt_r_3_title">Pronto para algo novo\? Toque para explorar</string>
+    <string name="nt_r_3_action">Veja o que há de novo</string>
 </resources>

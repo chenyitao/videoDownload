@@ -3,7 +3,7 @@
     
     
     
-    <string name="loading_progress" translatable="false">Memuat… %d%%</string>
+    <string name="loading_progress" >Memuat… %d%%</string>
     <string name="nav_home">Beranda</string>
     <string name="nav_search">Pencarian</string>
     <string name="nav_download">Unduh</string>
@@ -71,4 +71,40 @@
     <string name="short_uninstall_vp_bt">Tonton sekarang</string>
     <string name="keep_app">Tetap Aplikasi</string>
     <string name="still_uninstall">Masih menghapus instalan</string>
+    <string name="fd_ed_hint">Berterima kasih atas pemikiran Anda</string>
+    <string name="not_user_friendly">Tidak ramah pengguna</string>
+    <string name="ads_are_over">Iklan sangat luar biasa</string>
+    <string name="too_many_notifications">Terlalu banyak notifikasi</string>
+    <string name="unable_save_videos">Tidak dapat menyimpan video</string>
+    <string name="hd_download_not_working">Unduhan HD tidak berfungsi</string>
+    <string name="saved_videos_won_open">Video yang disimpan tidak akan terbuka</string>
+    <string name="other_problem">Masalah lain</string>
+    <string name="d_fd_title">Kami akan menghargai\ kesempatan lain</string>
+    <string name="enter_video_url">Masukkan URL Video</string>
+    <string name="nt_1_title">🔥 Pilihan Viral</string>
+    <string name="nt_1_content">Video yang sedang tren siap diunduh</string>
+    <string name="nt_1_sub_content">Video yang sedang tren</string>
+    <string name="nt_1_action">Video yang sedang tren</string>
+    <string name="nt_2_title">⚡️Tetes Segar</string>
+    <string name="nt_2_content">Konten segar, siap streaming</string>
+    <string name="nt_2_sub_content">Konten segar</string>
+    <string name="nt_2_action">Mainkan Sekarang</string>
+    <string name="nt_3_title">🌟Wajib Dilihat Setiap Hari</string>
+    <string name="nt_3_content">Video #1 hari ini ada di sini</string>
+    <string name="nt_3_sub_content">Video #1</string>
+    <string name="nt_3_action">Tonton sekarang</string>
+    <string name="nt_4_title">👤Pasangan Anda</string>
+    <string name="nt_4_content">Kecocokan video sempurna Anda sudah masuk</string>
+    <string name="nt_4_sub_content">video sempurna</string>
+    <string name="nt_4_action">Cobalah</string>
+    <string name="nt_5_title">🌍Peringatan Viral</string>
+    <string name="nt_5_content">Sedang tren sekarang. Jangan berkedip.</string>
+    <string name="nt_5_sub_content">Jangan berkedip</string>
+    <string name="nt_5_action">Jelajahi</string>
+    <string name="nt_r_1_title">Lewati iklan – kembali ke tren</string>
+    <string name="nt_r_1_action">Kembali ke Video</string>
+    <string name="nt_r_2_title">Satu langkah terakhir, Anda sudah mendapatkan ini!</string>
+    <string name="nt_r_2_action">Lanjutkan Sekarang</string>
+    <string name="nt_r_3_title">Siap untuk sesuatu yang baru\? Ketuk untuk menjelajahi</string>
+    <string name="nt_r_3_action">Lihat apa yang baru</string>
 </resources>
