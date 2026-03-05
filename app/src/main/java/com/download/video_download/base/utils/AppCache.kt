@@ -183,4 +183,9 @@ object AppCache {
             saveValue("hWebColorIndex", value)
         }
         get() = getValue("hWebColorIndex", 0)
+    var isPerPushCold: Boolean
+        set(value) {
+            saveValue("isPerPushCold", value)
+        }
+        get() = getValue("isPerPushCold", false)
 }

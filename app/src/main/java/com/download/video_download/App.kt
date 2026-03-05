@@ -57,6 +57,7 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         isColdStart = true
+        AppCache.isPerPushCold = false
         AppCache.init(this)
         TrackMgr.instance.init(this)
         if (AppCache.gr.isEmpty()){
@@ -183,6 +184,7 @@ class App : MultiDexApplication() {
         var isAppInForeground = false
         var isJumpingToSystemSetting = false
         var isColdStart = false
+
         fun initFB(fbobj: JSONObject?){
             if(!FacebookSdk.isInitialized()){
                 val fbcg = AppCache.fb
@@ -249,7 +251,7 @@ class App : MultiDexApplication() {
         try {
             if (FirebaseApp.getApps(this).isEmpty()) {
                 FirebaseApp.initializeApp(this)
-                FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!BuildConfig.DEBUG_MODE)
+                FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false)
             }
             CoroutineScope(Dispatchers.IO).launch {
                 MobileAds.initialize(this@App) {}

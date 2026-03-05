@@ -119,7 +119,7 @@ class RemoteConfig private constructor(){
     }
     private fun handleConfigSuccess(data: String) {
         val config = Crypt.paramsDecrypt (data)
-        LogUtils.d("Config：${config.toString()}")
+        LogUtils.d("admin","Config：${config.toString()}")
 
         AppCache.adcf = config.toString()
         AppCache.isFirstGetConfig =  false
@@ -129,6 +129,7 @@ class RemoteConfig private constructor(){
             val bBarHide = func.optString("bBarHide","n")
             val unInsShow = func.optString("unInsShow","n")
             ActivityManager.currentActivity()?.let {ac->
+//                NavigationBarUtils.hideNavigationBar(ac)
                 if (bBarHide == "y") {
                     NavigationBarUtils.hideNavigationBar(ac)
                 }else{

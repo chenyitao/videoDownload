@@ -71,14 +71,17 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         LogUtils.d("type111114", param)
         when(param){
             "dl","fn"  -> {
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_download
                 loadFragment(R.id.nav_download)
             }
             "vp","vp_ins" -> {
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_player
                 loadFragment(R.id.nav_player)
             }
             else->{
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_home
                 loadFragment(R.id.nav_home)
             }
@@ -105,12 +108,19 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 } else {
                     mBind.navBottom.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                         override fun onGlobalLayout() {
-                            mBind.navBottom.setPadding(0, 0, 0, 0)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                mBind.navBottom.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                            } else {
-                                mBind.navBottom.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                            }
+                            mBind.navBottom.postDelayed({
+                                mBind.navBottom.setPadding(0, 0, 0, 0)
+                                mBind.navBottom.requestLayout()
+                                mBind.navBottom.invalidate()
+
+                                // 移除监听器
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                    mBind.navBottom.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                } else {
+                                    @Suppress("DEPRECATION")
+                                    mBind.navBottom.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                                }
+                            }, 10)
                         }
                     })
                 }
@@ -255,14 +265,17 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         LogUtils.d("type111114", param)
         when(param){
             "dl","fn"  -> {
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_download
                 loadFragment(R.id.nav_download)
             }
             "vp","vp_ins" -> {
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_player
                 loadFragment(R.id.nav_player)
             }
             else->{
+                isTabClick = false
                 mBind.navBottom.selectedItemId = R.id.nav_home
                 loadFragment(R.id.nav_home)
             }

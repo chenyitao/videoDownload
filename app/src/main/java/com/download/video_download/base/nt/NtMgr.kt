@@ -25,6 +25,7 @@ import com.download.video_download.base.model.NotifyData
 import com.download.video_download.base.model.Nt
 import com.download.video_download.base.model.Vivo.setVivoNumber
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.activity.SplashActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -194,25 +195,32 @@ class NtMgr private constructor() {
     // ======================= NOTIFICATION DATA =========================
     // ======================= NOTIFICATION VALID CHECK =========================
     private fun isShowNtValid(type: NotifyType): Boolean{
+        LogUtils.d("Notify", "${type.name}:开始触发通知展示判断")
         if (!NotificationManagerCompat.from(App.getAppContext()).areNotificationsEnabled()) {
+            LogUtils.d("Notify", "${type.name}:未开启通知权限，不展示")
             return false
         }
         if (type != NotifyType.HOME && type != NotifyType.RECENT && type != NotifyType.CLICK_LEAVER) {
             if (App.isAppInForeground) {
+                LogUtils.d("Notify", "${type.name}:应用内，不展示")
                 return false
             }
         }
         if (isLocked) {
+            LogUtils.d("Notify", "${type.name}:屏幕锁了，不展示")
             return false
         }
         if (isInteractive) {
+            LogUtils.d("Notify", "${type.name}:屏幕黑屏，不展示")
             return false
         }
 
         if (isOrientation) {
+            LogUtils.d("Notify", "${type.name}:屏幕横屏，不展示")
             return false
         }
         if (!checkNtConditionMet(type)) {
+            LogUtils.d("Notify", "${type.name}:距离间隔时间不够，不展示")
             return false
         }
         return true
@@ -224,24 +232,32 @@ class NtMgr private constructor() {
         val isNtPushMet = when (type) {
             NotifyType.NORMAL -> {
                 val time = System.currentTimeMillis() - type.lastTime
+                LogUtils.d("Notify", "${type.name}:距离上次发送通知间隔时间：${time}")
                 time >= ntData.sNTime * DateUtils.MINUTE_IN_MILLIS
             }
             NotifyType.RECENT, NotifyType.HOME  ->{
-                ntData.rhN == "y" && System.currentTimeMillis() - type.lastTime >= ntData.rhNTime * DateUtils.MINUTE_IN_MILLIS
+                val time = System.currentTimeMillis() - type.lastTime
+                LogUtils.d("Notify", "${type.name}:距离上次发送通知间隔时间：${time},是否展示通知:${if (ntData.rhN == "y") "展示" else "不展示"}")
+                ntData.rhN == "y" && time >= ntData.rhNTime * DateUtils.MINUTE_IN_MILLIS
             }
             NotifyType.UNLOCK ->{
                 val distanceTime = System.currentTimeMillis() - installTime
                 val sendTime = System.currentTimeMillis() - type.lastTime
+                LogUtils.d("Notify", "${type.name}:距离应用安装间隔时间：${distanceTime}")
+                LogUtils.d("Notify", "${type.name}:距离上次发送通知间隔时间：${sendTime},是否展示通知:${if (ntData.lockN == "y") "展示" else "不展示"}")
                 ntData.lockN == "y" && distanceTime >= 5* DateUtils.MINUTE_IN_MILLIS && sendTime >= ntData.lockNTime * DateUtils.MINUTE_IN_MILLIS
             }
 
             NotifyType.CLICK_LEAVER->{
+                LogUtils.d("Notify", "${type.name}:是否展示通知:${if (ntData.oAdB == "y") "展示" else "不展示"}")
                 ntData.oAdB == "y"
             }
             NotifyType.LEAVER ->{
+                LogUtils.d("Notify", "${type.name}:是否展示通知:${if (ntData.oB == "y") "展示" else "不展示"}")
                 ntData.oB == "y"
             }
             NotifyType.ONE_MINUTE ->{
+                LogUtils.d("Notify", "${type.name}:是否展示通知:${if (ntData.hB == "y") "展示" else "不展示"}")
                 ntData.hB == "y"
             }
         }

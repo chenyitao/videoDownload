@@ -47,6 +47,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     private var isForbidRightScroll = true
     private var from = ""
     private var Job: kotlinx.coroutines.Job? = null
+    private var isNext = false
     override fun createViewBinding(): ActivityGuideBinding {
         return ActivityGuideBinding.inflate(layoutInflater)
     }
@@ -79,6 +80,11 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                     if (intent.getStringExtra("from") == "language"
                         || intent.getStringExtra("from") == "splash"){
                         if (position == guideList.size-1){
+                            if (!isNext){
+                                TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
+                            }else{
+                                isNext = false
+                            }
                             lifecycleScope.launch {
                                 withContext(Dispatchers.Main) {
                                     delay(200)
@@ -193,6 +199,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 finish()
                 return@setOnClickListener
             }
+            isNext = true
             mBind.viewPager.currentItem += 1
         }
         viewModel.isAdLoaded.observe(this, Observer { isLoaded ->

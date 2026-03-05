@@ -51,6 +51,8 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
         AppCache.fuc.takeIf { it.isNotEmpty() }?.let {fc->
             val fuc = JSONObject(fc)
             val bBarHide = fuc.optString("bBarHide","n")
+            NavigationBarUtils.hideNavigationBar(this)
+            isNavigationBarHidden = true
             ActivityManager.currentActivity()?.let {ac->
                 if (bBarHide == "y") {
                     isNavigationBarHidden = true
@@ -79,6 +81,9 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     protected abstract fun createViewModel(): VM
     override fun onResume() {
         super.onResume()
+        if (isNavigationBarHidden){
+            NavigationBarUtils.hideNavigationBar(this)
+        }
         restoreImmersiveState()
     }
     

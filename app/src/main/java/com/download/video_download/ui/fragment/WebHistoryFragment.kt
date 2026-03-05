@@ -16,6 +16,7 @@ import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.databinding.FragmentSearchHistoryBinding
 import com.download.video_download.ui.adapter.HistoryAdapter
 import com.download.video_download.ui.dialog.HistoryClearAllDialog
@@ -67,12 +68,15 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         binding.tvClearAll.setOnClickListener {
             showClearAllDialog()
         }
-        viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
+        viewModel.isHAdLoaded.observe(this, Observer { isLoaded ->
             if (!isLoaded) return@Observer
+            if (!isVisible) return@Observer
             lifecycleScope.launch {
+                LogUtils.e("11111111","2222222222")
                 AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
                     onShowResult = { position, adType, success, error->
                         if (success){
+                            LogUtils.e("11111111","999999999")
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 binding.sId.visibility = View.VISIBLE
                                 binding.sId.setNativeAd(it,requireContext())
@@ -109,7 +113,8 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         Job = lifecycleScope.launch {
             delay(200)
             if (isVisible){
-                viewModel.checkNAd(requireContext())
+                LogUtils.e("11111111","66666666")
+                viewModel.checkNAd(requireContext(),"history")
                 viewModel.preloadBkAd(requireContext())
                 TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
                 TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)

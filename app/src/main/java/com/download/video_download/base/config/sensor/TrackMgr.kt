@@ -51,20 +51,20 @@ class TrackMgr private constructor() {
     }
     fun trackEvent(eventType: TrackEventType, params: Map<String, Any> = emptyMap()) {
         val finalParams = buildFinalParams(eventType, params)
-        LogUtils.d(TAG, "trackEvent: ${eventType.tn} trackParams: $finalParams")
+        LogUtils.d("Tba", "trackEvent: ${eventType.tn} trackParams: $finalParams")
         serverStrategy.reportEvent(eventType.tn, finalParams)
 
         if (shouldReportToFirebase(eventType)) {
-            LogUtils.i(TAG, "firebase: ${eventType.tn} trackParams: $params")
+            LogUtils.i("firebase", "firebase: ${eventType.tn} trackParams: $params")
             firebaseStrategy.reportEvent(eventType.tn, params)
         }
     }
     fun trackFireBaseEvent(eventName: String, params: Map<String, Any>) {
-        LogUtils.i(TAG, "firebase: $eventName trackParams: $params")
+        LogUtils.i("firebase", "firebase: $eventName trackParams: $params")
         firebaseStrategy.reportEvent(eventName, params)
     }
     fun trackFbPurchaseEvent(eventType:TrackEventType ,currency: Currency, amount: BigDecimal, params: MutableMap<String, Any> = mutableMapOf()) {
-        LogUtils.e(TAG, "facebook: ${eventType.tn} trackParams: amount-$amount,currency-$currency params-$params")
+        LogUtils.e("facebook", "facebook: ${eventType.tn} trackParams: amount-$amount,currency-$currency params-$params")
         if (eventType == TrackEventType.FB_PURCHASE){
             facebookStrategy.reportPurchaseEvent(currency, amount)
             return
@@ -73,7 +73,7 @@ class TrackMgr private constructor() {
     }
 
     fun trackAppflyEvent(adRevenueData: AFAdRevenueData, params: Map<String, Any> = emptyMap()) {
-        LogUtils.d(TAG, "appflyer  trackParams: ${adRevenueData.toString()} $params")
+        LogUtils.d("appflyer", "appflyer  trackParams: ${adRevenueData.toString()} $params")
         appsflyer?.logAdRevenue(adRevenueData, params)
     }
     fun trackAdEvent(adLoc: AdPosition, type: AdType, event: TrackEventType, error: com.download.video_download.base.ad.model.LoadAdError?= null){

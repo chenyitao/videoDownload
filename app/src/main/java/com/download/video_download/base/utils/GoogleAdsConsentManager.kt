@@ -21,7 +21,7 @@ object GoogleAdsConsentManager {
                 val startTime = System.currentTimeMillis()
                 val isTest = ConsentDebugSettings.Builder(activity)
                     .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-                    .addTestDeviceHashedId("8C867149F21FBD7E6C1D39E79E55D31C")
+                    .addTestDeviceHashedId("00AC4BEBECDDE1FA8D28CA1E31F8CCE6")
                 val consentParams = ConsentRequestParameters
                     .Builder()
                     .setConsentDebugSettings(isTest.build())

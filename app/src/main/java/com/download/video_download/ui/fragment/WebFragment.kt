@@ -31,6 +31,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
@@ -241,6 +244,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 if (curPage != SearchState.WEB) {
                     binding.upFloatingGuide.visibility = View.GONE
                     loadFragment(SearchState.WEB)
+                    curPage = SearchState.WEB
                 }
                 searchViewModel.setChromeUrl(data)
                 hideKeyboard(binding.etSearch)
@@ -562,12 +566,17 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             return
         }
         childFragmentManager.beginTransaction().apply {
-            currentFragment?.let { hide(it) }
+            currentFragment?.let {
+                hide(it)
+                setMaxLifecycle(it, Lifecycle.State.STARTED)
+            }
 
             if (!targetFragment.isAdded) {
                 add(binding.flContainer.id, targetFragment, state.name)
             } else {
                 show(targetFragment)
+                detach(targetFragment)
+                attach(targetFragment)
             }
             setMaxLifecycle(targetFragment, Lifecycle.State.RESUMED)
             commitNowAllowingStateLoss()

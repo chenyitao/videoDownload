@@ -22,6 +22,7 @@ import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.FrontData
 import com.download.video_download.base.utils.AppCache
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.activity.SplashActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -196,6 +197,11 @@ class NService: Service() {
         fun createNt(){
             if (!NotificationManagerCompat.from(App.getAppContext()).areNotificationsEnabled() || serviceExist)
                 return
+            LogUtils.d("Notify", "create- changzhu- Notify")
+            if (!AppCache.isPerPushCold){
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czzs)
+                AppCache.isPerPushCold = true
+            }
             val manager = NotificationManagerCompat.from(App.getAppContext())
             generateNtChannel(manager)
             starNtConditionsMet(App.getAppContext())
@@ -203,9 +209,7 @@ class NService: Service() {
         fun updateNt(msgDot: Boolean = true) {
             if (!NotificationManagerCompat.from(App.getAppContext()).areNotificationsEnabled())
                 return
-            if (App.isColdStart){
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czzs)
-            }
+            LogUtils.d("Notify", "update- changzhu- Notify")
             val manager = NotificationManagerCompat.from(App.getAppContext())
             generateNtChannel(manager)
             starNtConditionsMet(App.getAppContext(), VALUE)

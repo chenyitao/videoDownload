@@ -18,6 +18,7 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.DetectState
 import com.download.video_download.base.model.DetectStatus
 import com.download.video_download.base.room.entity.Video
+import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.base.wiget.Player
 import com.download.video_download.databinding.FragmentSearchGuideBinding
 import com.download.video_download.ui.viewmodel.SearchViewModel
@@ -55,10 +56,13 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
     override fun initListeners() {
         viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
             if (!isLoaded) return@Observer
+            if (!isVisible) return@Observer
             lifecycleScope.launch {
+                LogUtils.e("11111111","111111111")
                 AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
                     onShowResult = { position, adType, success, error->
                         if (success){
+                            LogUtils.e("11111111","123123123123123")
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 viewModel.adjustGuideView(true)
                                 binding.adView.visibility = View.VISIBLE
@@ -88,7 +92,8 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
         Job = lifecycleScope.launch {
             delay(200)
             if (isVisible){
-                viewModel.checkNAd(requireContext())
+                LogUtils.e("11111111","777777777")
+                viewModel.checkNAd(requireContext(),"guide")
                 viewModel.preloadBkAd(requireContext())
                 TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
             }

@@ -47,6 +47,9 @@ class SearchViewModel: BaseViewModel() {
     private val _isAdLoaded = MutableLiveData<Boolean>(false)
 
     val isAdLoaded: MutableLiveData<Boolean> = _isAdLoaded
+    private val _isHAdLoaded = MutableLiveData<Boolean>(false)
+
+    val isHAdLoaded: MutableLiveData<Boolean> = _isHAdLoaded
     private val _adjustGuideView = MutableLiveData<Boolean>(false)
 
     val adjustGuideView: MutableLiveData<Boolean> = _adjustGuideView
@@ -152,16 +155,24 @@ class SearchViewModel: BaseViewModel() {
                 })
         }
     }
-    fun checkNAd(context: Context) {
+    fun checkNAd(context: Context,from:String) {
         val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.SEARCH, AdType.NATIVE) == AdLoadState.LOADED
         if (hasCache){
-            _isAdLoaded.postValue(true)
+            if (from == "history"){
+                _isHAdLoaded.postValue(true)
+            }else{
+                _isAdLoaded.postValue(true)
+            }
             return
         }
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    _isAdLoaded.postValue(loadState == AdLoadState.LOADED)
+                    if (from == "history"){
+                        _isHAdLoaded.postValue(true)
+                    }else{
+                        _isAdLoaded.postValue(true)
+                    }
                     LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })
         }
