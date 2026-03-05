@@ -70,7 +70,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         param = intent?.extras?.getString("param") ?: ""
         LogUtils.d("type111114", param)
         when(param){
-            "dl" -> {
+            "dl","fn"  -> {
                 mBind.navBottom.selectedItemId = R.id.nav_download
                 loadFragment(R.id.nav_download)
             }
@@ -251,6 +251,22 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent( intent)
+        param = intent?.extras?.getString("param") ?: ""
+        LogUtils.d("type111114", param)
+        when(param){
+            "dl","fn"  -> {
+                mBind.navBottom.selectedItemId = R.id.nav_download
+                loadFragment(R.id.nav_download)
+            }
+            "vp","vp_ins" -> {
+                mBind.navBottom.selectedItemId = R.id.nav_player
+                loadFragment(R.id.nav_player)
+            }
+            else->{
+                mBind.navBottom.selectedItemId = R.id.nav_home
+                loadFragment(R.id.nav_home)
+            }
+        }
     }
     private fun initFCM() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->

@@ -30,6 +30,7 @@ import androidx.core.view.marginTop
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.download.video_download.App
 import com.download.video_download.R
@@ -86,6 +87,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     private var permissionDenied = false
     private var taskCreatD:DownloadStatusDialog? = null
     private var taskCD:DownloadStatusDialog? = null
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -450,12 +452,19 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
     override fun onResume() {
         super.onResume()
         parseParams()
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main2)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_main2)
+        }
+        Job?.start()
     }
 
     override fun onPause() {
         super.onPause()
         hideKeyboard(binding.etSearch)
+        Job?.cancel()
+        Job = null
     }
 
     override fun onDestroy() {
@@ -560,6 +569,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             } else {
                 show(targetFragment)
             }
+            setMaxLifecycle(targetFragment, Lifecycle.State.RESUMED)
             commitNowAllowingStateLoss()
         }
         currentFragment = targetFragment

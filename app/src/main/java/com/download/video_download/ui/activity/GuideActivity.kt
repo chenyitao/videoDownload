@@ -46,6 +46,7 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     private var currentPage = 0
     private var isForbidRightScroll = true
     private var from = ""
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(): ActivityGuideBinding {
         return ActivityGuideBinding.inflate(layoutInflater)
     }
@@ -221,11 +222,21 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
     override fun onResume() {
         super.onResume()
         if (intent.getStringExtra("from") == "language" || intent.getStringExtra("from") == "splash"){
-            TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
-            viewModel.handleNativeAd(this)
+            Job?.cancel()
+            Job = lifecycleScope.launch {
+                delay(200)
+                TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
+                viewModel.handleNativeAd(this@GuideActivity)
+            }
+            Job?.start()
+
         }
     }
-
+    override fun onPause() {
+        super.onPause()
+        Job?.cancel()
+        Job = null
+    }
     class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: AppCompatTextView = itemView.findViewById(R.id.tv_title)
         val tvIntro: AppCompatTextView = itemView.findViewById(R.id.tv_intro)

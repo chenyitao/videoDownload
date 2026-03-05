@@ -83,7 +83,7 @@ class NService: Service() {
     private fun beginFS(){
         val remoteViews = generateRView().also { rv ->
             rv.setTextViewText(R.id.enter_video_url, App.getAppContext().getString(R.string.enter_video_url))
-            rv.setOnClickPendingIntent(R.id.iv_msg_dot, clickBtPendingIntent())
+            rv.setOnClickPendingIntent(R.id.iv_notify_dn, clickBtPendingIntent())
             rv.setOnClickPendingIntent(R.id.enter_video_url, enterPendingIntent())
         }
         val notification = buildFrontNotification(remoteViews).build()
@@ -122,7 +122,6 @@ class NService: Service() {
     private fun clickBtPendingIntent(): PendingIntent {
         val intent = Intent(this, SplashActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             addCategory(Intent.CATEGORY_DEFAULT)
             putExtra("param", "fn")
             putExtra("notify_channel_id", NOTIFY_CHANNEL_ID)
@@ -139,7 +138,6 @@ class NService: Service() {
     private fun enterPendingIntent(): PendingIntent {
         val intent = Intent(this, SplashActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             addCategory(Intent.CATEGORY_DEFAULT)
             putExtra("param", "enter_url")
             putExtra("notify_channel_id", NOTIFY_CHANNEL_ID)

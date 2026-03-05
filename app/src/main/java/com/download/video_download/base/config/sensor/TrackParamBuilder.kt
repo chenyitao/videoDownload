@@ -82,6 +82,7 @@ class TrackParamBuilder private constructor() {
                 put("ancestor", type)
                 put("load", adType.toString())
                 put("campus",currencyCode)
+                put("detect","admob")
             }
             return builder
         }

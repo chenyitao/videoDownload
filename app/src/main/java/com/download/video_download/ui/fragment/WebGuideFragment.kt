@@ -29,6 +29,7 @@ import kotlinx.coroutines.withContext
 class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding>() {
     val searchViewModel: SearchViewModel by viewModels(ownerProducer = { requireParentFragment() })
     lateinit var player: Player
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -83,14 +84,23 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkNAd(requireContext())
-        viewModel.preloadBkAd(requireContext())
-        TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            if (isVisible){
+                viewModel.checkNAd(requireContext())
+                viewModel.preloadBkAd(requireContext())
+                TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
+            }
+        }
+        Job?.start()
     }
 
     override fun onPause() {
         super.onPause()
         player.pause()
+        Job?.cancel()
+        Job = null
     }
 
     override fun onDestroy() {

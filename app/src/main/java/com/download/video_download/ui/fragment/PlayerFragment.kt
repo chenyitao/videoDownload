@@ -30,6 +30,7 @@ import com.download.video_download.ui.activity.InnerVideoActivity
 import com.download.video_download.ui.adapter.PlayerAdapter
 import com.download.video_download.ui.viewmodel.MainViewModel
 import com.download.video_download.ui.viewmodel.PlayerViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Locale.getDefault
@@ -40,6 +41,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
         ownerProducer = { requireActivity() }
     )
     var adapter: PlayerAdapter? = null
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -83,11 +85,18 @@ class PlayerFragment : BaseFragment<PlayerViewModel, FragmentPlayerBinding>() {
     override fun onResume() {
         super.onResume()
         playerViewModel.initVideoData()
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main4)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_main4)
+        }
+        Job?.start()
     }
 
     override fun onPause() {
         super.onPause()
+        Job?.cancel()
+        Job = null
     }
     fun shareVideo(item: Video) {
         val videoFile = File(

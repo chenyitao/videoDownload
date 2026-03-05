@@ -31,6 +31,7 @@ import kotlinx.coroutines.withContext
 class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     val homeViewModel: HomeViewModel by viewModels()
     lateinit var adapter: HomeSiteAdapter
+    private var Job: kotlinx.coroutines.Job? = null
     val mainViewModel: MainViewModel by viewModels(
         ownerProducer = { requireActivity() }
     )
@@ -124,14 +125,21 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     override fun onResume() {
         super.onResume()
         homeViewModel.initWebSiteData()
-        homeViewModel.preloadNAd(requireContext())
-        TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.NATIVE, TrackEventType.safedddd_bg)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            homeViewModel.preloadNAd(requireContext())
+            TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.NATIVE, TrackEventType.safedddd_bg)
 
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main1)
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_main1)
+        }
+        Job?.start()
     }
 
     override fun onPause() {
         super.onPause()
+        Job?.cancel()
+        Job = null
     }
 
     override fun onDestroyView() {

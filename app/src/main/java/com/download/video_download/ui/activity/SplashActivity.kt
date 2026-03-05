@@ -192,12 +192,6 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     private fun updateProgressText(progress: Int) {
         val progressText =
             String.format(App.getAppContext().getString(R.string.loading_progress), progress)
-        if (!mBind.progress.isVisible){
-            mBind.progress.visibility = View.VISIBLE
-        }
-        if (!mBind.loadingProgress.isVisible){
-            mBind.loadingProgress.visibility = View.VISIBLE
-        }
         mBind.loadingProgress.text = progressText
     }
 
@@ -229,6 +223,12 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             return
         }
         mViewModel.startLoading {
+            if (!mBind.progress.isVisible){
+                mBind.progress.visibility = View.VISIBLE
+            }
+            if (!mBind.loadingProgress.isVisible){
+                mBind.loadingProgress.visibility = View.VISIBLE
+            }
             AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
         }
     }
@@ -246,6 +246,12 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             }
                 if (!ifNeedUmp){
                     mViewModel.startLoading {
+                        if (!mBind.progress.isVisible){
+                            mBind.progress.visibility = View.VISIBLE
+                        }
+                        if (!mBind.loadingProgress.isVisible){
+                            mBind.loadingProgress.visibility = View.VISIBLE
+                        }
                         AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
                     }
                     return@requestPermissions
@@ -272,6 +278,12 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         mViewModel.preloadBatchAds(this)
         mViewModel.preloadAd(this)
         mViewModel.startLoading {
+            if (!mBind.progress.isVisible){
+                mBind.progress.visibility = View.VISIBLE
+            }
+            if (!mBind.loadingProgress.isVisible){
+                mBind.loadingProgress.visibility = View.VISIBLE
+            }
             AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED
         }
         isUmpFlowState = false

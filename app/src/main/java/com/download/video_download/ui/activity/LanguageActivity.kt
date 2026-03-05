@@ -37,6 +37,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
     lateinit var adapter :LanguageAdapter
     val viewModel: LanguageViewModel by viewModels()
     private var param = ""
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(): ActivityLanguageBinding {
         return ActivityLanguageBinding.inflate(layoutInflater)
     }
@@ -47,7 +48,6 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_yx)
         param = intent?.extras?.getString("param") ?: ""
-        LogUtils.d("type111112", param)
         mBind.rvLanguage.layoutManager = LinearLayoutManager(this)
         adapter = LanguageAdapter {
             if (it.language == "Use system language"){
@@ -105,8 +105,19 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
 
     override fun onResume() {
         super.onResume()
-        viewModel.handleNativeAd(this)
-        TrackMgr.instance.trackAdEvent(AdPosition.LANGUAGE, AdType.NATIVE, TrackEventType.safedddd_bg)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            viewModel.handleNativeAd(this@LanguageActivity)
+            TrackMgr.instance.trackAdEvent(AdPosition.LANGUAGE, AdType.NATIVE, TrackEventType.safedddd_bg)
+        }
+        Job?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Job?.cancel()
+        Job = null
     }
 
     override fun handleBackPressed(): Boolean {

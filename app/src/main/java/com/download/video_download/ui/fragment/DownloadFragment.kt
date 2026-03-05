@@ -22,6 +22,8 @@ import com.download.video_download.ui.dialog.DownloadStatusDialog
 import com.download.video_download.ui.dialog.isFragmentShowing
 import com.download.video_download.ui.viewmodel.DownloadViewModel
 import com.download.video_download.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding>() {
     val downloadViewModel: DownloadViewModel by viewModels()
@@ -30,6 +32,7 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
     )
     var adapter: DownloadTaskAdapter? = null
     var downloadDialog:DownloadStatusDialog? = null
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -102,10 +105,17 @@ class DownloadFragment : BaseFragment<DownloadViewModel, FragmentDownloadBinding
 
     override fun onResume() {
         super.onResume()
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_main3)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_main3)
+        }
+        Job?.start()
     }
 
     override fun onPause() {
         super.onPause()
+        Job?.cancel()
+        Job = null
     }
 }

@@ -30,6 +30,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
         ownerProducer = { requireParentFragment() } // 作用域指向父 Fragment
     )
     lateinit var adapter: HistoryAdapter
+    private var Job: kotlinx.coroutines.Job? = null
     override fun createViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -104,10 +105,23 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
 
     override fun onResume() {
         super.onResume()
-        viewModel.checkNAd(requireContext())
-        viewModel.preloadBkAd(requireContext())
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
-        TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
+        Job?.cancel()
+        Job = lifecycleScope.launch {
+            delay(200)
+            if (isVisible){
+                viewModel.checkNAd(requireContext())
+                viewModel.preloadBkAd(requireContext())
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser1)
+                TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)
+            }
+        }
+        Job?.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Job?.cancel()
+        Job = null
     }
 
     override fun onDestroy() {
