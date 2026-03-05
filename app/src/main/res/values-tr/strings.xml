@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">HD indirme çalışmıyor</string>
     <string name="saved_videos_won_open">Kaydedilen videolar açılmıyor</string>
     <string name="other_problem">Diğer sorun</string>
-    <string name="d_fd_title">Bir şans daha vermeyi\ takdir ederiz</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">Video URL\'sini gir</string>
     <string name="nt_1_title">🔥 Viral Seçimler</string>
     <string name="nt_1_content">İndirmeye hazır trend videolar</string>
     <string name="nt_1_sub_content">Trend videolar</string>
-    <string name="nt_1_action">Trend videolar</string>
+    <string name="nt_1_action">Videolar alın</string>
     <string name="nt_2_title">⚡️Taze Damlalar</string>
     <string name="nt_2_content">Taze içerik, yayına hazır</string>
     <string name="nt_2_sub_content">Taze içerik</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">Devam Et</string>
     <string name="nt_r_3_title">Yeni bir şeye hazır mısın\? Keşfetmek için dokunun</string>
     <string name="nt_r_3_action">Yenilikleri Görün</string>
+    
 </resources>

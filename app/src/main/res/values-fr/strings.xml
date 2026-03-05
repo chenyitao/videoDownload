@@ -76,12 +76,12 @@
     <string name="hd_download_not_working">Le téléchargement HD ne fonctionne pas</string>
     <string name="saved_videos_won_open">Les vidéos sauvegardées ne s’ouvrent pas</string>
     <string name="other_problem">Autre problème</string>
-    <string name="d_fd_title">Nous apprécierions \ une autre chance</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">Saisit de l’URL de la vidéo</string>
     <string name="nt_1_title">🔥 Choix viraux</string>
     <string name="nt_1_content">Vidéos tendance prêtes à être téléchargées</string>
     <string name="nt_1_sub_content">Vidéos tendance</string>
-    <string name="nt_1_action">Vidéos tendance</string>
+    <string name="nt_1_action">Obtenez des vidéos</string>
     <string name="nt_2_title">⚡️Gouttes fraîches</string>
     <string name="nt_2_content">Contenu frais, prêt à être diffusé en streaming</string>
     <string name="nt_2_sub_content">Contenu frais</string>
@@ -104,4 +104,5 @@
     <string name="nt_r_2_action">Continuer maintenant</string>
     <string name="nt_r_3_title">Prêt pour quelque chose de nouveau \? Appuyez pour explorer</string>
     <string name="nt_r_3_action">Découvrez ce qui est nouveau</string>
+    
 </resources>

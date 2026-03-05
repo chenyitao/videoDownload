@@ -18,6 +18,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.download.video_download.App
 import com.download.video_download.R
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.model.NotifyData
 import com.download.video_download.base.model.Nt
@@ -148,6 +150,7 @@ class NtMgr private constructor() {
                 updateLastNtTime(type)
                 val nt = buildNt(ntData, type, sRv, bRv, fRv)
                 showNt(manager, ntData, nt)
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdy, mapOf("safedddd" to ntData.params, "safeddddsj" to type.params))
             }
         }
     }

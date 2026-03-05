@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">Скачивание в HD не работает</string>
     <string name="saved_videos_won_open">Сохранённые видео не открываются</string>
     <string name="other_problem">Другая проблема</string>
-    <string name="d_fd_title">Мы будем признательны \за ещё один шанс</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">Вводите URL видео</string>
     <string name="nt_1_title">🔥 Вирусные прогнозы</string>
     <string name="nt_1_content">Трендовые видео, готовые к скачиванию</string>
     <string name="nt_1_sub_content">Трендовые видео</string>
-    <string name="nt_1_action">Трендовые видео</string>
+    <string name="nt_1_action">Получите видео</string>
     <string name="nt_2_title">⚡️Свежие капли</string>
     <string name="nt_2_content">Свежий контент, готовый к стримингу</string>
     <string name="nt_2_sub_content">Свежий контент</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">Продолжайте сейчас</string>
     <string name="nt_r_3_title">Готовы к чему-то новому\? Нажмите для исследования</string>
     <string name="nt_r_3_action">Посмотрите, что нового</string>
+    
 </resources>

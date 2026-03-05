@@ -76,12 +76,12 @@
     <string name="hd_download_not_working">HD ڈاؤن لوڈ کام نہیں کر رہا</string>
     <string name="saved_videos_won_open">محفوظ شدہ ویڈیوز نہیں کھل رہیں</string>
     <string name="other_problem">دیگر مسائل</string>
-    <string name="d_fd_title">ہم ایک اور موقع کی قدر کریں گے</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">ویڈیو یو آر ایل درج کریں</string>
     <string name="nt_1_title">🔥 وائرل پک</string>
     <string name="nt_1_content">ٹرینڈنگ ویڈیوز ڈاؤن لوڈ کے لیے تیار ہیں</string>
     <string name="nt_1_sub_content">ٹرینڈنگ ویڈیوز</string>
-    <string name="nt_1_action">ٹرینڈنگ ویڈیوز</string>
+    <string name="nt_1_action">ویڈیوز حاصل کریں</string>
     <string name="nt_2_title">⚡️تازہ قطرے</string>
     <string name="nt_2_content">تازہ مواد، اسٹریم کے لیے تیار</string>
     <string name="nt_2_sub_content">تازہ مواد</string>
@@ -104,4 +104,5 @@
     <string name="nt_r_2_action">ابھی جاری رکھیں</string>
     <string name="nt_r_3_title">کچھ نیا سننے کے لیے تیار ہیں؟ دریافت کرنے کے لیے ٹیپ کریں</string>
     <string name="nt_r_3_action">دیکھیں کیا نیا ہے</string>
+    
 </resources>

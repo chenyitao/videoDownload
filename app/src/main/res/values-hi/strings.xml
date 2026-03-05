@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">एचडी डाउनलोड काम नहीं कर रहा है</string>
     <string name="saved_videos_won_open">सेव किए गए वीडियो नहीं खुलेंगे</string>
     <string name="other_problem">अन्य समस्या</string>
-    <string name="d_fd_title">हम एक और मौके \की सराहना करेंगे</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">वीडियो URL दर्ज करें</string>
     <string name="nt_1_title">🔥 वायरल पिक्स</string>
     <string name="nt_1_content">ट्रेंडिंग वीडियो डाउनलोड करने के लिए तैयार</string>
     <string name="nt_1_sub_content">ट्रेंडिंग वीडियो</string>
-    <string name="nt_1_action">ट्रेंडिंग वीडियो</string>
+    <string name="nt_1_action">वीडियो प्राप्त करें</string>
     <string name="nt_2_title">⚡️ताजी बूँदें</string>
     <string name="nt_2_content">ताज़ा सामग्री, स्ट्रीम करने के लिए तैयार</string>
     <string name="nt_2_sub_content">ताज़ा सामग्री</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">अब जारी रखें</string>
     <string name="nt_r_3_title">कुछ नया करने के लिए तैयार हैं\? एक्सप्लोर करने के लिए टैप करें</string>
     <string name="nt_r_3_action">देखें नया क्या है</string>
+    
 </resources>

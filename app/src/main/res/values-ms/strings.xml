@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">Muat turun HD tidak berfungsi</string>
     <string name="saved_videos_won_open">Video yang disimpan tidak akan dibuka</string>
     <string name="other_problem">Masalah lain</string>
-    <string name="d_fd_title">Kami akan menghargai\ peluang lain</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">Masukkan URL Video</string>
     <string name="nt_1_title">🔥 Pilihan Viral</string>
     <string name="nt_1_content">Video sohor kini sedia untuk dimuat turun</string>
     <string name="nt_1_sub_content">Video sohor kini</string>
-    <string name="nt_1_action">Video sohor kini</string>
+    <string name="nt_1_action">Dapatkan Video</string>
     <string name="nt_2_title">⚡️Titisan segar</string>
     <string name="nt_2_content">Kandungan segar, sedia untuk distrim</string>
     <string name="nt_2_sub_content">Kandungan segar</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">Teruskan Sekarang</string>
     <string name="nt_r_3_title">Bersedia untuk sesuatu yang baharu\? Ketik untuk meneroka</string>
     <string name="nt_r_3_action">Lihat Perkara Baharu</string>
+    
 </resources>

@@ -76,12 +76,12 @@
     <string name="hd_download_not_working">التنزيل عالي الدقة لا يعمل</string>
     <string name="saved_videos_won_open">الفيديوهات المحفوظة لا تفتح</string>
     <string name="other_problem">مشكلة أخرى</string>
-    <string name="d_fd_title">سنكون ممتنين لفرصة أخرى</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">أدخل رابط الفيديو</string>
     <string name="nt_1_title">🔥 اختيارات فيروسية</string>
     <string name="nt_1_content">الفيديوهات الرائجة جاهزة للتحميل</string>
     <string name="nt_1_sub_content">الفيديوهات الرائجة</string>
-    <string name="nt_1_action">الفيديوهات الرائجة</string>
+    <string name="nt_1_action">احصل على الفيديوهات</string>
     <string name="nt_2_title">⚡️قطرات طازجة</string>
     <string name="nt_2_content">محتوى جديد، جاهز للبث</string>
     <string name="nt_2_sub_content">محتوى جديد</string>
@@ -104,4 +104,5 @@
     <string name="nt_r_2_action">تابع الآن</string>
     <string name="nt_r_3_title">هل أنت مستعد لشيء جديد؟ انقر للاستكشاف</string>
     <string name="nt_r_3_action">انظر إلى ما هو الجديد</string>
+    
 </resources>

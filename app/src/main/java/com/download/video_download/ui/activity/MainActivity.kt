@@ -74,7 +74,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 mBind.navBottom.selectedItemId = R.id.nav_download
                 loadFragment(R.id.nav_download)
             }
-            "vp" -> {
+            "vp","vp_ins" -> {
                 mBind.navBottom.selectedItemId = R.id.nav_player
                 loadFragment(R.id.nav_player)
             }
@@ -126,9 +126,13 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
         }
     }
     private fun requestNotifyPer(){
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzzs)
         permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
             if (allGranted){
                 NService.createNt()
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzty)
+            }else{
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzjj)
             }
         }
     }

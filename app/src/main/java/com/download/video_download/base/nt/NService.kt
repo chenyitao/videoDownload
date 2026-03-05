@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.download.video_download.App
 import com.download.video_download.R
+import com.download.video_download.base.config.sensor.TrackEventType
+import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.FrontData
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.ui.activity.SplashActivity
@@ -203,6 +205,9 @@ class NService: Service() {
         fun updateNt(msgDot: Boolean = true) {
             if (!NotificationManagerCompat.from(App.getAppContext()).areNotificationsEnabled())
                 return
+            if (App.isColdStart){
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czzs)
+            }
             val manager = NotificationManagerCompat.from(App.getAppContext())
             generateNtChannel(manager)
             starNtConditionsMet(App.getAppContext(), VALUE)

@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">HDダウンロードがうまくいかない</string>
     <string name="saved_videos_won_open">保存動画が開きません</string>
     <string name="other_problem">その他の問題</string>
-    <string name="d_fd_title">もう一度チャンス\をいただきたいです</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">ビデオURLを入力してください</string>
     <string name="nt_1_title">🔥 バイラルピック</string>
     <string name="nt_1_content">トレンド動画をダウンロード準備完了</string>
     <string name="nt_1_sub_content">トレンド動画</string>
-    <string name="nt_1_action">トレンド動画</string>
+    <string name="nt_1_action">動画を入手</string>
     <string name="nt_2_title">⚡️フレッシュ・ドロップス</string>
     <string name="nt_2_content">新鮮なコンテンツ、ストリーミング準備完了</string>
     <string name="nt_2_sub_content">新鮮なコンテンツ</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">今すぐ続ける</string>
     <string name="nt_r_3_title">新しいものに挑戦する準備はできていますか\?タップして探索</string>
     <string name="nt_r_3_action">最新情報をチェック</string>
+    
 </resources>

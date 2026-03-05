@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">Hindi gumagana ang pag-download ng HD</string>
     <string name="saved_videos_won_open">Hindi magbubukas ang mga naka-save na video</string>
     <string name="other_problem">Iba pang problema</string>
-    <string name="d_fd_title">Pinahahalagahan namin \ang isa pang pagkakataon</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">Ipasok ang URL ng Video</string>
     <string name="nt_1_title">🔥 Mga Viral Pick</string>
     <string name="nt_1_content">Trending videos handa nang i-download</string>
     <string name="nt_1_sub_content">Mga Trending na Video</string>
-    <string name="nt_1_action">Mga Trending na Video</string>
+    <string name="nt_1_action">Email Address *</string>
     <string name="nt_2_title">⚡️Mga Sariwang Patak</string>
     <string name="nt_2_content">Sariwang nilalaman, handa nang mag-stream</string>
     <string name="nt_2_sub_content">Sariwang nilalaman</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">Magpatuloy Ngayon</string>
     <string name="nt_r_3_title">Handa na para sa isang bagong bagay\? I-tap upang galugarin</string>
     <string name="nt_r_3_action">Tingnan kung ano ang bago</string>
+    
 </resources>

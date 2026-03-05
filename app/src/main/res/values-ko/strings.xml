@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">HD 다운로드 불가</string>
     <string name="saved_videos_won_open">저장된 영상이 열리지 않습니다</string>
     <string name="other_problem">다른 문제</string>
-    <string name="d_fd_title">다시 한 번 기회를\ 주시면 감사하겠습니다</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">비디오 URL 입력</string>
     <string name="nt_1_title">🔥 바이럴 픽</string>
     <string name="nt_1_content">다운로드 가능한 인기 동영상</string>
     <string name="nt_1_sub_content">인기 동영상</string>
-    <string name="nt_1_action">인기 동영상</string>
+    <string name="nt_1_action">동영상 보기</string>
     <string name="nt_2_title">⚡️신선한 드롭스</string>
     <string name="nt_2_content">신선한 콘텐츠, 스트리밍 준비 완료</string>
     <string name="nt_2_sub_content">신선한 콘텐츠</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">지금 계속</string>
     <string name="nt_r_3_title">새로운 것을 기대할 준비가 되셨나요\? 탭하여 탐색하세요</string>
     <string name="nt_r_3_action">새로운 소식을 확인해 보세요</string>
+    
 </resources>

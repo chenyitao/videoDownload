@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">การดาวน์โหลด HD ไม่ทํางาน</string>
     <string name="saved_videos_won_open">วิดีโอที่บันทึกไว้จะไม่เปิดขึ้น</string>
     <string name="other_problem">ปัญหาอื่น ๆ</string>
-    <string name="d_fd_title">เรายินดีเป็นอย่างยิ่งสําหรับโอกาสอีกครั้ง</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">ป้อน URL ของวิดีโอ</string>
     <string name="nt_1_title">🔥 การเลือกไวรัส</string>
     <string name="nt_1_content">วิดีโอที่กําลังมาแรงพร้อมให้ดาวน์โหลด</string>
     <string name="nt_1_sub_content">วิดีโอที่กําลังมาแรง</string>
-    <string name="nt_1_action">วิดีโอที่กําลังมาแรง</string>
+    <string name="nt_1_action">รับวิดีโอ</string>
     <string name="nt_2_title">⚡️หยดสด</string>
     <string name="nt_2_content">เนื้อหาสดใหม่พร้อมสตรีม</string>
     <string name="nt_2_sub_content">เนื้อหาที่สดใหม่</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">ดําเนินการต่อตอนนี้</string>
     <string name="nt_r_3_title">พร้อมสําหรับสิ่งใหม่ๆ แล้วหรือยัง\? แตะเพื่อสํารวจ</string>
     <string name="nt_r_3_action">ดูว่ามีอะไรใหม่</string>
+    
 </resources>

@@ -51,6 +51,28 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
         param = intent?.extras?.getString("param") ?: ""
+        when(param){
+            "dl" -> {
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 1))
+            }
+            "vp" -> {
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 2))
+            }
+            "us" -> {
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 3))
+            }
+            "fn" -> {
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safedddd" to 2))
+            }
+            "enter_url" -> {
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safedddd" to 1))
+            }
+        }
+        if (intent?.extras?.getInt("ntType") == 2){
+            val safedddd = intent.extras?.getString("ntParam")
+            val safeddddsj = intent.extras?.getString("ntTime")
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdj,mapOf("safedddd" to safedddd.toString(),"safeddddsj" to safeddddsj.toString()))
+        }
         if (isColdStart){
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
         }else{
@@ -212,10 +234,15 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
 
     private fun requestNotifyPer(ifNeedUmp: Boolean){
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzzs)
         permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
                 AppCache.isPerNtShow = true
             if (allGranted){
                 NService.createNt()
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzty)
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safedddd" to "1"))
+            }else{
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzjj)
             }
                 if (!ifNeedUmp){
                     mViewModel.startLoading {
@@ -235,6 +262,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         if (GoogleAdsConsentManager.isLoadingConsent){
             return
         }
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_umpca)
         val umpResult = GoogleAdsConsentManager.requestConsentInfo(this)
         if (umpResult){
             GoogleAdsConsentManager.isLoadingConsent = true

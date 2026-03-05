@@ -79,12 +79,12 @@
     <string name="hd_download_not_working">HD 下載無法使用</string>
     <string name="saved_videos_won_open">儲存的影片無法開啟</string>
     <string name="other_problem">另一個問題</string>
-    <string name="d_fd_title">我們很感激\能再給我一次機會</string>
+    <string name="d_fd_title">We would appreciate \ another chance</string>
     <string name="enter_video_url">輸入影片網址</string>
     <string name="nt_1_title">🔥 病毒推薦</string>
     <string name="nt_1_content">熱門影片，隨時可下載</string>
     <string name="nt_1_sub_content">熱門影片</string>
-    <string name="nt_1_action">熱門影片</string>
+    <string name="nt_1_action">取得影片</string>
     <string name="nt_2_title">⚡️新鮮的滴落</string>
     <string name="nt_2_content">新鮮內容，準備串流</string>
     <string name="nt_2_sub_content">新鮮內容</string>
@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">立即繼續</string>
     <string name="nt_r_3_title">準備好迎接新事物了嗎？點擊探索</string>
     <string name="nt_r_3_action">看看最新動態</string>
+    
 </resources>

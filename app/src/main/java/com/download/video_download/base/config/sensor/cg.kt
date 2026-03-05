@@ -70,8 +70,27 @@ enum class TrackEventType(val tn: String) {
     safedddd_bg("safedddd_bg"),
     safedddd_bh("safedddd_bh"),
     safedddd_bi("safedddd_bi"),
-    safedddd_dianji("safedddd_dianji")
-
+    safedddd_dianji("safedddd_dianji"),
+    safedddd_umpca("safedddd_umpca"),
+    safedddd_umpcb("safedddd_umpcb"),
+    safedddd_umpcd("safedddd_umpcd"),
+    safedddd_umpce("safedddd_umpce"),
+    safedddd_umpcc("safedddd_umpcc"),
+    safedddd_long1("safedddd_long1"),
+    safedddd_long2("safedddd_long2"),
+    safedddd_long3("safedddd_long3"),
+    safedddd_long4("safedddd_long4"),
+    safedddd_long5("safedddd_long5"),
+    safedddd_long6("safedddd_long6"),
+    safedddd_long7("safedddd_long7"),
+    safedddd_tzzs("safedddd_tzzs"),
+    safedddd_tzty("safedddd_tzty"),
+    safedddd_tzjj("safedddd_tzjj"),
+    safedddd_tzkq("safedddd_tzkq"),
+    safedddd_tzdy("safedddd_tzdy"),
+    safedddd_tzdj("safedddd_tzdj"),
+    safedddd_czzs("safedddd_czzs"),
+    safedddd_czdj("safedddd_czdj")
 }
 interface TrackReportStrategy {
     fun reportEvent(eventName: String, params: Map<String, Any>)
