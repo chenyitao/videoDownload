@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="@dimen/common_dimen_14dp">
+            android:layout_marginStart="14dp">
             <TextView
                 android:id="@+id/tv_normal_title"
                 android:layout_width="wrap_content"

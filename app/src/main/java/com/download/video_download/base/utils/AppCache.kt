@@ -178,4 +178,9 @@ object AppCache {
             saveValue("isHomePerNtShow", value)
         }
         get() = getValue("isHomePerNtShow", false)
+    var hWebColorIndex:  Int
+        set(value) {
+            saveValue("hWebColorIndex", value)
+        }
+        get() = getValue("hWebColorIndex", 0)
 }

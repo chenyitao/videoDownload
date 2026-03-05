@@ -66,9 +66,9 @@ data class WebsiteData(
     @SerialName("title")
     val title: String,
     @SerialName("image")
-    val image: Int,
+    val image: Int = 0,
     @SerialName("color")
-    val color: String = "",
+    val color: Int = -1,
     @SerialName("url")
     val url: String,
     @SerialName("sort")

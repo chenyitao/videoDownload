@@ -5,13 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="18dp">
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_site"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+    <RelativeLayout
+        android:id="@+id/rl_site"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_site"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"/>
+        <RelativeLayout
+            android:id="@+id/iv_site_t"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_site_strok_round">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_site_t"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/shape_site_fd9900_round"/>
+        </RelativeLayout>
+    </RelativeLayout>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_site"
         android:layout_width="wrap_content"
@@ -19,8 +42,10 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="12sp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_site"/>
+        app:layout_constraintTop_toBottomOf="@+id/rl_site"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

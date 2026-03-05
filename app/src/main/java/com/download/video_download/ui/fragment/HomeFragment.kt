@@ -123,6 +123,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     }
     override fun onResume() {
         super.onResume()
+        homeViewModel.initWebSiteData()
         homeViewModel.preloadNAd(requireContext())
         TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.NATIVE, TrackEventType.safedddd_bg)
 
