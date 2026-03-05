@@ -24,7 +24,11 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.config.sensor.TrackParamBuilder
 import com.download.video_download.base.ext.jsonParser
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.model.Nt
 import com.download.video_download.base.model.Rf
+import com.download.video_download.base.nt.NService
+import com.download.video_download.base.nt.NtMgr
+import com.download.video_download.base.nt.SysKeyReceiver
 import com.download.video_download.base.task.HlsMerger
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
@@ -118,6 +122,7 @@ class App : MultiDexApplication() {
 
             override fun onActivityStarted(activity: Activity) {
                 foregroundActivityCount++
+                NtMgr.instance.removeLeaveClickNt()
                 if (foregroundActivityCount == 1 && !isAppInForeground) {
                     isAppInForeground = true
                     statusChangeListeners.forEach { it.onAppEnterForeground() }
@@ -157,6 +162,9 @@ class App : MultiDexApplication() {
                         }
                     }, 200)
                 }
+                if(foregroundActivityCount <=0){
+                    NtMgr.instance.showLeaveClickNt()
+                }
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
@@ -165,6 +173,10 @@ class App : MultiDexApplication() {
                 ActivityManager.removeActivity(activity)
             }
         })
+        NService.createNt()
+        SysKeyReceiver.instance.startKeyReceiver(this)
+        NtMgr.instance.ntTaskJob()
+        NtMgr.instance.startNtWorkMgrTask()
     }
     companion object {
         private var weakApp: WeakReference<Application>? = null

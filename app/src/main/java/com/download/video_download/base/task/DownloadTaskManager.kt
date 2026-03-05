@@ -13,6 +13,7 @@ import com.arialyy.aria.core.task.DownloadTask
 import com.download.video_download.App
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
+import com.download.video_download.base.nt.NService
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.room.entity.getSequentialNumber
 import com.download.video_download.base.utils.AppCache
@@ -407,6 +408,9 @@ class DownloadTaskManager() : DownloadTaskListener {
                    updateVideoLiveData(newList)
                     _isCompete.value = true
                    newList.removeAt(index)
+                   if (!NService.isShowMsgDot){
+                       NService.updateNt(true)
+                   }
                 } else {
                     newList[index] = updatedItem
                    updateVideoLiveData(newList)

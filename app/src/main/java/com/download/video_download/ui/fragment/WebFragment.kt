@@ -46,6 +46,8 @@ import com.download.video_download.base.model.History
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.nt.NService
+import com.download.video_download.base.nt.NtMgr
 import com.download.video_download.base.room.entity.Video
 import com.download.video_download.base.task.DownloadTaskManager
 import com.download.video_download.base.utils.AnimaUtils
@@ -733,6 +735,9 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         taskCD?.show(this.childFragmentManager, "DownloadDialog")
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser13, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+        if (!NService.isShowMsgDot){
+            NService.updateNt(true)
+        }
     }
     private fun goToPermissionSetting() {
         App.isJumpingToSystemSetting = true

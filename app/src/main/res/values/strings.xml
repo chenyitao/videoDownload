@@ -107,4 +107,5 @@
     <string name="nt_r_2_action">Continue Now</string>
     <string name="nt_r_3_title">Ready for something new? Tap to explore</string>
     <string name="nt_r_3_action">See What’s New</string>
+    <string name="nt_use_intro" translatable="false">“Safe Downloader-Save Video” keeps you informed with a live progress notification during downloads, so you can easily track the process and return to the app. You\'re always in control—turn this feature on or off anytime via your device’s notification settings.</string>
 </resources>

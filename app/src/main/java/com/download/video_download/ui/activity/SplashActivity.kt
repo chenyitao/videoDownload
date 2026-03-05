@@ -19,6 +19,8 @@ import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.startActivity
+import com.download.video_download.base.nt.NService
+import com.download.video_download.base.nt.NtMgr
 import com.download.video_download.base.utils.ActivityManager
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.GoogleAdsConsentManager
@@ -120,6 +122,11 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
     override fun onResume() {
         super.onResume()
+        NtMgr.instance.advert_leave = true
+        NService.createNt()
+        if (param == "fn"){
+            NService.updateNt(false)
+        }
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
                 initFlow()
@@ -207,6 +214,9 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     private fun requestNotifyPer(ifNeedUmp: Boolean){
         permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
                 AppCache.isPerNtShow = true
+            if (allGranted){
+                NService.createNt()
+            }
                 if (!ifNeedUmp){
                     mViewModel.startLoading {
                         AdMgr.INSTANCE.getAdLoadState(AdPosition.LOADING, AdType.APP_OPEN) == AdLoadState.LOADED

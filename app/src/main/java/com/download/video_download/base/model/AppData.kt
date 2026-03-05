@@ -117,6 +117,10 @@ data class TagData(
     val title: String,
     var isSelected: Boolean = false,
 )
+data class FrontData(
+    val title: String,
+    val action: String
+)
 data class NotifyData( val id: Int,
                    var iconSR: Int,
                    var iconBR: Int,

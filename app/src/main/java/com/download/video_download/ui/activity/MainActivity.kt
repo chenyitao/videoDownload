@@ -34,6 +34,7 @@ import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.model.NavState
 import com.download.video_download.base.model.NavigationItem
 import com.download.video_download.base.model.SearchState
+import com.download.video_download.base.nt.NService
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.LogUtils
 import com.download.video_download.ui.fragment.DownloadFragment
@@ -126,6 +127,9 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
     }
     private fun requestNotifyPer(){
         permissionHelper.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS)) { permissionsResult, allGranted ->
+            if (allGranted){
+                NService.createNt()
+            }
         }
     }
     override fun initListeners() {

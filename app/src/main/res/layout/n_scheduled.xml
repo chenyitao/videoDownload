@@ -8,7 +8,7 @@
     android:padding="8dp"
     android:gravity="center_vertical">
     <TextView
-        android:id="@+id/et_input"
+        android:id="@+id/enter_video_url"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -25,17 +25,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/iv_download"
+            android:id="@+id/iv_notify_dn"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_nt_d" />
         <ImageView
-            android:id="@+id/iv_red"
+            android:id="@+id/iv_msg_dot"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:scaleType="fitCenter"
-            android:layout_alignEnd="@+id/iv_download"
+            android:layout_alignEnd="@+id/iv_notify_dn"
             android:background="@drawable/shape_input_red" />
     </RelativeLayout>
 </LinearLayout>
