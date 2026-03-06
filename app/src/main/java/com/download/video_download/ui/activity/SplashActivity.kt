@@ -22,6 +22,8 @@ import com.download.video_download.base.ext.startActivity
 import com.download.video_download.base.nt.NService
 import com.download.video_download.base.nt.NtMgr
 import com.download.video_download.base.utils.ActivityManager
+import com.download.video_download.base.utils.AnimaUtils
+import com.download.video_download.base.utils.AnimaUtils.initRotateAnimation
 import com.download.video_download.base.utils.AppCache
 import com.download.video_download.base.utils.GoogleAdsConsentManager
 import com.download.video_download.base.utils.LogUtils
@@ -47,10 +49,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
     }
 
     override fun initViews(savedInstanceState: Bundle?) {
-        updateProgressText(0)
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_ad)
         param = intent?.extras?.getString("param") ?: ""
+        initRotateAnimation(mBind.circleProgress)
         when(param){
             "dl" -> {
                 TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 1))
@@ -91,6 +93,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             if (!isComplete) return@Observer
             mBind.loadingProgress.visibility = View.INVISIBLE
             mBind.progress.visibility = View.INVISIBLE
+            mBind.circleProgress.visibility = View.VISIBLE
+            AnimaUtils.startRotateAnimation(mBind.circleProgress)
             TrackMgr.instance.trackAdEvent(AdPosition.LOADING, AdType.APP_OPEN, TrackEventType.safedddd_bg)
             if (mViewModel.isAdLoaded.value == true) {
                 lifecycleScope.launch {
@@ -107,6 +111,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
                             mViewModel.preloadBatchAds(this@SplashActivity)
                         },
                         onAdDismissed = { position, adType ->
+                            mBind.circleProgress.visibility = View.INVISIBLE
+                            AnimaUtils.stopRotateAnimation(mBind.circleProgress)
                             route()
                         })
                 }
@@ -208,6 +214,8 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         val isPerNtShow = AppCache.isPerNtShow
         if (ifNeedUmp && isColdStart){
             isUmpFlowState = true
+            mBind.circleProgress.visibility = View.VISIBLE
+            AnimaUtils.startRotateAnimation(mBind.circleProgress)
             if (!isPerNtShow){
                 val checkP = permissionHelper.checkNtPermission()
                 if (!checkP){
@@ -280,6 +288,10 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             GoogleAdsConsentManager.isLoadingConsent = true
             val isConsentCompleted =  GoogleAdsConsentManager.showConsentForm( this)
         }
+        mBind.circleProgress.visibility = View.INVISIBLE
+        AnimaUtils.stopRotateAnimation(mBind.circleProgress)
+        mBind.progress.visibility = View.VISIBLE
+        mBind.loadingProgress.visibility = View.VISIBLE
         AdMgr.INSTANCE.setPrivacyConsent(GoogleAdsConsentManager.isConsentProcessCompleted())
         mViewModel.preloadBatchAds(this)
         mViewModel.preloadAd(this)
