@@ -12,6 +12,7 @@ import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.nt.NtMgr
 import com.download.video_download.base.utils.AppCache
 import kotlinx.serialization.encodeToString
 import kotlin.coroutines.resume
@@ -51,6 +52,7 @@ class NativeAdLoadStrategy : AdLoadStrategy {
                     adCount?.todayClickCount += 1
                     AppCache.adLimitC =  context.jsonParser().encodeToString(adCount)
                     TrackMgr.instance.trackAdEvent(position!!, adType!!, TrackEventType.safedddd_dianji)
+                    NtMgr.instance.advert_click_leave = true
                 }
 
                 override fun onAdImpression() {

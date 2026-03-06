@@ -12,6 +12,7 @@ import com.download.video_download.base.ad.model.AdType
 import com.download.video_download.base.config.sensor.TrackEventType
 import com.download.video_download.base.config.sensor.TrackMgr
 import com.download.video_download.base.ext.jsonParser
+import com.download.video_download.base.nt.NtMgr
 import com.download.video_download.base.utils.AppCache
 import kotlinx.serialization.encodeToString
 
@@ -46,6 +47,7 @@ class InterstitialStrategy : AdShowStrategy {
                 adCount?.todayShowCount += 1
                 AppCache.adLimitC =  activity.jsonParser().encodeToString(adCount)
                 showCallback(position, adType, true, null)
+                NtMgr.instance.advert_leave = true
             }
 
             override fun onAdImpression() {
@@ -58,6 +60,8 @@ class InterstitialStrategy : AdShowStrategy {
                 AppCache.adLimitC =  activity.jsonParser().encodeToString(adCount)
                 clickCallback(position, adType)
                 TrackMgr.instance.trackAdEvent(position, adType, TrackEventType.safedddd_dianji)
+                NtMgr.instance.advert_click_leave = true
+                NtMgr.instance.advert_leave = true
             }
         }
         interstitialAd.show(activity)

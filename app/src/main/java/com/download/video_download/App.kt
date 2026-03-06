@@ -57,8 +57,8 @@ class App : MultiDexApplication() {
         super.onCreate()
         weakApp = WeakReference(this)
         isColdStart = true
-        AppCache.isPerPushCold = false
         AppCache.init(this)
+        AppCache.isPerPushCold = false
         TrackMgr.instance.init(this)
         if (AppCache.gr.isEmpty()){
             GoogleRef.getInstance().init(this, {

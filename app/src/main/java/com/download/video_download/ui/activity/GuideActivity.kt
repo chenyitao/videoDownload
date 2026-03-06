@@ -81,15 +81,17 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                         || intent.getStringExtra("from") == "splash"){
                         if (position == guideList.size-1){
                             if (!isNext){
-                                TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
+                                if (position != currentPage){
+                                    TrackMgr.instance.trackAdEvent(AdPosition.GUIDE, AdType.NATIVE, TrackEventType.safedddd_bg)
+                                    lifecycleScope.launch {
+                                        withContext(Dispatchers.Main) {
+                                            delay(200)
+                                            viewModel.handleNativeAd( this@GuideActivity)
+                                        }
+                                    }
+                                }
                             }else{
                                 isNext = false
-                            }
-                            lifecycleScope.launch {
-                                withContext(Dispatchers.Main) {
-                                    delay(200)
-                                    viewModel.handleNativeAd( this@GuideActivity)
-                                }
                             }
                         }
                     }

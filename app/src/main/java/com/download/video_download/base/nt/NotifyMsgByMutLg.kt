@@ -44,7 +44,7 @@ class NotifyMsgByMutLg private constructor() {
             App.getAppContext().getString(R.string.nt_r_2_title),
             SpannableString(""),
             App.getAppContext().getString(R.string.nt_r_2_action),
-            8
+            7
         )
     }
     fun getOneMinuteNotifyMsg(): NotifyData {
@@ -55,7 +55,7 @@ class NotifyMsgByMutLg private constructor() {
             App.getAppContext().getString(R.string.nt_r_3_title),
             SpannableString(""),
             App.getAppContext().getString(R.string.nt_r_3_action),
-            7
+            8
         )
     }
     private fun getCurLgNotifyMsg(): List<NotifyData>{

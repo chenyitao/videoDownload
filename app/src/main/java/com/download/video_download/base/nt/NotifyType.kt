@@ -15,6 +15,6 @@ enum class NotifyType(
     HOME("SaveVideo_Notify","SaveVideo","home", "3",0L),
     UNLOCK("SaveVideo_Notify","SaveVideo","unlock", "4",0L),
     CLICK_LEAVER("SaveVideo_Notify","SaveVideo","click_leaver", "5",0L),
-    ONE_MINUTE("SaveVideo_Notify","SaveVideo","one_minute", "6",0L),
-    LEAVER("SaveVideo_Notify","SaveVideo","leave", "7",0L);
+    ONE_MINUTE("SaveVideo_Notify","SaveVideo","one_minute", "7",0L),
+    LEAVER("SaveVideo_Notify","SaveVideo","leave", "6",0L);
 }

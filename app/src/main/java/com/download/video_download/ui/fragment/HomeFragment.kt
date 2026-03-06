@@ -94,6 +94,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         }
         viewModel.isAdLoaded.observe(this, Observer { isLoaded ->
             if (!isLoaded) return@Observer
+            if (!isVisible) return@Observer
             lifecycleScope.launch {
 
                 AdMgr.INSTANCE.showAd(AdPosition.HOME, AdType.NATIVE,requireActivity(),

@@ -163,6 +163,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
+        NtMgr.instance.advert_leave = false
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -203,14 +204,16 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         if (isUmpFlowState){
             return
         }
-        val checkP = permissionHelper.checkNtPermission()
         val ifNeedUmp = GoogleAdsConsentManager.checkIfNeedShowConsent()
         val isPerNtShow = AppCache.isPerNtShow
         if (ifNeedUmp && isColdStart){
             isUmpFlowState = true
-            if (!isPerNtShow && !checkP){
-                requestNotifyPer(true)
-                return
+            if (!isPerNtShow){
+                val checkP = permissionHelper.checkNtPermission()
+                if (!checkP){
+                    requestNotifyPer(true)
+                    return
+                }
             }
             processUmp()
             return
@@ -218,8 +221,11 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         mViewModel.preloadBatchAds(this)
         mViewModel.preloadAd(this)
         AdMgr.INSTANCE.setPrivacyConsent(GoogleAdsConsentManager.isConsentProcessCompleted())
-        if (!isPerNtShow && !checkP){
-            requestNotifyPer(false)
+        if (!isPerNtShow){
+            val checkP = permissionHelper.checkNtPermission()
+            if (!checkP){
+                requestNotifyPer(false)
+            }
             return
         }
         mViewModel.startLoading {
