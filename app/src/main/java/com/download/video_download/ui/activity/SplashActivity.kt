@@ -155,7 +155,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         if (param == "fn"){
             NService.updateNt(false)
         }
-        lifecycleScope.launch {
+        App.coroutineScope.launch {
             withContext(Dispatchers.Main){
                 initFlow()
             }

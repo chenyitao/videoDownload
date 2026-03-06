@@ -45,6 +45,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.lang.ref.WeakReference
@@ -184,7 +186,7 @@ class App : MultiDexApplication() {
         var isAppInForeground = false
         var isJumpingToSystemSetting = false
         var isColdStart = false
-
+        val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         fun initFB(fbobj: JSONObject?){
             if(!FacebookSdk.isInitialized()){
                 val fbcg = AppCache.fb
@@ -311,5 +313,6 @@ class App : MultiDexApplication() {
         GoogleRef.getInstance().release()
         TrackMgr.instance.destroy()
         RemoteConfig.instance.stopConfigRequest()
+        coroutineScope.cancel()
     }
 }

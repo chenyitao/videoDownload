@@ -92,7 +92,7 @@ class NtMgr private constructor() {
         }
         advert_leave = false
         ntTaskScope.launch {
-            delay(200)
+            delay(1000)
             executePushNt(NotifyType.LEAVER)
         }
     }

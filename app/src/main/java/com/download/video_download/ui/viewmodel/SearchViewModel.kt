@@ -168,10 +168,12 @@ class SearchViewModel: BaseViewModel() {
         viewModelScope.launch {
             AdMgr.INSTANCE.preloadAd(AdPosition.SEARCH, AdType.NATIVE, context,
                 onLoadStateChanged = { position, adType, loadState,error ->
-                    if (from == "history"){
-                        _isHAdLoaded.postValue(true)
-                    }else{
-                        _isAdLoaded.postValue(true)
+                    if (loadState == AdLoadState.LOADED){
+                        if (from == "history"){
+                            _isHAdLoaded.postValue(true)
+                        }else{
+                            _isAdLoaded.postValue(true)
+                        }
                     }
                     LogUtils.d("ad:  ${error?.message}${error?.domain}")
                 })

@@ -58,11 +58,9 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
             if (!isLoaded) return@Observer
             if (!isVisible) return@Observer
             lifecycleScope.launch {
-                LogUtils.e("11111111","111111111")
                 AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
                     onShowResult = { position, adType, success, error->
                         if (success){
-                            LogUtils.e("11111111","123123123123123")
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 viewModel.adjustGuideView(true)
                                 binding.adView.visibility = View.VISIBLE
@@ -92,7 +90,6 @@ class WebGuideFragment: BaseFragment<SearchViewModel, FragmentSearchGuideBinding
         Job = lifecycleScope.launch {
             delay(200)
             if (isVisible){
-                LogUtils.e("11111111","777777777")
                 viewModel.checkNAd(requireContext(),"guide")
                 viewModel.preloadBkAd(requireContext())
                 TrackMgr.instance.trackAdEvent(AdPosition.SEARCH, AdType.NATIVE, TrackEventType.safedddd_bg)

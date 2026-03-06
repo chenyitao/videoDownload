@@ -72,6 +72,7 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
             if (!isLoaded) return@Observer
             if (!isVisible) return@Observer
             lifecycleScope.launch {
+                LogUtils.e("11111111","dddddd")
                 AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
                     onShowResult = { position, adType, success, error->
                         if (success){
