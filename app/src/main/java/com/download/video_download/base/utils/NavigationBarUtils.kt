@@ -45,20 +45,12 @@ object NavigationBarUtils {
     fun setImmersiveNavigationBar(activity: Activity) {
         val window = activity.window
         val decorView = window.decorView
-
-        // 1. 设置导航栏为透明（保留你的核心需求）
         window.navigationBarColor = Color.TRANSPARENT
-
-        // 2. 关键：获取当前已有的标志位，追加布局相关标志（而非直接赋值）
         var uiFlags = decorView.systemUiVisibility
-        // 追加布局稳定标志
         uiFlags = uiFlags or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        // 追加布局延伸到导航栏标志
         uiFlags = uiFlags or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        // 追加布局延伸到状态栏标志
         uiFlags = uiFlags or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        // 3. 重新设置（保留所有原有标志，仅新增布局相关）
         decorView.systemUiVisibility = uiFlags
     }
 
@@ -106,22 +98,6 @@ object NavigationBarUtils {
                             or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     )
             WindowCompat.setDecorFitsSystemWindows(window, false)
-        }
-    }
-    private fun handleSamsungNavigationBar(window: Window) {
-        try {
-            // 三星设备特有的导航栏隐藏参数
-            val params = window.attributes
-            val field = params.javaClass.getField("navigationBarColor")
-            field.set(params, 0x00000000) // 设置透明
-            window.attributes = params
-
-            // 强制刷新窗口
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-        } catch (e: Exception) {
-            // 忽略反射异常，兼容非三星设备
-            e.printStackTrace()
         }
     }
     fun showNavigationBar(activity: Activity) {

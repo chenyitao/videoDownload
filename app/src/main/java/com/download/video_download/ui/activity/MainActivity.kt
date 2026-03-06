@@ -7,8 +7,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -106,23 +109,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                         WindowInsets.CONSUMED
                     }
                 } else {
-                    mBind.navBottom.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                        override fun onGlobalLayout() {
-                            mBind.navBottom.postDelayed({
-                                mBind.navBottom.setPadding(0, 0, 0, 0)
-                                mBind.navBottom.requestLayout()
-                                mBind.navBottom.invalidate()
-
-                                // 移除监听器
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                    mBind.navBottom.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                                } else {
-                                    @Suppress("DEPRECATION")
-                                    mBind.navBottom.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                                }
-                            }, 10)
-                        }
-                    })
+                    fixBottomNavMarginAfterHideNavBar()
                 }
             }
         }
@@ -288,5 +275,66 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
             }
             val token = task.result ?: ""
         }
+    }
+    fun fixBottomNavMarginAfterHideNavBar() {
+        val bottomNav = mBind.navBottom
+        val window = this.window
+
+        // 步骤1：关闭系统自动给 View 应用窗口边距（关键！）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10 及以上
+            bottomNav.setFitsSystemWindows(false)
+            // 清除布局参数中的底部边距（避免残留）
+            (bottomNav.layoutParams as? ViewGroup.MarginLayoutParams)?.let {
+                it.bottomMargin = 0
+                bottomNav.layoutParams = it
+            }
+        }
+
+        // 步骤2：监听导航栏状态，动态调整 BottomNavigationView 的布局
+        bottomNav.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                bottomNav.post { // 确保在主线程布局完成后执行
+                    // 获取当前导航栏的真实显示高度（隐藏时为0）
+                    val navBarRealHeight = getNavigationBarHeight()
+
+                    // 核心：强制设置 BottomNavigationView 的底部 padding 为0，同时调整布局
+                    bottomNav.setPadding(0, 0, 0, 0)
+                    // 手动重置 BottomNavigationView 的底部位置，消除空白
+                    val layoutParams = bottomNav.layoutParams as ViewGroup.MarginLayoutParams
+                    layoutParams.bottomMargin = 0
+                    bottomNav.layoutParams = layoutParams
+
+                    // 强制重新测量和布局（Android 10 必须）
+                    bottomNav.measure(
+                        View.MeasureSpec.makeMeasureSpec(bottomNav.width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(bottomNav.height, View.MeasureSpec.AT_MOST)
+                    )
+                    bottomNav.layout(
+                        bottomNav.left,
+                        bottomNav.top,
+                        bottomNav.right,
+                        this@MainActivity.window.decorView.height - bottomNav.measuredHeight
+                    )
+
+                    // 刷新视图
+                    bottomNav.requestLayout()
+                    bottomNav.invalidate()
+                }
+
+                // 移除监听器，避免重复执行
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    bottomNav.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                } else {
+                    @Suppress("DEPRECATION")
+                    bottomNav.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                }
+            }
+        })
+
+        // 步骤3：确保窗口布局完全占满屏幕（隐藏导航栏后）
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
     }
 }

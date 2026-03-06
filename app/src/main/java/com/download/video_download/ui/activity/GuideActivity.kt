@@ -101,13 +101,11 @@ class GuideActivity : BaseActivity< GuideViewModel, ActivityGuideBinding>() {
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
-                if (from != "language" && from != "splash"){
-                    if (position < currentPage){
-                        mBind.viewPager.setCurrentItem(position+1,false)
-                        currentPage = position+1
-                    }else{
-                        currentPage = position
-                    }
+                if (position < currentPage){
+                    mBind.viewPager.setCurrentItem(position+1,false)
+                    currentPage = position+1
+                }else{
+                    currentPage = position
                 }
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }

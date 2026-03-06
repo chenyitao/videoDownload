@@ -72,11 +72,9 @@ class WebHistoryFragment: BaseFragment<SearchViewModel, FragmentSearchHistoryBin
             if (!isLoaded) return@Observer
             if (!isVisible) return@Observer
             lifecycleScope.launch {
-                LogUtils.e("11111111","2222222222")
                 AdMgr.INSTANCE.showAd(AdPosition.SEARCH, AdType.NATIVE,requireActivity(),
                     onShowResult = { position, adType, success, error->
                         if (success){
-                            LogUtils.e("11111111","999999999")
                             AdMgr.INSTANCE.getNativeAd( position)?.let {
                                 binding.sId.visibility = View.VISIBLE
                                 binding.sId.setNativeAd(it,requireContext())

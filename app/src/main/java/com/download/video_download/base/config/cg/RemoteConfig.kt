@@ -129,7 +129,6 @@ class RemoteConfig private constructor(){
             val bBarHide = func.optString("bBarHide","n")
             val unInsShow = func.optString("unInsShow","n")
             ActivityManager.currentActivity()?.let {ac->
-//                NavigationBarUtils.hideNavigationBar(ac)
                 if (bBarHide == "y") {
                     NavigationBarUtils.hideNavigationBar(ac)
                 }else{
