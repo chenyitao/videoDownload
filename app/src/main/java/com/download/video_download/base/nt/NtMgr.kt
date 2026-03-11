@@ -151,7 +151,7 @@ class NtMgr private constructor() {
                 updateLastNtTime(type)
                 val nt = buildNt(ntData, type, sRv, bRv, fRv)
                 showNt(manager, ntData, nt)
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdy, mapOf("safedddd" to ntData.params, "safeddddsj" to type.params))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdy, mapOf("safeeeee" to ntData.params.toString(), "safeeeeesj" to type.params.toString()))
             }
         }
     }

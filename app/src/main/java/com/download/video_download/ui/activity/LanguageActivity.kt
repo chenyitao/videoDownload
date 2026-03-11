@@ -60,7 +60,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
            if (!it.isSelected){
                return@LanguageAdapter
            }
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_yz,mutableMapOf("safedddd" to "2"))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_yz,mutableMapOf("safeeeee" to "2"))
             AppCache.isSelectLng = true
             handleGoNext()
         }
@@ -83,7 +83,7 @@ class LanguageActivity : BaseActivity<LanguageViewModel, ActivityLanguageBinding
 
     override fun initListeners() {
         mBind.nextBtn.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_yz,mutableMapOf("safedddd" to "1"))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_yz,mutableMapOf("safeeeee" to "1"))
             AppCache.isSelectLng = true
             handleGoNext()
         }

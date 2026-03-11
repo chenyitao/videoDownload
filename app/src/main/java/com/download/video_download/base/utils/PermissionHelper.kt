@@ -69,12 +69,12 @@ class PermissionHelper private constructor(private val activity: ComponentActivi
     }
     fun checkNtPermission(): Boolean{
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU){
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safedddd" to "2"))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safeeeee" to "2"))
             return true
         }
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) ==
             PackageManager.PERMISSION_GRANTED ){
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safedddd" to "1"))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safeeeee" to "1"))
         }
         val check = ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED || shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)

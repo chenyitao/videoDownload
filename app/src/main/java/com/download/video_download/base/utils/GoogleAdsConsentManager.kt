@@ -33,16 +33,16 @@ object GoogleAdsConsentManager {
                     {
                         val endTime = System.currentTimeMillis()
                         TrackMgr.instance.trackEvent(
-                            TrackEventType.safedddd_umpcb, mapOf("safedddd" to 1,"safeddddump" to (endTime - startTime).toString()))
+                            TrackEventType.safedddd_umpcb, mapOf("safeeeee" to "1","safeeeeeump" to (endTime - startTime).toString()))
                         hasAdRequestPermission = false
                         result.resume(true)
                     },
                     { error ->
                         val endTime = System.currentTimeMillis()
                         TrackMgr.instance.trackEvent(
-                            TrackEventType.safedddd_umpcb, mapOf("safedddd" to 2,"safeddddump" to (endTime - startTime).toString()))
+                            TrackEventType.safedddd_umpcb, mapOf("safeeeee" to "2","safeeeeeump" to (endTime - startTime).toString()))
                         TrackMgr.instance.trackEvent(
-                            TrackEventType.safedddd_umpcc, mapOf("safedddd" to error.message))
+                            TrackEventType.safedddd_umpcc, mapOf("safeeeee" to error.message))
                         hasAdRequestPermission = true
                         result.resume(false)
                     }
@@ -72,20 +72,20 @@ object GoogleAdsConsentManager {
             try {
                 val startTime = System.currentTimeMillis()
                 TrackMgr.instance.trackEvent(
-                    TrackEventType.safedddd_umpcd, mapOf("safedddd" to AppCache.curCountry))
+                    TrackEventType.safedddd_umpcd, mapOf("safeeeee" to AppCache.curCountry))
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { error ->
                     AppCache.isShowUmp= (error == null)
                     hasAdRequestPermission = true
                     isLoadingConsent = false
-                    var safedddd = 3
+                    var safedddd = "3"
                     if (consentInfoClient.canRequestAds()){
-                        safedddd = 1
+                        safedddd = "1"
                     }else if (error != null){
-                        safedddd = 2
+                        safedddd = "2"
                     }
                     val endTime = System.currentTimeMillis()
                     TrackMgr.instance.trackEvent(
-                        TrackEventType.safedddd_umpce, mapOf("safedddd" to safedddd,"safeddddump" to (endTime - startTime).toString()))
+                        TrackEventType.safedddd_umpce, mapOf("safeeeee" to safedddd,"safeeeeeump" to (endTime - startTime).toString()))
                     result.resume(true)
                 }
             } catch (_: Throwable) {

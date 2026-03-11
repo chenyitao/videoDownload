@@ -48,7 +48,7 @@ class HomeFragment: BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         TrackMgr.instance.trackEvent(TrackEventType.SESSION_START)
         adapter = HomeSiteAdapter{
             TrackMgr.instance.trackAdEvent(AdPosition.HOME, AdType.INTERSTITIAL, TrackEventType.safedddd_bg)
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_home2, mapOf("safedddd1" to it.url))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_home2, mapOf("safeeeee1" to it.url))
             val hasCache = AdMgr.INSTANCE.getAdLoadState(AdPosition.HOME, AdType.INTERSTITIAL) == AdLoadState.LOADED
 
             if (hasCache){

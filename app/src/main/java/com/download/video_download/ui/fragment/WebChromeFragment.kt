@@ -125,7 +125,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
                         searchViewModel.saveVideos(videoList)
                         if (!isLoading && videoList.isNotEmpty()){
                             endTime = System.currentTimeMillis()
-                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser7, mapOf("safedddd1" to curUrl,"safedddd2" to (endTime - startTime).toString()))
+                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser7, mapOf("safeeeee" to curUrl,"safeeeee2" to (endTime - startTime).toString()))
                         }
                     }
                 },
@@ -151,7 +151,7 @@ class WebChromeFragment: BaseFragment<SearchViewModel, FragmentSearchChromeBindi
             if (url.isNotEmpty() && (URLUtil.isNetworkUrl(url) || url.contains("www.") || url.contains(".com"))){
                 val host = url.toUri().host
                 if (binding.webview.url == null || binding.webview.url?.contains(host.toString()) == false){
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser3, mapOf("safedddd" to url))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser3, mapOf("safeeeee" to url))
                     binding.webview.loadUrl(url)
                 }
             }else{

@@ -225,7 +225,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         binding.tvSearch.setOnClickListener {
             val inputContent = binding.etSearch.text.toString().trim()
             if (inputContent.isNotEmpty()) {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser2, mapOf("safedddd1" to inputContent))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser2, mapOf("safeeeee1" to inputContent))
                 val data =
                     if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.") || inputContent.contains(
                             ".com"
@@ -260,7 +260,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 val inputContent = v.text.toString().trim()
 
                 if (inputContent.isNotEmpty()) {
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser2, mapOf("safedddd1" to inputContent))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser2, mapOf("safeeeee1" to inputContent))
                     val data =
                         if (URLUtil.isNetworkUrl(inputContent) || inputContent.contains("www.") || inputContent.contains(
                                 ".com"
@@ -387,7 +387,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 requireContext().showToast(getString(R.string.a_video))
                 return@setOnClickListener
             }
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser8, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser8, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
             showDownloadDialog()
         }
         viewModel.adjustGuideView.observe(this){
@@ -645,7 +645,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
 
     fun showDownloadDialog() {
         searchViewModel.videos.value?.let {video->
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser9, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser9, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
             video.forEach { it.isSelect = true }
             val downloadDialog = DownloadDialog()
             downloadDialog.updateData(video)
@@ -682,7 +682,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
     }
     private fun handleStartDownload(video:MutableList<Video>){
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser10, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser10, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
         if (PUtils.hasStoragePermission(requireContext())) {
             val vf = video.filter { fv-> fv.isSelect }
             showTaskCreate(vf.toMutableList())
@@ -690,7 +690,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 return
             }
             DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_down1, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_down1, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
         } else {
             if (permissionDenied){
                 mainViewModel.isFromPermissionBack = true
@@ -711,7 +711,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         taskCreatD?.setIsComplete(false)
         taskCreatD?.setOnConfirmListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser12, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser12, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
             if (searchViewModel.videos.value?.isNotEmpty() == true){
                 if (video.size == 1 && video[0].url.contains("android.resource:")){
                     mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.PLAYER))
@@ -721,7 +721,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
             }
         }
         taskCreatD?.show(this.childFragmentManager, "DownloadDialog")
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser11, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser11, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
         val videos = searchViewModel.videos.value?: mutableListOf()
         if (videos.size == 1 && videos[0].url.contains("android.resource:")){
             Handler(Looper.getMainLooper()).postDelayed({
@@ -749,11 +749,11 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
         }
         taskCD?.setIsComplete(true)
         taskCD?.setOnConfirmListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser14, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser14, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
             mainViewModel.navigate(NavigationItem("", NavState.SEARCH, NavState.PLAYER))
         }
         taskCD?.show(this.childFragmentManager, "DownloadDialog")
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser13, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_browser13, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
         if (!NService.isShowMsgDot){
             NService.updateNt(true)
         }
@@ -777,7 +777,7 @@ class WebFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
                 return@registerForActivityResult
             }
             DownloadTaskManager.INSTANCE.startResumeTask(vf.toMutableList())
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_down1, mapOf("safedddd" to binding.etSearch.text.toString().trim()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_down1, mapOf("safeeeee" to binding.etSearch.text.toString().trim()))
 
         } else {
             permissionDenied = true

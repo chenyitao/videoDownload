@@ -37,6 +37,7 @@ class TrackParamBuilder private constructor() {
                 put("cogitate", CfUtils.getVersionName(App.getAppContext()))
                 put("furbish", UUID.randomUUID().toString())
                 put("megavolt", "")
+                put("curse",mapOf("app_versionxin" to CfUtils.getVersionName(App.getAppContext())))
             }
             return builder
         }

@@ -65,25 +65,25 @@ class FeedbackActivity:BaseActivity<FDViewModel, ActivityFeedbackBinding>() {
             finish()
         }
         mBind.keep.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long5, mapOf("safedddd" to 2))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long5, mapOf("safeeeee" to "2"))
             ActivityManager.finishAllActivityExcept(this.javaClass)
             startActivity<MainActivity>()
             finish()
         }
         mBind.still.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long5, mapOf("safedddd" to 1))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long5, mapOf("safeeeee" to "1"))
             if (fd?.isFragmentShowing() == true) {
                 return@setOnClickListener
             }
             fd = FDDialog().apply {
                 setOnKeep {
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_long7, mapOf("safedddd" to 2))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_long7, mapOf("safeeeee" to "2"))
                     ActivityManager.finishAllActivityExcept(this.javaClass)
                     startActivity<MainActivity>()
                     finish()
                 }
                 setOnStill {
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_long7, mapOf("safedddd" to 1))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_long7, mapOf("safeeeee" to "1"))
                     App.isJumpingToSystemSetting = true
                     val intent = Intent("android.settings.APPLICATION_DETAILS_SETTINGS").apply {
                         data = "package:${requireContext().packageName}".toUri()

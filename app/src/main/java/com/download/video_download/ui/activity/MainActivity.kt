@@ -97,7 +97,7 @@ class MainActivity : BaseActivity< MainViewModel, ActivityMainBinding>()  {
                 delay( 60 *60 * 1000L)
                 TrackMgr.instance.trackEvent(
                     TrackEventType.safedddd_ac,
-                    mutableMapOf("safedddd" to "2")
+                    mutableMapOf("safeeeee" to "2")
                 )
             }
         }

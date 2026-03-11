@@ -55,25 +55,25 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
         initRotateAnimation(mBind.circleProgress)
         when(param){
             "dl" -> {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 1))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safeeeee" to "1"))
             }
             "vp" -> {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 2))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safeeeee" to "2"))
             }
             "us" -> {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safedddd" to 3))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_long1,mapOf("safeeeee" to "3"))
             }
             "fn" -> {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safedddd" to 2))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safeeeee" to "2"))
             }
             "enter_url" -> {
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safedddd" to 1))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_czdj,mapOf("safeeeee" to "1"))
             }
         }
         if (intent?.extras?.getInt("ntType") == 2){
             val safedddd = intent.extras?.getString("ntParam")
             val safeddddsj = intent.extras?.getString("ntTime")
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdj,mapOf("safedddd" to safedddd.toString(),"safeddddsj" to safeddddsj.toString()))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzdj,mapOf("safeeeee" to safedddd.toString(),"safeeeeesj" to safeddddsj.toString()))
         }
         if (isColdStart){
             TrackMgr.instance.trackEvent(TrackEventType.safedddd_ae)
@@ -254,7 +254,7 @@ class SplashActivity : BaseActivity<SplashViewModel, ActivitySplashBinding>() {
             if (allGranted){
                 NService.createNt()
                 TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzty)
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safedddd" to "1"))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzkq,mutableMapOf("safeeeee" to "1"))
             }else{
                 TrackMgr.instance.trackEvent(TrackEventType.safedddd_tzjj)
             }

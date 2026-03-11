@@ -79,7 +79,7 @@ class DownloadTaskManager() : DownloadTaskListener {
                 add(item)
             }  else {
                 create(item)
-                TrackMgr.instance.trackEvent(TrackEventType.safedddd_down2, mapOf("safedddd" to currentHost.toString()))
+                TrackMgr.instance.trackEvent(TrackEventType.safedddd_down2, mapOf("safeeeee" to currentHost.toString()))
             }
         }
 
@@ -329,7 +329,7 @@ class DownloadTaskManager() : DownloadTaskListener {
         val currentHost =
             task?.entity?.url?.toUri()?.host
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_down5,
-            mapOf("safedddd" to currentHost.toString()))
+            mapOf("safeeeee" to currentHost.toString()))
     }
     override fun onTaskCancel(task: DownloadTask?){
         updatateVideoItem(task)
@@ -337,14 +337,14 @@ class DownloadTaskManager() : DownloadTaskListener {
         val currentHost =
             item?.url?.toUri()?.host
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_down6,
-            mapOf("safedddd" to currentHost.toString()))
+            mapOf("safeeeee" to currentHost.toString()))
     }
     override fun onTaskFail(task: DownloadTask?, e: Exception?){
         updatateVideoItem(task)
         val currentHost =
             task?.entity?.url?.toUri()?.host
         TrackMgr.instance.trackEvent(TrackEventType.safedddd_down4,
-            mapOf("safedddd" to currentHost.toString(),"safedddd3" to e?.message.toString() ,"safeddddurl" to task?.entity?.url.toString()))
+            mapOf("safeeeee" to currentHost.toString(),"safeeeee3" to e?.message.toString() ,"safedeeeeurl" to task?.entity?.url.toString()))
     }
     override fun onTaskComplete(task: DownloadTask?) = updatateVideoItem(task)
     override fun onTaskRunning(task: DownloadTask?) = updatateVideoItem(task)
@@ -376,7 +376,7 @@ class DownloadTaskManager() : DownloadTaskListener {
                 )
 
                if (entity.state == IEntity.STATE_COMPLETE) {
-                   TrackMgr.instance.trackEvent(TrackEventType.safedddd_down3, mapOf("safedddd" to updatedItem.url))
+                   TrackMgr.instance.trackEvent(TrackEventType.safedddd_down3, mapOf("safeeeee" to updatedItem.url))
                     val mimeType = if (updatedItem.mimeTypes.contains("vnd.apple") == true) "video/mp4" else updatedItem.mimeTypes
                     var duration = updatedItem.duration
                     if (updatedItem.duration == 0L){

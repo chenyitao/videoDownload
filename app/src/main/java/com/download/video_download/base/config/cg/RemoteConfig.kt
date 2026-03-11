@@ -54,7 +54,7 @@ class RemoteConfig private constructor(){
             while (isActive) {
                 try {
                     LogUtils.d("Remote","get admin config...")
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 2))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safeeeee" to "2"))
                     if (!AppCache.isFirstGetConfig){
                         delay(50*60 * 1000)
                         getAdminConfig()
@@ -85,7 +85,7 @@ class RemoteConfig private constructor(){
                             val timeDiffMs = max(0, endTime - startTime)
                             val seconds = timeDiffMs / 1000
                             val sec = if (seconds.toInt() == 0 && timeDiffMs > 0) 1 else seconds.toInt()
-                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user2, mapOf("safedddd" to 1, "safedddd1" to sec))
+                            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user2, mapOf("safeeeee" to "1", "safeeeee1" to sec.toString()))
                             continuation.resume(true)
                             if (it.isEmpty()){
                                 return@sendPost
@@ -113,7 +113,7 @@ class RemoteConfig private constructor(){
     }
     fun getConfigOn() {
         coroutineScope.launch(Dispatchers.IO) {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safedddd" to 3))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user1, mapOf("safeeeee" to "3"))
             getAdminConfig()
         }
     }
@@ -174,7 +174,7 @@ class RemoteConfig private constructor(){
             }else {
                 safedddd = "2"
             }
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user4,mutableMapOf("safedddd" to safedddd))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_user4,mutableMapOf("safeeeee" to safedddd))
         }
         var safedddd = ""
         var safeddddk1 = ""
@@ -207,7 +207,7 @@ class RemoteConfig private constructor(){
         }else if (getLastChar(k3) == "zm"){
             safeddddk3 = "2"
         }
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_user3,mutableMapOf("safedddd" to safedddd, "safeddddk1" to safeddddk1,"safeddddk3" to safeddddk3))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_user3,mutableMapOf("safeeeee" to safedddd, "safeeeeek1" to safeddddk1,"safeeeeek3" to safeddddk3))
     }
     private fun getLastChar(str: String?): String {
         val lastChar = str?.last()

@@ -129,14 +129,14 @@ class TrackMgr private constructor() {
         if (event == TrackEventType.safedddd_sbb){
             val code:String? =  error?.code?.toString()
             val message:String =  error?.message.toString()
-            trackEvent(event, mutableMapOf("safedddd" to safedddd,"safedddd4" to code.toString(),"safedddd5" to message))
+            trackEvent(event, mutableMapOf("safeeeee" to safedddd,"safeeeee4" to code.toString(),"safeeeee5" to message))
         }else{
             if (event == TrackEventType.safedddd_bg){
-                val safedddd1 = if (AdMgr.INSTANCE.hasCachedAd(adLoc, type)) 1 else 2
-                val safedddd2 = if (AdMgr.INSTANCE.isDailyLimitReached()) if (AdMgr.INSTANCE.isClickLimitReached()) 1 else 2 else 3
-                trackEvent(event, mutableMapOf("safedddd" to safedddd,"safedddd1" to safedddd1,"safedddd2" to safedddd2))
+                val safedddd1 = if (AdMgr.INSTANCE.hasCachedAd(adLoc, type)) "1" else "2"
+                val safedddd2 = if (AdMgr.INSTANCE.isDailyLimitReached()) if (AdMgr.INSTANCE.isClickLimitReached()) "1" else "2" else "3"
+                trackEvent(event, mutableMapOf("safeeeee" to safedddd,"safeeeee1" to safedddd1,"safeeeee2" to safedddd2))
             }else{
-                trackEvent(event, mutableMapOf("safedddd" to safedddd))
+                trackEvent(event, mutableMapOf("safeeeee" to safedddd))
             }
         }
     }

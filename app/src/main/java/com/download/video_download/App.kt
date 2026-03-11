@@ -71,7 +71,7 @@ class App : MultiDexApplication() {
                     val referrerUrl = refer.referrerUrl
                     val safedddd  = if (referrerUrl.contains("organic")) "1" else if (referrerUrl.isEmpty()) "2" else "3"
                     TrackMgr.instance.trackEvent(TrackEventType.INSTALL, TrackParamBuilder.createInstallParams().build())
-                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_ref2, mutableMapOf("safedddd" to safedddd))
+                    TrackMgr.instance.trackEvent(TrackEventType.safedddd_ref2, mutableMapOf("safeeeee" to safedddd))
                 }
             })
         }
@@ -80,7 +80,7 @@ class App : MultiDexApplication() {
             TrackMgr.instance.trackEvent(TrackEventType.FIRST_OPEN)
             AppCache.firstOpen = false
         }
-        TrackMgr.instance.trackEvent(TrackEventType.safedddd_ac,mutableMapOf("safedddd" to "1"))
+        TrackMgr.instance.trackEvent(TrackEventType.safedddd_ac,mutableMapOf("safeeeee" to "1"))
         val cacheStr = DESUtil.readTxtFileSync(
             context = this,
             fileName = "cache.txt"
@@ -261,7 +261,7 @@ class App : MultiDexApplication() {
             val conversionListener = object : AppsFlyerConversionListener {
                 override fun onConversionDataSuccess(conversionData: MutableMap<String, Any>?) {
                     conversionData?.let { data ->
-                        TrackMgr.instance.trackEvent(TrackEventType.safedddd_panduan,mutableMapOf("safeddddstr" to data))
+                        TrackMgr.instance.trackEvent(TrackEventType.safedddd_panduan,mutableMapOf("safeeeeestr" to data.toString()))
                     }
                 }
 

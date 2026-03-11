@@ -31,25 +31,25 @@ class UninsActivity:BaseActivity<UninsViewModel, ActivityUninsBinding>() {
             finish()
         }
         mBind.d.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safedddd" to 3))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safeeeee" to "3"))
             startActivity<GuideActivity>()
             finish()
         }
         mBind.v.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safedddd" to 4))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safeeeee" to "4"))
             ActivityManager.finishAllActivityExcept(this.javaClass)
             startActivity<MainActivity>(){
                 putExtra("param", "vp_ins")
             }
         }
         mBind.keep.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safedddd" to 2))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safeeeee" to "2"))
             ActivityManager.finishAllActivityExcept(this.javaClass)
             startActivity<MainActivity>()
             finish()
         }
         mBind.still.setOnClickListener {
-            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safedddd" to 1))
+            TrackMgr.instance.trackEvent(TrackEventType.safedddd_long3, mapOf("safeeeee" to "1"))
             startActivity<FeedbackActivity>()
             finish()
         }
