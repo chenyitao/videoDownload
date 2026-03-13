@@ -43,14 +43,15 @@ class HomeViewModel: BaseViewModel() {
                 val sIndex = AppCache.hWebColorIndex
                 val web: RWeb? = App.getAppContext().jsonParser().decodeFromString<RWeb>(it)
                 web?.let { cg->
-                    if (cg.show.isNotEmpty() && cg.show == "y" && cg.content.isNotEmpty()){}
-                    cg.content.forEachIndexed { index, websiteData ->
-                        val colorIndex = (sIndex + index) % 5
-                        webList.add(WebsiteData(image = 0, title = websiteData.title, url =websiteData.url, color = COLORS[colorIndex], sort = websiteData.sort))
+                    if (cg.show.isNotEmpty() && cg.show == "y" && cg.content.isNotEmpty()){
+                        cg.content.forEachIndexed { index, websiteData ->
+                            val colorIndex = (sIndex + index) % 5
+                            webList.add(WebsiteData(image = 0, title = websiteData.title, url =websiteData.url, color = COLORS[colorIndex], sort = websiteData.sort))
+                        }
+                        webList.sortBy { it.sort }
+                        val newIndex = (AppCache.hWebColorIndex + 1) % 5
+                        AppCache.hWebColorIndex = newIndex
                     }
-                    webList.sortBy { it.sort }
-                    val newIndex = (AppCache.hWebColorIndex + 1) % 5
-                    AppCache.hWebColorIndex = newIndex
                 }
             }
             val fb = WebsiteData(

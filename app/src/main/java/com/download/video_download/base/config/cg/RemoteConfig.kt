@@ -232,9 +232,8 @@ class RemoteConfig private constructor(){
         var refer: Rf? = null
         referStr.takeIf { it.isNotEmpty() }?.let {
             refer = App.getAppContext().jsonParser().decodeFromString<Rf>(referStr)
-            rfUrl = "utm_content=tiktokglobal_E_C_P_C"
+            rfUrl = refer.referrerUrl
         }
-
         val json = JSONObject().apply {
             put("qvugtr", TrackMgr.instance.getDistinctID())
             put("wkzr", "SafeDownload")

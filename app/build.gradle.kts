@@ -18,8 +18,8 @@ android {
         applicationId = "com.t.a"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "3.0.1"
+        versionCode = 5
+        versionName = "3.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
